@@ -57,37 +57,34 @@ export function buildBusinessPlanPrompt(params: BuildPromptParams): {
   }
 
   const systemPrompts: Record<string, string> = {
-    ru: `Ты — опытный бизнес-консультант по малому бизнесу в Узбекистане.
+    ru: `Ты — опытный бизнес-консультант в Узбекистане. Даёшь ТОЛЬКО практичные, конкретные советы.
 
-Правила:
-- Отвечай ТОЛЬКО на русском языке.
-- Будь практичным и конкретным. Без воды и мотивационных речей.
-- Все суммы в узбекских сумах (млн сум).
-- ОБЯЗАТЕЛЬНО используй "ориентировочно", "возможно", "по оценке" — не давай гарантий.
-- Учитывай реальную статистику района если она предоставлена.
-- Анализируй конкурентную среду на основе данных района.
+КРИТИЧЕСКИ ВАЖНЫЕ ПРАВИЛА:
+- Бизнес-план СТРОГО соответствует выбранной сфере пользователя. Если выбрано "шитьё" — план ТОЛЬКО про швейный бизнес, НЕ про IT.
+- Если пользователю не хватает оборудования — предложи КОНКРЕТНЫЕ модели с ценами в Узбекистане (OLX.uz, Малика базар).
+- Все суммы в млн сум. Используй "ориентировочно", "по оценке" — без гарантий.
+- Учитывай данные района если предоставлены. Анализируй конкурентов.
+- В startup_costs указывай КОНКРЕТНОЕ оборудование с моделями и ценами.
 - Ответ — строго JSON без markdown.`,
 
-    uz: `Sen — O'zbekistonda kichik biznes bo'yicha tajribali biznes-maslahatchi.
+    uz: `Sen — O'zbekistonda tajribali biznes-maslahatchi. FAQAT amaliy, aniq maslahatlar berasan.
 
-Qoidalar:
-- FAQAT o'zbek tilida javob ber (lotin alifbosi).
-- Amaliy va aniq bo'l. Suv quyma.
-- Barcha summalarni o'zbek so'mida (mln so'm) ko'rsat.
-- ALBATTA "taxminan", "ehtimol", "baholash bo'yicha" so'zlarini ishlat — kafolat berma.
-- Tuman statistikasi berilgan bo'lsa, uni tahlil qil.
-- Raqobat muhitini tuman ma'lumotlari asosida baholash.
+MUHIM QOIDALAR:
+- Biznes-reja foydalanuvchi tanlagan sohaga QATIY mos bo'lishi kerak. Agar "tikuvchilik" tanlangan bo'lsa — reja FAQAT tikuvchilik haqida, IT haqida EMAS.
+- Agar foydalanuvchida jihozlar yetishmasa — ANIQ modellar va O'zbekistondagi narxlarini tavsiya qil (OLX.uz, Malika bozori, Sergeli bozori).
+- Barcha summalar mln so'mda. "Taxminan", "baholash bo'yicha" so'zlarini ishlat — kafolat berma.
+- Tuman ma'lumotlari berilgan bo'lsa — ularni tahlil qil. Raqobatchilarni baholash.
+- startup_costs da ANIQ jihozlar, modellar va narxlarini yoz.
 - Javob — faqat JSON, markdown bo'lmasin.`,
 
-    en: `You are an experienced small business consultant in Uzbekistan.
+    en: `You are an experienced business consultant in Uzbekistan. Give ONLY practical, specific advice.
 
-Rules:
-- Answer ONLY in English.
-- Be practical and specific. No fluff or motivational speeches.
-- All amounts in Uzbek som (mln UZS).
-- ALWAYS use "approximately", "possibly", "estimated" — never guarantee outcomes.
-- Analyze the district statistics if provided.
-- Assess competition based on real district data.
+CRITICAL RULES:
+- Business plan MUST match the user's chosen field. If "sewing" is selected — plan is ONLY about sewing, NOT about IT.
+- If user lacks equipment — suggest SPECIFIC models with prices in Uzbekistan (OLX.uz, Malika bazaar).
+- All amounts in mln UZS. Use "approximately", "estimated" — no guarantees.
+- Use district data if provided. Assess competition.
+- In startup_costs list SPECIFIC equipment with models and prices.
 - Response must be strict JSON without markdown.`,
   };
 
@@ -126,41 +123,48 @@ Hozirgi daromad: ${userIncome ? userIncome + " mln so'm/oy" : "noma'lum"}
 Holati: ${userEmployment || "noma'lum"}
 Biznes tajribasi: ${userExperience === "yes" ? "bor" : "yo'q"}`;
 
-  const user = `Biznes-reja tuzib ber:
+  const user = `DIQQAT: Biznes-reja FAQAT "${biz.name_uz}" haqida bo'lishi SHART. Boshqa soha tavsiya QILMA.
 
+=== TUMAN MA'LUMOTLARI ===
 Tuman: ${district.name_uz} (${district.region_uz}), turi: ${district.type}, aholi: ${district.population.toLocaleString()}
 ${districtContext}
+
+=== FOYDALANUVCHI ===
 ${userBlock}
 
-TANLANGAN SOHA: ${sphere}
-Biznes turi: ${biz.name_uz} (${biz.category})
+=== SOHA VA JAVOBLAR ===
+Tanlangan soha: ${sphere}
+Biznes turi: ${biz.name_uz}
 Ko'nikmalari: ${skillsList}
 Boshlang'ich kapital: ${answers.capital} mln so'm
 Garov: ${answers.collateral}
 Joy: ${answers.premises || "noma'lum"}
-Raqobat: ${answers.competition}
-Kam ta'minlangan: ${answers.poor_registry}
-${sphereAnswers.length > 0 ? "\nSOHA BO'YICHA JAVOBLAR:\n" + sphereAnswers.join("\n") : ""}
+Raqobat yaqin atrofda: ${answers.competition}
+Kam ta'minlangan oila: ${answers.poor_registry}
+${sphereAnswers.length > 0 ? "\nSoha bo'yicha batafsil javoblar:\n" + sphereAnswers.join("\n") : ""}
 
-Score: ${business.total_score} (ko'nikmalar: ${business.breakdown.skills_match}, kapital: ${business.breakdown.capital_sufficient}, raqobat: ${business.breakdown.competition_low})
-
-Tavsiya etilgan bank: ${bp.bank_name_uz} — ${bp.product_name_uz}
+=== BANK ===
+Tavsiya: ${bp.bank_name_uz} — ${bp.product_name_uz}
 Kredit: ${bp.min_amount_mln}–${bp.max_amount_mln} mln so'm, ${bp.interest_rate_annual}% yillik, ${bp.term_months_max} oygacha
-Bank tanlash sabablari: ${bank.match_reasons.join("; ")}
 
-O'rtacha daromad: ${biz.avg_monthly_revenue_mln} mln/oy
-O'rtacha xarajat: ${biz.avg_monthly_expense_mln} mln/oy
-Qoplash muddati: ~${biz.breakeven_months} oy
+=== MUHIM KO'RSATMALAR ===
+1. startup_costs da ANIQ jihoz/uskuna nomlari va O'zbekistondagi narxlarini yoz.
+   Masalan: "Tikuv mashinasi JUKI DDL-8700 (b/u OLX.uz)" — 3.5 mln, "Overlok JACK E4" — 4 mln.
+   Agar foydalanuvchi javoblarida jihozi yo'q desa — kerakli jihozlarni aniq ko'rsat.
+2. risks da bu tumanga xos xavflarni yoz (raqobat, suv/elektr muammolari va h.k.)
+3. mentor_note da ANIQ, amaliy maslahat ber — "qayerdan boshlash", "qayerda mijoz topish"
 
 Faqat JSON qaytar:
 {
-  "summary": "biznes g'oyasining aniq tavsifi, tuman kontekstida (3-4 jumla)",
-  "target_audience": "bu tumandagi aniq maqsadli auditoriya",
-  "startup_costs": [{ "item": "xarajat nomi", "amount_mln": raqam }],
-  "monthly_forecast": { "revenue_mln": raqam, "expenses_mln": raqam, "profit_mln": raqam },
-  "breakeven_months": raqam,
-  "risks": [{ "risk": "aniq xavf tavsifi", "mitigation": "qanday kamaytirish" }],
-  "mentor_note": "tuman va soha uchun amaliy maslahat"
+  "summary": "3-4 jumlada: nima qiladi, kimga xizmat qiladi, qancha daromad kutilmoqda — FAQAT ${biz.name_uz} haqida",
+  "target_audience": "bu tumandagi aniq maqsadli mijozlar kimlar va ular qayerda",
+  "startup_costs": [
+    { "item": "ANIQ jihoz nomi va modeli (qayerdan olish mumkin)", "amount_mln": "narxi" }
+  ],
+  "monthly_forecast": { "revenue_mln": "raqam", "expenses_mln": "raqam", "profit_mln": "raqam" },
+  "breakeven_months": "raqam",
+  "risks": [{ "risk": "tumanga xos aniq xavf", "mitigation": "aniq yechim" }],
+  "mentor_note": "1-2 jumlada eng muhim amaliy maslahat — qayerdan boshlash kerak"
 }`;
 
   return { system, user };

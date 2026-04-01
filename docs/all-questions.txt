@@ -1,0 +1,1244 @@
+BIZNESYOL — BARCHA SAVOLLAR / ВСЕ ВОПРОСЫ / ALL QUESTIONS
+======================================================================
+Oxirgi yangilanish: 2026-04-01
+Jami savollar: 58
+
+
+──────────────────────────────────────────────────────────────────────
+UMUMIY (Common)
+──────────────────────────────────────────────────────────────────────
+
+  [lang] (single_choice)
+  UZ: Tilni tanlang
+  RU: Выберите язык
+  EN: Choose your language
+  Variantlar / Варианты / Options:
+    1. [uz]
+       UZ: O'zbek
+       RU: O'zbek
+       EN: O'zbek
+    2. [ru]
+       UZ: Ruscha
+       RU: Русский
+       EN: Russian
+    3. [en]
+       UZ: Inglizcha
+       RU: English
+       EN: English
+
+  [district] (district_select)
+  UZ: Qaysi tumanda yashaysiz?
+  RU: В каком районе вы живёте?
+  EN: Which district do you live in?
+  Variantlar / Варианты / Options:
+    1. [job]
+       UZ: Ish topish
+       RU: Найти работу
+       EN: Find a job
+    2. [business]
+       UZ: Biznes ochish
+       RU: Открыть бизнес
+       EN: Start a business
+
+  [path] (path_split)
+  UZ: Maqsadingiz nima?
+  RU: Какая у вас цель?
+  EN: What is your goal?
+
+  [register] — NOT FOUND IN CODE
+
+
+──────────────────────────────────────────────────────────────────────
+ISH TOPISH (Job path)
+──────────────────────────────────────────────────────────────────────
+
+  [job_skills] (multi_choice)
+  UZ: Qanday ko'nikmalaringiz bor?
+  RU: Какие у вас навыки?
+  EN: What skills do you have?
+  Variantlar / Варианты / Options:
+    1. [driving]
+       UZ: Haydovchilik
+       RU: Вождение
+       EN: Driving
+    2. [cooking]
+       UZ: Oshpazlik
+       RU: Готовка
+       EN: Cooking
+    3. [sewing]
+       UZ: Tikuvchilik
+       RU: Шитьё
+       EN: Sewing
+    4. [construction]
+       UZ: Qurilish
+       RU: Строительство
+       EN: Construction
+    5. [it]
+       UZ: IT / kompyuter
+       RU: IT / компьютер
+       EN: IT / computers
+    6. [sales]
+       UZ: Savdo
+       RU: Продажи
+       EN: Sales
+    7. [teaching]
+       UZ: O'qitish
+       RU: Обучение
+       EN: Teaching
+    8. [medical]
+       UZ: Tibbiyot
+       RU: Медицина
+       EN: Healthcare
+    9. [security]
+       UZ: Qo'riqchi
+       RU: Охрана
+       EN: Security
+    10. [other]
+       UZ: Boshqa
+       RU: Другое
+       EN: Other
+
+  [job_experience] (single_choice)
+  UZ: Ish tajribangiz?
+  RU: Опыт работы?
+  EN: Work experience?
+  Variantlar / Варианты / Options:
+    1. [0-1]
+       UZ: 1 yilgacha
+       RU: До 1 года
+       EN: Under 1 year
+    2. [1-3]
+       UZ: 1–3 yil
+       RU: 1–3 года
+       EN: 1–3 years
+    3. [3-5]
+       UZ: 3–5 yil
+       RU: 3–5 лет
+       EN: 3–5 years
+    4. [5+]
+       UZ: 5+ yil
+       RU: 5+ лет
+       EN: 5+ years
+
+  [job_salary] (single_choice)
+  UZ: Qancha maosh kutasiz?
+  RU: Какую зарплату ожидаете?
+  EN: Expected salary?
+  Variantlar / Варианты / Options:
+    1. [any]
+       UZ: Farqi yo'q
+       RU: Любая
+       EN: Any
+    2. [2-4]
+       UZ: 2–4 mln
+       RU: 2–4 млн
+       EN: 2–4M
+    3. [4-7]
+       UZ: 4–7 mln
+       RU: 4–7 млн
+       EN: 4–7M
+    4. [7+]
+       UZ: 7+ mln
+       RU: 7+ млн
+       EN: 7+M
+
+  [job_relocate] (single_choice)
+  UZ: Ko'chishga tayyormisiz?
+  RU: Готовы к переезду?
+  EN: Ready to relocate?
+  Variantlar / Варианты / Options:
+    1. [да]
+       UZ: Ha
+       RU: Да
+       EN: Yes
+    2. [область]
+       UZ: Viloyat ichida
+       RU: В пределах области
+       EN: Within region
+    3. [нет]
+       UZ: Yo'q
+       RU: Нет
+       EN: No
+
+
+──────────────────────────────────────────────────────────────────────
+SOHA TANLASH (Sphere)
+──────────────────────────────────────────────────────────────────────
+
+  [sphere] (single_choice)
+  UZ: Qaysi sohada biznes qilmoqchisiz?
+  RU: В какой сфере хотите открыть бизнес?
+  EN: Which field do you want to start a business in?
+
+
+──────────────────────────────────────────────────────────────────────
+OVQAT TAYYORLASH (Food)
+──────────────────────────────────────────────────────────────────────
+
+  [food_q1] (single_choice)
+  UZ: Qanday turdagi ovqat tayyorlamoqchisiz?
+  RU: Какой тип еды хотите готовить?
+  EN: What type of food do you want to prepare?
+  Variantlar / Варианты / Options:
+    1. [home_meals]
+       UZ: Uy ovqatlari — osh, sho'rva, lag'mon (kunlik buyurtma)
+       RU: Домашняя еда — плов, шурпа, лагман (ежедневные заказы)
+       EN: Home meals — plov, soup, lagman (daily orders)
+    2. [bakery]
+       UZ: Non, somsa, patir — tandirda yoki pechda
+       RU: Хлеб, самса, лепёшки — в тандыре или печи
+       EN: Bread, samsa, flatbread — in tandoor or oven
+    3. [pastry]
+       UZ: Tort, shirinlik, pechenye — bayramlar uchun
+       RU: Торты, сладости, печенье — на заказ к праздникам
+       EN: Cakes, sweets, cookies — for events and orders
+    4. [street_food]
+       UZ: Ko'cha ovqat — shashlik, hot-dog, burger
+       RU: Стрит-фуд — шашлык, хот-доги, бургеры
+       EN: Street food — kebab, hot-dogs, burgers
+
+  [food_q2] (single_choice)
+  UZ: Oshxona jihozlaringiz bormi?
+  RU: Какое кухонное оборудование у вас есть?
+  EN: What kitchen equipment do you have?
+  Variantlar / Варианты / Options:
+    1. [home_kitchen]
+       UZ: Oddiy uy oshxonasi
+       RU: Обычная домашняя кухня
+       EN: Regular home kitchen
+    2. [has_tandoor]
+       UZ: Tandirim yoki katta pechim bor
+       RU: Есть тандыр или большая печь
+       EN: I have a tandoor or large oven
+    3. [semi_pro]
+       UZ: Professional oshxona jihozlari bor (mikser, muzlatgich)
+       RU: Есть проф. оборудование (миксер, морозилка)
+       EN: Have pro equipment (mixer, freezer)
+    4. [nothing]
+       UZ: Hech narsa yo'q, noldan boshlayman
+       RU: Ничего нет, начну с нуля
+       EN: Nothing, starting from scratch
+
+  [food_q3] (single_choice)
+  UZ: Kuniga nechta buyurtma bajarishingiz mumkin?
+  RU: Сколько заказов в день сможете выполнять?
+  EN: How many orders per day can you handle?
+  Variantlar / Варианты / Options:
+    1. [5-10]
+       UZ: 5–10 ta (o'zim yolg'iz)
+       RU: 5–10 (сам/сама)
+       EN: 5–10 (by myself)
+    2. [10-30]
+       UZ: 10–30 ta (1-2 yordamchi bilan)
+       RU: 10–30 (с 1-2 помощниками)
+       EN: 10–30 (with 1-2 helpers)
+    3. [30+]
+       UZ: 30+ (jamoa bilan, katta hajmda)
+       RU: 30+ (командой, большие объёмы)
+       EN: 30+ (with a team, large scale)
+
+  [food_q4] (single_choice)
+  UZ: Yetkazib berishni qanday rejalashtirmoqdasiz?
+  RU: Как планируете доставку?
+  EN: How do you plan to handle delivery?
+  Variantlar / Варианты / Options:
+    1. [pickup]
+       UZ: Mijoz o'zi olib ketadi
+       RU: Самовывоз
+       EN: Customer picks up
+    2. [self_deliver]
+       UZ: O'zim yetkazaman (velosiped/mototsikl)
+       RU: Сам доставлю (велосипед/мотоцикл)
+       EN: I'll deliver (bike/motorcycle)
+    3. [partner]
+       UZ: Express24 yoki Yandex Dostavka orqali
+       RU: Через Express24 или Yandex Доставку
+       EN: Via Express24 or Yandex Delivery
+    4. [undecided]
+       UZ: Hali qaror qilmadim
+       RU: Ещё не решил
+       EN: Haven't decided yet
+
+  [food_q5] (single_choice)
+  UZ: Sanitariya guvohnomangiz bormi (SES)?
+  RU: Есть ли санитарная книжка (СЭС)?
+  EN: Do you have a sanitary certificate?
+  Variantlar / Варианты / Options:
+    1. [yes]
+       UZ: Ha, bor
+       RU: Да, есть
+       EN: Yes
+    2. [no]
+       UZ: Yo'q, lekin olishim mumkin
+       RU: Нет, но могу получить
+       EN: No, but I can get one
+    3. [unknown]
+       UZ: Nima ekanini bilmayman
+       RU: Не знаю что это
+       EN: I don't know what that is
+
+
+──────────────────────────────────────────────────────────────────────
+GOZALLIK (Beauty)
+──────────────────────────────────────────────────────────────────────
+
+  [beauty_q1] (single_choice)
+  UZ: Qaysi xizmatlarni ko'rsatmoqchisiz?
+  RU: Какие услуги хотите оказывать?
+  EN: Which services do you want to offer?
+  Variantlar / Варианты / Options:
+    1. [hair]
+       UZ: Soch turmagi — erkaklar va ayollar soch kesish
+       RU: Стрижки — мужские и женские
+       EN: Haircuts — men's and women's
+    2. [nails]
+       UZ: Manikur / pedikur / tirnoq dizayni
+       RU: Маникюр / педикюр / дизайн ногтей
+       EN: Manicure / pedicure / nail art
+    3. [makeup]
+       UZ: Makiyaj / to'y pardozi
+       RU: Макияж / свадебный образ
+       EN: Makeup / bridal styling
+    4. [full_salon]
+       UZ: To'liq salon — barchasi birga
+       RU: Полный салон — все услуги
+       EN: Full salon — all services
+
+  [beauty_q2] (single_choice)
+  UZ: Bu sohada tajribangiz bormi?
+  RU: Есть опыт в этой сфере?
+  EN: Do you have experience in this field?
+  Variantlar / Варианты / Options:
+    1. [self]
+       UZ: O'zimga va yaqinlarimga qilaman
+       RU: Делаю себе и близким
+       EN: I do it for myself and friends
+    2. [course]
+       UZ: Kurs tamomladim, sertifikatim bor
+       RU: Закончила курсы, есть сертификат
+       EN: Completed a course, have certificate
+    3. [worked]
+       UZ: Salonda ishlaganman 1+ yil
+       RU: Работала в салоне 1+ год
+       EN: Worked in a salon 1+ year
+    4. [none]
+       UZ: Tajribam yo'q, o'rganmoqchiman
+       RU: Нет опыта, хочу научиться
+       EN: No experience, want to learn
+
+  [beauty_q3] (single_choice)
+  UZ: Asbob-uskunalaringiz bormi?
+  RU: Какое оборудование у вас есть?
+  EN: What equipment do you have?
+  Variantlar / Варианты / Options:
+    1. [basic]
+       UZ: Asosiy — qaychi, fen, lak
+       RU: Базовое — ножницы, фен, лак
+       EN: Basic — scissors, dryer, polish
+    2. [good]
+       UZ: Yaxshi to'plam — professional asboblar
+       RU: Хороший набор — проф. инструменты
+       EN: Good set — pro tools
+    3. [nothing]
+       UZ: Hech narsa yo'q
+       RU: Ничего нет
+       EN: Nothing at all
+
+  [beauty_q4] (single_choice)
+  UZ: Qayerda ishlash rejangiz bor?
+  RU: Где планируете работать?
+  EN: Where do you plan to work?
+  Variantlar / Варианты / Options:
+    1. [home]
+       UZ: Uyda — alohida xona ajrataman
+       RU: Дома — выделю отдельную комнату
+       EN: At home — dedicated room
+    2. [rent]
+       UZ: Ijara xona yoki salon ichida joy
+       RU: Арендую место в салоне или помещение
+       EN: Rent a chair or space
+    3. [mobile]
+       UZ: Mijozlar uyiga boraman
+       RU: Буду ездить к клиентам
+       EN: I'll go to clients
+
+  [beauty_q5] (single_choice)
+  UZ: Instagram sahifangiz bormi?
+  RU: Есть Instagram для работ?
+  EN: Do you have an Instagram for your work?
+  Variantlar / Варианты / Options:
+    1. [active]
+       UZ: Ha, faol sahifam bor, ishlarim bor
+       RU: Да, есть активная страница с работами
+       EN: Yes, active page with portfolio
+    2. [exists]
+       UZ: Bor, lekin kam post
+       RU: Есть, но мало постов
+       EN: Exists but few posts
+    3. [no]
+       UZ: Yo'q, yaratish kerak
+       RU: Нет, нужно создать
+       EN: No, need to create one
+
+
+──────────────────────────────────────────────────────────────────────
+TIKUVCHILIK (Sewing)
+──────────────────────────────────────────────────────────────────────
+
+  [sewing_q1] (single_choice)
+  UZ: Qanday turdagi tikuvchilik qilmoqchisiz?
+  RU: Какой вид швейного дела вас интересует?
+  EN: What type of sewing interests you?
+  Variantlar / Варианты / Options:
+    1. [clothes]
+       UZ: Kiyim tikish — ko'ylak, kostyum, libos
+       RU: Пошив одежды — платья, костюмы
+       EN: Clothing — dresses, suits
+    2. [alterations]
+       UZ: Ta'mirlash va qayta tikish
+       RU: Ремонт и переделка одежды
+       EN: Alterations and repairs
+    3. [curtains]
+       UZ: Parda, ko'rpa-to'shak, uy matolar
+       RU: Шторы, постельное бельё, текстиль
+       EN: Curtains, bedding, home textiles
+    4. [national]
+       UZ: Milliy kiyimlar — atlas, adras
+       RU: Национальная одежда — атлас, адрас
+       EN: National clothing — atlas, adras
+
+  [sewing_q2] (single_choice)
+  UZ: Tikuv mashinangiz bormi?
+  RU: Есть ли швейная машина?
+  EN: Do you have a sewing machine?
+  Variantlar / Варианты / Options:
+    1. [industrial]
+       UZ: Ha, sanoat mashinam bor (overlok ham)
+       RU: Да, промышленная (с оверлоком)
+       EN: Yes, industrial (with overlock)
+    2. [home]
+       UZ: Ha, uy mashinam bor
+       RU: Да, домашняя машина
+       EN: Yes, home machine
+    3. [old]
+       UZ: Eski mashina bor, yangilash kerak
+       RU: Есть старая, нужно обновить
+       EN: Have an old one, need to upgrade
+    4. [none]
+       UZ: Yo'q, sotib olish kerak
+       RU: Нет, нужно купить
+       EN: No, need to buy
+
+  [sewing_q3] (single_choice)
+  UZ: Bu sohada tajribangiz qanday?
+  RU: Какой у вас опыт в шитье?
+  EN: What's your sewing experience?
+  Variantlar / Варианты / Options:
+    1. [pro]
+       UZ: 5+ yil, buyurtmalar bilan ishlaganman
+       RU: 5+ лет, работала с заказами
+       EN: 5+ years, worked with orders
+    2. [medium]
+       UZ: 1–3 yil, o'zimga va tanishlarimga tikaman
+       RU: 1–3 года, шью для себя и знакомых
+       EN: 1–3 years, sew for myself and friends
+    3. [beginner]
+       UZ: Yangi boshladim yoki kurs tamomladim
+       RU: Начинаю или закончила курсы
+       EN: Just starting or finished a course
+
+  [sewing_q4] (single_choice)
+  UZ: Mato va materiallarni qayerdan olasiz?
+  RU: Где планируете закупать ткани?
+  EN: Where will you source fabrics?
+  Variantlar / Варианты / Options:
+    1. [wholesale]
+       UZ: Optom bozordan (Kuchka, Chorsu)
+       RU: Оптом с базара (Кучка, Чорсу)
+       EN: Wholesale from bazaar
+    2. [supplier]
+       UZ: Doimiy yetkazib beruvchim bor
+       RU: Есть постоянный поставщик
+       EN: I have a regular supplier
+    3. [client]
+       UZ: Mijoz o'zi olib keladi
+       RU: Клиент приносит сам
+       EN: Client brings their own
+    4. [unsure]
+       UZ: Hali bilmayman
+       RU: Пока не знаю
+       EN: Not sure yet
+
+  [sewing_q5] (single_choice)
+  UZ: Kuniga nechta buyum tikishingiz mumkin?
+  RU: Сколько изделий в день можете сшить?
+  EN: How many items can you sew per day?
+  Variantlar / Варианты / Options:
+    1. [1-2]
+       UZ: 1–2 ta (murakkab buyumlar)
+       RU: 1–2 (сложные изделия)
+       EN: 1–2 (complex items)
+    2. [3-5]
+       UZ: 3–5 ta (oddiy kiyimlar)
+       RU: 3–5 (простая одежда)
+       EN: 3–5 (simple clothing)
+    3. [5+]
+       UZ: 5+ (sanoat hajmda)
+       RU: 5+ (промышленный объём)
+       EN: 5+ (industrial volume)
+
+
+──────────────────────────────────────────────────────────────────────
+SAVDO (Trade)
+──────────────────────────────────────────────────────────────────────
+
+  [trade_q1] (single_choice)
+  UZ: Qanday savdo qilmoqchisiz?
+  RU: Какой тип торговли вас интересует?
+  EN: What type of trade interests you?
+  Variantlar / Варианты / Options:
+    1. [grocery]
+       UZ: Oziq-ovqat do'koni (mahalla do'koni)
+       RU: Продуктовый магазин (у дома)
+       EN: Grocery store (neighborhood)
+    2. [market]
+       UZ: Bozorda savdo nuqtasi (kiyim, poyafzal)
+       RU: Точка на рынке (одежда, обувь)
+       EN: Market stall (clothing, shoes)
+    3. [online]
+       UZ: Onlayn savdo (Instagram/Telegram)
+       RU: Онлайн (Instagram/Telegram)
+       EN: Online (Instagram/Telegram)
+    4. [wholesale]
+       UZ: Ulgurji savdo (optom sotish)
+       RU: Оптовая торговля
+       EN: Wholesale trade
+
+  [trade_q2] (single_choice)
+  UZ: Savdo tajribangiz bormi?
+  RU: Есть опыт в торговле?
+  EN: Do you have trading experience?
+  Variantlar / Варианты / Options:
+    1. [yes]
+       UZ: Ha, do'konda yoki bozorda ishlaganman
+       RU: Да, работал в магазине или на рынке
+       EN: Yes, worked in a shop or market
+    2. [online]
+       UZ: Onlayn sotganman (OLX, Instagram)
+       RU: Продавал онлайн (OLX, Instagram)
+       EN: Sold online (OLX, Instagram)
+    3. [no]
+       UZ: Tajribam yo'q
+       RU: Нет опыта
+       EN: No experience
+
+  [trade_q3] (single_choice)
+  UZ: Yetkazib beruvchilar bilan aloqangiz bormi?
+  RU: Есть связи с поставщиками?
+  EN: Do you have supplier connections?
+  Variantlar / Варианты / Options:
+    1. [yes]
+       UZ: Ha, optom sotuvchilarni bilaman
+       RU: Да, знаю оптовых продавцов
+       EN: Yes, I know wholesalers
+    2. [some]
+       UZ: Bir-ikkitasini bilaman
+       RU: Знаю пару поставщиков
+       EN: Know a couple
+    3. [no]
+       UZ: Yo'q, izlashim kerak
+       RU: Нет, нужно искать
+       EN: No, need to find them
+
+  [trade_q4] (single_choice)
+  UZ: Tovar uchun saqlash joyingiz bormi?
+  RU: Есть место для хранения товара?
+  EN: Do you have storage for goods?
+  Variantlar / Варианты / Options:
+    1. [yes]
+       UZ: Ha, omborim yoki katta xonam bor
+       RU: Да, есть склад или большое помещение
+       EN: Yes, have a warehouse or large room
+    2. [home]
+       UZ: Uyda saqlashim mumkin
+       RU: Могу хранить дома
+       EN: Can store at home
+    3. [no]
+       UZ: Joyim yo'q
+       RU: Места нет
+       EN: No storage space
+
+  [trade_q5] (single_choice)
+  UZ: Tumaningizda qaysi tovar kam — ko'proq talab bor?
+  RU: Какого товара не хватает в вашем районе?
+  EN: What products are lacking in your district?
+  Variantlar / Варианты / Options:
+    1. [food]
+       UZ: Sifatli oziq-ovqat
+       RU: Качественные продукты
+       EN: Quality food products
+    2. [clothes]
+       UZ: Arzon kiyim va poyafzal
+       RU: Доступная одежда и обувь
+       EN: Affordable clothing and shoes
+    3. [household]
+       UZ: Uy-ro'zg'or buyumlari
+       RU: Хозтовары
+       EN: Household goods
+    4. [unsure]
+       UZ: Bilmayman, o'rganishim kerak
+       RU: Не знаю, нужно изучить
+       EN: Not sure, need to research
+
+
+──────────────────────────────────────────────────────────────────────
+QISHLOQ XOJALIGI (Agriculture)
+──────────────────────────────────────────────────────────────────────
+
+  [agro_q1] (single_choice)
+  UZ: Qaysi yo'nalishda ishlamoqchisiz?
+  RU: Какое направление вас интересует?
+  EN: Which direction interests you?
+  Variantlar / Варианты / Options:
+    1. [greenhouse]
+       UZ: Issiqxona — pomidor, bodring, sabzavot
+       RU: Теплица — помидоры, огурцы, овощи
+       EN: Greenhouse — tomatoes, cucumbers, vegetables
+    2. [poultry]
+       UZ: Parrandachilik — tovuq, bedana
+       RU: Птицеводство — куры, перепела
+       EN: Poultry — chickens, quail
+    3. [livestock]
+       UZ: Chorvachilik — sigir, qo'y, echki
+       RU: Животноводство — коровы, овцы, козы
+       EN: Livestock — cows, sheep, goats
+    4. [fruit]
+       UZ: Mevazor / uzumzor
+       RU: Фруктовый / виноградный сад
+       EN: Orchard / vineyard
+
+  [agro_q2] (single_choice)
+  UZ: Yer maydoni bormi?
+  RU: Есть земельный участок?
+  EN: Do you have land?
+  Variantlar / Варианты / Options:
+    1. [own_big]
+       UZ: Ha, 10+ sotix o'z yerim
+       RU: Да, 10+ соток своей земли
+       EN: Yes, 10+ sotix of own land
+    2. [own_small]
+       UZ: Ha, lekin kichik (5 sotixgacha)
+       RU: Да, но маленький (до 5 соток)
+       EN: Yes, but small (up to 5 sotix)
+    3. [rent]
+       UZ: Ijaraga olishim mumkin
+       RU: Могу арендовать
+       EN: Can rent
+    4. [none]
+       UZ: Yo'q
+       RU: Нет
+       EN: No
+
+  [agro_q3] (single_choice)
+  UZ: Qishloq xo'jaligida tajribangiz bormi?
+  RU: Есть опыт в сельском хозяйстве?
+  EN: Do you have agricultural experience?
+  Variantlar / Варианты / Options:
+    1. [family]
+       UZ: Ha, oilamiz bilan shug'ullanganmiz
+       RU: Да, занимались семьёй
+       EN: Yes, family experience
+    2. [worked]
+       UZ: Fermerda ishlaganman
+       RU: Работал на ферме
+       EN: Worked on a farm
+    3. [hobby]
+       UZ: Bog'da o'stirganman (hobbi)
+       RU: Выращивал в огороде (хобби)
+       EN: Grew in garden (hobby)
+    4. [none]
+       UZ: Tajribam yo'q
+       RU: Нет опыта
+       EN: No experience
+
+  [agro_q4] (single_choice)
+  UZ: Suv ta'minoti qanday?
+  RU: Как обстоит дело с водоснабжением?
+  EN: What's the water supply situation?
+  Variantlar / Варианты / Options:
+    1. [good]
+       UZ: Yaxshi — ariq yoki quduq bor
+       RU: Хорошее — есть арык или колодец
+       EN: Good — have irrigation or well
+    2. [limited]
+       UZ: Cheklangan — faqat shahar suvi
+       RU: Ограниченное — только водопровод
+       EN: Limited — only city water
+    3. [poor]
+       UZ: Yomon — suv muammosi bor
+       RU: Плохое — проблемы с водой
+       EN: Poor — water problems
+
+  [agro_q5] (single_choice)
+  UZ: Mahsulotni qayerga sotasiz?
+  RU: Куда будете продавать продукцию?
+  EN: Where will you sell your products?
+  Variantlar / Варианты / Options:
+    1. [bazaar]
+       UZ: Mahalliy bozorga
+       RU: На местный базар
+       EN: Local bazaar
+    2. [restaurants]
+       UZ: Restoranlarga va oshxonalarga
+       RU: Ресторанам и столовым
+       EN: To restaurants and cafes
+    3. [wholesale]
+       UZ: Optom sotuvchilarga
+       RU: Оптовым покупателям
+       EN: To wholesalers
+    4. [neighbors]
+       UZ: Qo'shnilarga va mahallaga
+       RU: Соседям и по махалле
+       EN: To neighbors and community
+
+
+──────────────────────────────────────────────────────────────────────
+TAMIRLASH (Repair)
+──────────────────────────────────────────────────────────────────────
+
+  [repair_q1] (single_choice)
+  UZ: Qanday ta'mirlash bilan shug'ullanmoqchisiz?
+  RU: Каким ремонтом хотите заниматься?
+  EN: What type of repair do you want to do?
+  Variantlar / Варианты / Options:
+    1. [phone]
+       UZ: Telefon va elektronika ta'mirlash
+       RU: Телефоны и электроника
+       EN: Phones and electronics
+    2. [car]
+       UZ: Avto ta'mirlash (STO)
+       RU: Авторемонт (СТО)
+       EN: Auto repair
+    3. [construction]
+       UZ: Uy ta'mirlash (santexnika, elektrika, kafel)
+       RU: Ремонт квартир (сантехника, электрика, плитка)
+       EN: Home repair (plumbing, electrical, tiling)
+    4. [appliance]
+       UZ: Maishiy texnika (kir mashinasi, muzlatgich)
+       RU: Бытовая техника (стиралки, холодильники)
+       EN: Appliances (washers, fridges)
+
+  [repair_q2] (single_choice)
+  UZ: Bu sohada qancha tajribangiz bor?
+  RU: Сколько опыта в этой сфере?
+  EN: How much experience do you have?
+  Variantlar / Варианты / Options:
+    1. [pro]
+       UZ: 3+ yil, doimiy mijozlarim bor
+       RU: 3+ лет, есть постоянные клиенты
+       EN: 3+ years, have regular clients
+    2. [medium]
+       UZ: 1–3 yil, do'stlarga qilganman
+       RU: 1–3 года, делал друзьям
+       EN: 1–3 years, done for friends
+    3. [learning]
+       UZ: O'rganmoqdaman (YouTube, kurslar)
+       RU: Учусь (YouTube, курсы)
+       EN: Learning (YouTube, courses)
+
+  [repair_q3] (single_choice)
+  UZ: Asbob-uskunalaringiz qanday?
+  RU: Какие у вас инструменты?
+  EN: What tools do you have?
+  Variantlar / Варианты / Options:
+    1. [full]
+       UZ: To'liq to'plam — ishlashga tayyor
+       RU: Полный набор — готов работать
+       EN: Full set — ready to work
+    2. [basic]
+       UZ: Asosiy asboblar bor, to'ldirish kerak
+       RU: Базовые есть, нужно докупить
+       EN: Basic tools, need more
+    3. [none]
+       UZ: Deyarli hech narsa yo'q
+       RU: Почти ничего нет
+       EN: Almost nothing
+
+  [repair_q4] (single_choice)
+  UZ: Ehtiyot qismlarni qayerdan olasiz?
+  RU: Где будете закупать запчасти?
+  EN: Where will you get spare parts?
+  Variantlar / Варианты / Options:
+    1. [contacts]
+       UZ: Yetkazib beruvchilarim bor
+       RU: Есть свои поставщики
+       EN: Have my own suppliers
+    2. [market]
+       UZ: Bozordan (Malika, Urda, Sergeli)
+       RU: С рынка (Малика, Урда, Сергели)
+       EN: From market (Malika, Urda, Sergeli)
+    3. [online]
+       UZ: Internetdan buyurtma qilaman
+       RU: Заказываю через интернет
+       EN: Order online
+
+  [repair_q5] (single_choice)
+  UZ: Mijozlarni qanday topasiz?
+  RU: Как будете находить клиентов?
+  EN: How will you find clients?
+  Variantlar / Варианты / Options:
+    1. [word]
+       UZ: Og'zaki — tanishlar va mahalla orqali
+       RU: Сарафанное радио — знакомые и махалля
+       EN: Word of mouth — friends and community
+    2. [telegram]
+       UZ: Telegram kanal va guruhlar orqali
+       RU: Через Telegram каналы и группы
+       EN: Via Telegram channels and groups
+    3. [location]
+       UZ: Bozor yonida yoki ko'chada joy ochaman
+       RU: Открою точку у рынка или у дороги
+       EN: Open a spot near a market or road
+    4. [olx]
+       UZ: OLX va e'lonlar orqali
+       RU: Через OLX и объявления
+       EN: Via OLX and classifieds
+
+
+──────────────────────────────────────────────────────────────────────
+TRANSPORT (Transport)
+──────────────────────────────────────────────────────────────────────
+
+  [transport_q1] (single_choice)
+  UZ: Qanday transport xizmati ko'rsatmoqchisiz?
+  RU: Какой вид транспортных услуг?
+  EN: What type of transport service?
+  Variantlar / Варианты / Options:
+    1. [taxi]
+       UZ: Taksi (Yandex, Uklon, MyTaxi)
+       RU: Такси (Яндекс, Uklon, MyTaxi)
+       EN: Taxi (Yandex, Uklon, MyTaxi)
+    2. [cargo]
+       UZ: Yuk tashish (Damas, Porter, GAZel)
+       RU: Грузоперевозки (Дамас, Портер, Газель)
+       EN: Cargo (Damas, Porter, GAZel)
+    3. [delivery]
+       UZ: Kurerlik / yetkazib berish
+       RU: Курьерская доставка
+       EN: Courier / delivery
+    4. [intercity]
+       UZ: Shaharlararo yo'lovchi tashish
+       RU: Междугородние пассажирские
+       EN: Intercity passenger transport
+
+  [transport_q2] (single_choice)
+  UZ: Avtomobilingiz bormi?
+  RU: Есть автомобиль?
+  EN: Do you have a vehicle?
+  Variantlar / Варианты / Options:
+    1. [own_car]
+       UZ: Ha, yengil avto (Cobalt, Nexia, Spark)
+       RU: Да, легковой (Cobalt, Nexia, Spark)
+       EN: Yes, car (Cobalt, Nexia, Spark)
+    2. [own_cargo]
+       UZ: Ha, yuk mashinam bor (Damas, Porter)
+       RU: Да, грузовой (Дамас, Портер)
+       EN: Yes, cargo (Damas, Porter)
+    3. [buy]
+       UZ: Yo'q, sotib olishim kerak
+       RU: Нет, нужно купить
+       EN: No, need to buy
+    4. [rent]
+       UZ: Ijaraga olishim mumkin
+       RU: Могу взять в аренду
+       EN: Can rent one
+
+  [transport_q3] (single_choice)
+  UZ: Haydovchilik huquqi bormi?
+  RU: Есть водительские права?
+  EN: Do you have a driver's license?
+  Variantlar / Варианты / Options:
+    1. [bc]
+       UZ: Ha, B va C toifa
+       RU: Да, категории B и C
+       EN: Yes, categories B and C
+    2. [b]
+       UZ: Ha, faqat B toifa
+       RU: Да, только категория B
+       EN: Yes, only category B
+    3. [no]
+       UZ: Yo'q
+       RU: Нет
+       EN: No
+
+  [transport_q4] (single_choice)
+  UZ: Kuniga qancha soat ishlashingiz mumkin?
+  RU: Сколько часов в день готовы работать?
+  EN: How many hours per day can you work?
+  Variantlar / Варианты / Options:
+    1. [part]
+       UZ: 4–6 soat (qo'shimcha daromad)
+       RU: 4–6 часов (подработка)
+       EN: 4–6 hours (side income)
+    2. [full]
+       UZ: 8–10 soat (asosiy ish)
+       RU: 8–10 часов (основная работа)
+       EN: 8–10 hours (main job)
+    3. [max]
+       UZ: 12+ soat (maksimal daromad)
+       RU: 12+ часов (максимум дохода)
+       EN: 12+ hours (maximum income)
+
+
+──────────────────────────────────────────────────────────────────────
+TALIM (Education)
+──────────────────────────────────────────────────────────────────────
+
+  [education_q1] (single_choice)
+  UZ: Qaysi ta'lim yo'nalishida ishlaysiz?
+  RU: Какое направление образования?
+  EN: Which education field?
+  Variantlar / Варианты / Options:
+    1. [tutoring]
+       UZ: Repetitorlik (matematika, tillar, fanlar)
+       RU: Репетиторство (математика, языки, предметы)
+       EN: Tutoring (math, languages, subjects)
+    2. [language]
+       UZ: Til kurslari (ingliz, rus, koreya)
+       RU: Языковые курсы (английский, русский, корейский)
+       EN: Language courses (English, Russian, Korean)
+    3. [kindergarten]
+       UZ: Xususiy bolalar bog'chasi / yozgi lager
+       RU: Частный детский сад / летний лагерь
+       EN: Private kindergarten / summer camp
+    4. [skills]
+       UZ: Kasbiy kurslar (tikuvchilik, oshpazlik, IT)
+       RU: Профессиональные курсы (шитьё, кулинария, IT)
+       EN: Professional courses (sewing, cooking, IT)
+
+  [education_q2] (single_choice)
+  UZ: Bu sohada tajribangiz bormi?
+  RU: Есть педагогический опыт?
+  EN: Do you have teaching experience?
+  Variantlar / Варианты / Options:
+    1. [teacher]
+       UZ: Ha, maktabda yoki kursda ishlaganman
+       RU: Да, работал в школе или на курсах
+       EN: Yes, worked in school or courses
+    2. [informal]
+       UZ: Norasmiy — bolalarga, tanishlarga o'rgatganman
+       RU: Неформально — учил детей, знакомых
+       EN: Informally — taught kids, friends
+    3. [none]
+       UZ: Yo'q, lekin bilimim bor
+       RU: Нет, но знания есть
+       EN: No, but I have the knowledge
+
+  [education_q3] (single_choice)
+  UZ: Dars o'tish formatini tanlang
+  RU: Формат преподавания?
+  EN: Teaching format?
+  Variantlar / Варианты / Options:
+    1. [offline]
+       UZ: Faqat oflayn — uyda yoki ijarada
+       RU: Только офлайн — дома или в аренде
+       EN: Offline only — at home or rented space
+    2. [online]
+       UZ: Faqat onlayn (Zoom, Telegram)
+       RU: Только онлайн (Zoom, Telegram)
+       EN: Online only (Zoom, Telegram)
+    3. [hybrid]
+       UZ: Aralash — onlayn va oflayn
+       RU: Смешанный — онлайн и офлайн
+       EN: Hybrid — online and offline
+
+  [education_q4] (single_choice)
+  UZ: Nechta o'quvchi bilan ishlashingiz mumkin?
+  RU: Сколько учеников можете вести?
+  EN: How many students can you handle?
+  Variantlar / Варианты / Options:
+    1. [individual]
+       UZ: 1–3 (individual darslar)
+       RU: 1–3 (индивидуальные)
+       EN: 1–3 (individual lessons)
+    2. [small]
+       UZ: 5–10 (kichik guruhlar)
+       RU: 5–10 (небольшие группы)
+       EN: 5–10 (small groups)
+    3. [large]
+       UZ: 10+ (katta guruhlar / markaz)
+       RU: 10+ (большие группы / центр)
+       EN: 10+ (large groups / center)
+
+
+──────────────────────────────────────────────────────────────────────
+RAQAMLI (Digital)
+──────────────────────────────────────────────────────────────────────
+
+  [digital_q1] (single_choice)
+  UZ: Qaysi raqamli xizmatlar bilan shug'ullanasiz?
+  RU: Какие цифровые услуги хотите оказывать?
+  EN: Which digital services do you want to offer?
+  Variantlar / Варианты / Options:
+    1. [web]
+       UZ: Veb-sayt va dastur yaratish
+       RU: Создание сайтов и приложений
+       EN: Website and app development
+    2. [smm]
+       UZ: SMM — ijtimoiy tarmoqlarni yuritish
+       RU: SMM — ведение соцсетей
+       EN: SMM — social media management
+    3. [photo_video]
+       UZ: Foto/video suratga olish va montaj
+       RU: Фото/видео съёмка и монтаж
+       EN: Photo/video shooting and editing
+    4. [design]
+       UZ: Grafik dizayn (logotip, reklama)
+       RU: Графический дизайн (логотипы, реклама)
+       EN: Graphic design (logos, advertising)
+    5. [online_shop]
+       UZ: Onlayn do'kon (Instagram/Telegram)
+       RU: Онлайн-магазин (Instagram/Telegram)
+       EN: Online shop (Instagram/Telegram)
+
+  [digital_q2] (single_choice)
+  UZ: Bu sohada tajribangiz qanday?
+  RU: Какой опыт в этой сфере?
+  EN: What's your experience level?
+  Variantlar / Варианты / Options:
+    1. [pro]
+       UZ: Freelance yoki kompaniyada ishlaganman
+       RU: Работал фрилансером или в компании
+       EN: Worked freelance or in a company
+    2. [portfolio]
+       UZ: Portfolio bor, lekin doimiy ish qilmadim
+       RU: Есть портфолио, но не работал постоянно
+       EN: Have a portfolio but no steady work
+    3. [learning]
+       UZ: O'rganmoqdaman (kurslar, YouTube)
+       RU: Учусь (курсы, YouTube)
+       EN: Learning (courses, YouTube)
+
+  [digital_q3] (single_choice)
+  UZ: Qanday texnik jihozlaringiz bor?
+  RU: Какое оборудование есть?
+  EN: What equipment do you have?
+  Variantlar / Варианты / Options:
+    1. [good]
+       UZ: Yaxshi kompyuter/noutbuk + internet
+       RU: Хороший компьютер/ноутбук + интернет
+       EN: Good computer/laptop + internet
+    2. [phone]
+       UZ: Faqat telefon
+       RU: Только телефон
+       EN: Phone only
+    3. [camera]
+       UZ: Kamera + kompyuter (foto/video uchun)
+       RU: Камера + компьютер (для фото/видео)
+       EN: Camera + computer (for photo/video)
+    4. [need]
+       UZ: Sotib olishim kerak
+       RU: Нужно купить
+       EN: Need to buy
+
+  [digital_q4] (single_choice)
+  UZ: Mijozlarni qayerdan topish rejangiz bor?
+  RU: Где планируете искать клиентов?
+  EN: Where do you plan to find clients?
+  Variantlar / Варианты / Options:
+    1. [freelance]
+       UZ: Upwork, Fiverr — xalqaro mijozlar
+       RU: Upwork, Fiverr — международные клиенты
+       EN: Upwork, Fiverr — international clients
+    2. [local]
+       UZ: Mahalliy bizneslar va tadbirkorlar
+       RU: Местные бизнесы и предприниматели
+       EN: Local businesses and entrepreneurs
+    3. [social]
+       UZ: Telegram guruhlar va Instagram
+       RU: Telegram группы и Instagram
+       EN: Telegram groups and Instagram
+    4. [all]
+       UZ: Hammasi — turli kanallardan
+       RU: Все каналы — максимальный охват
+       EN: All channels — maximum reach
+
+
+──────────────────────────────────────────────────────────────────────
+XIZMATLAR (Services)
+──────────────────────────────────────────────────────────────────────
+
+  [services_q1] (single_choice)
+  UZ: Qanday xizmat ko'rsatmoqchisiz?
+  RU: Какие услуги хотите оказывать?
+  EN: What services do you want to offer?
+  Variantlar / Варианты / Options:
+    1. [laundry]
+       UZ: Kir yuvish / kimyoviy tozalash
+       RU: Прачечная / химчистка
+       EN: Laundry / dry cleaning
+    2. [cleaning]
+       UZ: Uy tozalash (klining)
+       RU: Уборка квартир (клининг)
+       EN: House cleaning
+    3. [car_wash]
+       UZ: Avtomobil yuvish
+       RU: Автомойка
+       EN: Car wash
+    4. [other]
+       UZ: Boshqa xizmatlar
+       RU: Другие услуги
+       EN: Other services
+
+  [services_q2] (single_choice)
+  UZ: Bu xizmat uchun maxsus jihozlar kerakmi?
+  RU: Нужно специальное оборудование?
+  EN: Do you need special equipment?
+  Variantlar / Варианты / Options:
+    1. [have]
+       UZ: Ha, va menda bor
+       RU: Да, и оно у меня есть
+       EN: Yes, and I have it
+    2. [buy]
+       UZ: Ha, sotib olishim kerak
+       RU: Да, нужно купить
+       EN: Yes, need to buy
+    3. [minimal]
+       UZ: Minimal jihozlar kerak
+       RU: Нужно минимум оборудования
+       EN: Minimal equipment needed
+
+  [services_q3] (single_choice)
+  UZ: Tumaningizda bu xizmatga talab bormi?
+  RU: Есть спрос на эту услугу в вашем районе?
+  EN: Is there demand for this service in your area?
+  Variantlar / Варианты / Options:
+    1. [high]
+       UZ: Ha, ko'p odam so'raydi
+       RU: Да, многие спрашивают
+       EN: Yes, many people ask
+    2. [moderate]
+       UZ: O'rtacha — bor lekin ko'p emas
+       RU: Средний — есть, но не много
+       EN: Moderate — some but not a lot
+    3. [unsure]
+       UZ: Bilmayman, tekshirish kerak
+       RU: Не знаю, нужно проверить
+       EN: Not sure, need to check
+
+  [services_q4] (single_choice)
+  UZ: Yordamchilar kerakmi?
+  RU: Нужны ли помощники?
+  EN: Will you need helpers?
+  Variantlar / Варианты / Options:
+    1. [solo]
+       UZ: O'zim yolg'iz ishlayman
+       RU: Буду работать один/одна
+       EN: I'll work alone
+    2. [family]
+       UZ: Oila a'zolari yordam beradi
+       RU: Помогут члены семьи
+       EN: Family members will help
+    3. [hire]
+       UZ: 1–2 ishchi yollayman
+       RU: Найму 1–2 работников
+       EN: Will hire 1–2 workers
+
+
+──────────────────────────────────────────────────────────────────────
+MOLIYAVIY (Financial — all spheres)
+──────────────────────────────────────────────────────────────────────
+
+  [capital] (single_choice)
+  UZ: Biznesga qancha pul sarflashingiz mumkin?
+  RU: Сколько готовы вложить в бизнес?
+  EN: How much can you invest?
+  Variantlar / Варианты / Options:
+    1. [0-5]
+       UZ: 5 mln gacha
+       RU: До 5 млн
+       EN: Up to 5M
+    2. [5-20]
+       UZ: 5–20 mln
+       RU: 5–20 млн
+       EN: 5–20M
+    3. [20-50]
+       UZ: 20–50 mln
+       RU: 20–50 млн
+       EN: 20–50M
+    4. [50-100]
+       UZ: 50–100 mln
+       RU: 50–100 млн
+       EN: 50–100M
+    5. [100+]
+       UZ: 100 mln+
+       RU: 100+ млн
+       EN: 100M+
+
+  [collateral] (single_choice)
+  UZ: Kredit uchun garov qo'ya olasizmi?
+  RU: Можете предоставить залог для кредита?
+  EN: Can you provide collateral for a loan?
+  Variantlar / Варианты / Options:
+    1. [есть]
+       UZ: Ha — uy, avto yoki yer
+       RU: Да — дом, авто или земля
+       EN: Yes — house, car, or land
+    2. [нет]
+       UZ: Yo'q
+       RU: Нет
+       EN: No
+
+  [competition] (single_choice)
+  UZ: Tumaningizda shu sohada raqobat bormi?
+  RU: Есть конкуренция в этой сфере в вашем районе?
+  EN: Is there competition in this field in your district?
+  Variantlar / Варианты / Options:
+    1. [нет]
+       UZ: Yo'q yoki bilmayman
+       RU: Нет или не знаю
+       EN: No or don't know
+    2. [1-3]
+       UZ: Ha, 1–3 ta o'xshash biznes bor
+       RU: Да, 1–3 похожих бизнеса
+       EN: Yes, 1–3 similar businesses
+    3. [много]
+       UZ: Ko'p, lekin men farqli qilaman
+       RU: Много, но я сделаю иначе
+       EN: Many, but I'll stand out
+
+  [poor_registry] (single_choice)
+  UZ: Kam ta'minlangan oila maqomingiz bormi?
+  RU: Есть статус малообеспеченной семьи?
+  EN: Do you have low-income family status?
+  Variantlar / Варианты / Options:
+    1. [да]
+       UZ: Ha
+       RU: Да
+       EN: Yes
+    2. [нет]
+       UZ: Yo'q
+       RU: Нет
+       EN: No
+    3. [не знаю]
+       UZ: Bilmayman
+       RU: Не знаю
+       EN: Not sure
+
+
+──────────────────────────────────────────────────────────────────────
+ROYXATDAN OTISH (Registration form — not a question, separate UI)
+──────────────────────────────────────────────────────────────────────
+
+  Majburiy maydonlar / Обязательные / Required:
+    1. Toliq ism / Полное имя / Full name
+    2. Telefon raqam / Телефон / Phone (+998 format)
+  
+  Ixtiyoriy maydonlar / Необязательные / Optional:
+    3. Tugilgan yil / Год рождения / Birth year
+    4. Jins / Пол / Gender (male/female)
+    5. Talim darajasi / Образование / Education (secondary/vocational/higher)
+    6. Oila azolari soni / Членов семьи / Family size
+    7. Oylik daromad (mln) / Доход / Monthly income
+    8. Hozirgi holat / Статус / Employment status (unemployed/part_time/informal/student)
+    9. Biznes tajribasi / Опыт бизнеса / Business experience (yes/no)

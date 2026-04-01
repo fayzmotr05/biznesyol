@@ -69,24 +69,44 @@ export function scoreBusinessTypes(
   const season = getCurrentSeason();
   const userCapital = capitalRangeToMln(capitalRange);
 
-  // Map sphere selection to business categories for boosting
-  const sphereToCategories: Record<string, string[]> = {
-    food: ["food"],
-    beauty: ["services"],
-    sewing: ["production"],
-    trade: ["trade"],
-    agro: ["agriculture"],
-    repair: ["services", "construction"],
-    transport: ["transport"],
-    education: ["education"],
-    digital: ["it", "creative"],
-    services: ["services"],
+  // Map sphere to specific business type IDs (primary) and related categories (secondary)
+  const sphereToPrimary: Record<string, string[]> = {
+    food: ["food_catering", "bakery"],
+    beauty: ["beauty_salon", "barbershop"],
+    sewing: ["sewing_studio"],
+    trade: ["grocery_shop", "market_stall", "online_shop"],
+    agro: ["greenhouse", "poultry_farming", "livestock"],
+    repair: ["phone_repair", "car_repair", "construction_repair"],
+    transport: ["transport_taxi"],
+    education: ["tutoring", "kindergarten_private"],
+    digital: ["it_services", "photo_video", "online_shop"],
+    services: ["laundry", "car_wash"],
   };
-  const boostedCategories = sphereToCategories[sphere] || [];
+  const sphereToRelated: Record<string, string[]> = {
+    food: ["production"],
+    beauty: ["services"],
+    sewing: ["services", "trade"],
+    trade: ["food", "services"],
+    agro: ["food", "production"],
+    repair: ["services", "construction"],
+    transport: ["trade", "services"],
+    education: ["services", "it"],
+    digital: ["creative", "trade", "education"],
+    services: ["trade"],
+  };
+  const primaryIds = sphereToPrimary[sphere] || [];
+  const relatedCategories = sphereToRelated[sphere] || [];
 
   const scored = businessTypes.map((biz) => {
-    // --- sphere_boost: if user chose this sphere, boost matching businesses ---
-    const sphereBoost = boostedCategories.includes(biz.category) ? 0.15 : 0;
+    // --- sphere matching: primary (user's exact sphere) vs related vs unrelated ---
+    let sphereMultiplier: number;
+    if (primaryIds.includes(biz.id)) {
+      sphereMultiplier = 1.0; // exact match — full score
+    } else if (relatedCategories.includes(biz.category)) {
+      sphereMultiplier = 0.5; // related — half score, shown as alternatives
+    } else {
+      sphereMultiplier = 0.1; // unrelated — nearly invisible
+    }
 
     // --- skills_match: required (full weight) + optional (0.5x bonus) ---
     let requiredMatch = 0;
@@ -138,14 +158,14 @@ export function scoreBusinessTypes(
     // --- season_ok: current season coefficient ---
     const seasonOk = biz.seasons[season] ?? 1.0;
 
-    // Weighted total
-    let totalScore =
-      skillsMatch * 0.25 +
-      capitalSufficient * 0.20 +
+    // Weighted total — sphere multiplier ensures user's chosen field dominates
+    let totalScore = (
+      skillsMatch * 0.30 +
+      capitalSufficient * 0.25 +
       competitionLow * 0.15 +
       riskOk * 0.15 +
-      seasonOk * 0.10 +
-      sphereBoost; // +0.15 if matches user's chosen sphere
+      seasonOk * 0.15
+    ) * sphereMultiplier;
 
     // Bonus: premises match
     if (biz.requires_premises && hasPremises === "нет") {
