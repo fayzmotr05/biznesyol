@@ -1,0 +1,2 @@
+[     913ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ https://biznesyol.vercel.app/admin/login:0
+[   29963ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ https://biznesyol.vercel.app/admin/super:0

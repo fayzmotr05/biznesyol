@@ -1,0 +1,28 @@
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "BiznesYo'l Biznes rejalashtirish platformasi" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img [ref=e6]
+        - generic [ref=e10]:
+          - text: BiznesYo'l
+          - generic [ref=e11]: Biznes rejalashtirish platformasi
+      - generic [ref=e12]:
+        - button "O'z" [ref=e13]
+        - button "Рус" [ref=e14]
+        - button "Eng" [ref=e15]
+  - main [ref=e16]:
+    - generic [ref=e17]:
+      - generic [ref=e18]:
+        - img [ref=e20]
+        - heading "Admin Panel" [level=1] [ref=e23]
+        - paragraph [ref=e24]: BiznesYo'l boshqaruv paneli
+      - generic [ref=e25]:
+        - generic [ref=e26]:
+          - generic [ref=e27]: Email
+          - textbox "admin@biznesyol.uz" [active] [ref=e28]
+        - generic [ref=e29]:
+          - generic [ref=e30]: Parol
+          - textbox [ref=e31]
+        - button "Kirish" [ref=e32]
+  - alert [ref=e33]

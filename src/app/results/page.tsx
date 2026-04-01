@@ -29,7 +29,9 @@ export default function ResultsPage() {
 
 function ResultsContent() {
   const searchParams = useSearchParams();
-  const sessionId = searchParams.get("sessionId") ?? "";
+  // Try URL param first, then localStorage
+  const urlSessionId = searchParams.get("sessionId") ?? "";
+  const [sessionId, setSessionId] = useState(urlSessionId);
 
   const [answers, setAnswers] = useState<SurveyAnswers | null>(null);
   const [district, setDistrict] = useState<District | null>(null);
@@ -45,6 +47,12 @@ function ResultsContent() {
 
   // Load answers and compute scores
   useEffect(() => {
+    // Resolve sessionId: URL param > localStorage
+    if (!sessionId) {
+      const saved = localStorage.getItem("asaka_session_id");
+      if (saved) setSessionId(saved);
+    }
+
     let stored: SurveyAnswers | null = null;
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -65,7 +73,7 @@ function ResultsContent() {
 
     setDistrict(dist);
     setScored(scoreBusinessTypes(stored, dist.type));
-  }, []);
+  }, [sessionId]);
 
   // Select a business → compute banks, save selection
   const handleSelect = useCallback((idx: number) => {

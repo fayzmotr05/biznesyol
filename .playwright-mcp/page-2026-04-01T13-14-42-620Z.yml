@@ -1,0 +1,65 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "BiznesYo'l Biznes rejalashtirish platformasi" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img [ref=e6]
+        - generic [ref=e10]:
+          - text: BiznesYo'l
+          - generic [ref=e11]: Biznes rejalashtirish platformasi
+      - generic [ref=e12]:
+        - button "O'z" [ref=e13]
+        - button "Рус" [ref=e14]
+        - button "Eng" [ref=e15]
+  - main [ref=e16]:
+    - generic [ref=e18]:
+      - generic [ref=e19]: Bepul platforma
+      - heading "O'z biznesingizni boshlash uchun aniq reja oling" [level=1] [ref=e21]:
+        - text: O'z biznesingizni boshlash
+        - text: uchun aniq reja oling
+      - paragraph [ref=e22]: Tumaningiz, ko'nikmalaringiz va byudjetingizga mos biznes turi, bank krediti va bosqichma-bosqich reja.
+      - generic [ref=e23]:
+        - link "Boshlash" [ref=e24] [cursor=pointer]:
+          - /url: /survey
+          - text: Boshlash
+          - img [ref=e25]
+        - generic [ref=e27]: 5 daqiqa · Ro'yxatdan o'tishsiz
+    - generic [ref=e28]:
+      - heading "Qanday ishlaydi" [level=2] [ref=e29]
+      - generic [ref=e30]:
+        - generic [ref=e31]:
+          - generic [ref=e32]: "01"
+          - img [ref=e34]
+          - heading "So'rovnomani to'ldiring" [level=3] [ref=e37]
+          - paragraph [ref=e38]: 5 daqiqalik savollarga javob bering — ro'yxatdan o'tish shart emas
+        - generic [ref=e39]:
+          - generic [ref=e40]: "02"
+          - img [ref=e42]
+          - heading "Biznes tavsiyalar oling" [level=3] [ref=e45]
+          - paragraph [ref=e46]: AI sizning ko'nikmalaringiz va hududingizga mos biznes turlarini tanlaydi
+        - generic [ref=e47]:
+          - generic [ref=e48]: "03"
+          - img [ref=e50]
+          - heading "Bank va reja tanlang" [level=3] [ref=e52]
+          - paragraph [ref=e53]: Garovsiz kredit, imtiyozli dasturlar va tayyor biznes-reja
+    - generic [ref=e56]:
+      - generic [ref=e57]:
+        - generic [ref=e58]: 600K+
+        - generic [ref=e59]: O'zbekistonda kichik bizneslar
+      - generic [ref=e60]:
+        - generic [ref=e61]: 54%
+        - generic [ref=e62]: YaIMdagi KBning ulushi
+      - generic [ref=e63]:
+        - generic [ref=e64]: "7"
+        - generic [ref=e65]: Bank kredit dasturlari
+    - generic [ref=e67]:
+      - heading "Biznesingizni bugun boshlang" [level=2] [ref=e68]
+      - paragraph [ref=e69]: So'rovnomani to'ldiring va o'zingizga mos biznes turini bilib oling
+      - link "Bepul boshlash" [ref=e70] [cursor=pointer]:
+        - /url: /survey
+        - text: Bepul boshlash
+        - img [ref=e71]
+    - generic [ref=e74]:
+      - paragraph [ref=e75]: Tavsiyalar taxminiy xarakterga ega va natija kafolati emas.
+      - paragraph [ref=e76]: 2026 BiznesYo'l
+  - alert [ref=e77]

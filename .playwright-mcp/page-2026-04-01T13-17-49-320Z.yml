@@ -1,0 +1,27 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "BiznesYo'l Biznes rejalashtirish platformasi" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img [ref=e6]
+        - generic [ref=e10]:
+          - text: BiznesYo'l
+          - generic [ref=e11]: Biznes rejalashtirish platformasi
+      - generic [ref=e12]:
+        - button "O'z" [ref=e13]
+        - button "Рус" [ref=e14]
+        - button "Eng" [ref=e15]
+  - main [ref=e16]:
+    - generic [ref=e17]:
+      - generic [ref=e18]:
+        - generic [ref=e19]: 0-savol 13-dan
+        - generic [ref=e20]: 0%
+      - progressbar "0 of 13" [ref=e21]
+    - generic [ref=e23]:
+      - heading "Tilni tanlang" [level=2] [ref=e24]
+      - generic [ref=e25]:
+        - button "O'zbek" [ref=e26]
+        - button "Ruscha" [ref=e27]
+        - button "Inglizcha" [ref=e28]
+    - paragraph [ref=e29]: Ma'lumotlaringiz maxfiy saqlanadi
+  - alert [ref=e30]

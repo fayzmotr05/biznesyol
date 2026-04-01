@@ -1,0 +1,42 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "BiznesYo'l Biznes rejalashtirish platformasi" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img [ref=e6]
+        - generic [ref=e10]:
+          - text: BiznesYo'l
+          - generic [ref=e11]: Biznes rejalashtirish platformasi
+      - generic [ref=e12]:
+        - button "O'z" [ref=e13]
+        - button "Рус" [ref=e14]
+        - button "Eng" [ref=e15]
+  - main [ref=e16]:
+    - generic [ref=e17]:
+      - generic [ref=e18]:
+        - generic [ref=e19]: 3-savol 13-dan
+        - generic [ref=e20]: 23%
+      - progressbar "3 of 13" [ref=e632]
+    - button "Orqaga" [ref=e33]:
+      - img [ref=e34]
+      - text: Orqaga
+    - generic [ref=e634]:
+      - generic [ref=e635]:
+        - img [ref=e637]
+        - generic [ref=e640]:
+          - heading "Ma'lumotlaringiz" [level=2] [ref=e641]
+          - paragraph [ref=e642]: Shaxsiy biznes-reja uchun kerak
+      - generic [ref=e646]:
+        - generic [ref=e647]:
+          - generic [ref=e648]: To'liq ism-familiyangiz *
+          - textbox "Aliyev Ali" [ref=e649]
+        - generic [ref=e650]:
+          - generic [ref=e651]: Telefon raqam *
+          - textbox "+998 90 123 4567" [ref=e652]: "+998"
+        - generic [ref=e653]:
+          - generic [ref=e654]: Tug'ilgan yilingiz
+          - spinbutton [ref=e655]
+        - button "Davom etish" [disabled] [ref=e656]
+      - paragraph [ref=e657]: Ma'lumotlaringiz faqat biznes-reja uchun ishlatiladi va uchinchi tomonlarga berilmaydi
+    - paragraph [ref=e29]: Ma'lumotlaringiz maxfiy saqlanadi
+  - alert [ref=e30]
