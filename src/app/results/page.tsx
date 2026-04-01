@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { Suspense, useEffect, useState, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import type { Locale, SurveyAnswers, ScoredBusiness, BankMatch, BusinessPlanResult, District } from "@/types";
@@ -16,6 +16,18 @@ const districts = districtsData as District[];
 const STORAGE_KEY = "asaka_survey";
 
 export default function ResultsPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex-1 flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    }>
+      <ResultsContent />
+    </Suspense>
+  );
+}
+
+function ResultsContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("sessionId") ?? "";
 
