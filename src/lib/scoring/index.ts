@@ -65,14 +65,33 @@ export function scoreBusinessTypes(
   const capitalRange = str(answers, "capital");
   const competition = str(answers, "competition");
   const hasPremises = str(answers, "premises");
+  const sphere = str(answers, "sphere"); // user's chosen sphere
   const season = getCurrentSeason();
   const userCapital = capitalRangeToMln(capitalRange);
 
+  // Map sphere selection to business categories for boosting
+  const sphereToCategories: Record<string, string[]> = {
+    food: ["food"],
+    beauty: ["services"],
+    sewing: ["production"],
+    trade: ["trade"],
+    agro: ["agriculture"],
+    repair: ["services", "construction"],
+    transport: ["transport"],
+    education: ["education"],
+    digital: ["it", "creative"],
+    services: ["services"],
+  };
+  const boostedCategories = sphereToCategories[sphere] || [];
+
   const scored = businessTypes.map((biz) => {
+    // --- sphere_boost: if user chose this sphere, boost matching businesses ---
+    const sphereBoost = boostedCategories.includes(biz.category) ? 0.15 : 0;
+
     // --- skills_match: required (full weight) + optional (0.5x bonus) ---
     let requiredMatch = 0;
     if (biz.required_skills.length === 0) {
-      requiredMatch = 0.8; // No skills needed = decent but not perfect
+      requiredMatch = 0.8;
     } else {
       requiredMatch =
         biz.required_skills.filter((s) => userSkills.includes(s)).length /
@@ -121,11 +140,12 @@ export function scoreBusinessTypes(
 
     // Weighted total
     let totalScore =
-      skillsMatch * 0.30 +
-      capitalSufficient * 0.25 +
-      competitionLow * 0.20 +
+      skillsMatch * 0.25 +
+      capitalSufficient * 0.20 +
+      competitionLow * 0.15 +
       riskOk * 0.15 +
-      seasonOk * 0.10;
+      seasonOk * 0.10 +
+      sphereBoost; // +0.15 if matches user's chosen sphere
 
     // Bonus: premises match
     if (biz.requires_premises && hasPremises === "нет") {

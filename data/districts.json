@@ -1578,5 +1578,255 @@
     "type": "rural",
     "population": 82000,
     "coords": { "lat": 41.2345, "lng": 60.7234 }
+  },
+  {
+    "id": "karakalpakstan_taxiatosh",
+    "name_ru": "Тахиаташский район",
+    "name_uz": "Taxiatosh tumani",
+    "region_ru": "Республика Каракалпакстан",
+    "region_uz": "Qoraqalpog'iston Respublikasi",
+    "type": "urban",
+    "population": 35000,
+    "coords": { "lat": 42.2833, "lng": 59.5167 }
+  },
+  {
+    "id": "karakalpakstan_qongirot",
+    "name_ru": "Кунградский район",
+    "name_uz": "Qo'ng'irot tumani",
+    "region_ru": "Республика Каракалпакстан",
+    "region_uz": "Qoraqalpog'iston Respublikasi",
+    "type": "mixed",
+    "population": 75000,
+    "coords": { "lat": 42.7972, "lng": 58.6969 }
+  },
+  {
+    "id": "karakalpakstan_bozatov",
+    "name_ru": "Бозатауский район",
+    "name_uz": "Bo'zatov tumani",
+    "region_ru": "Республика Каракалпакстан",
+    "region_uz": "Qoraqalpog'iston Respublikasi",
+    "type": "rural",
+    "population": 45000,
+    "coords": { "lat": 42.11, "lng": 60.08 }
+  },
+  {
+    "id": "andijan_xojaobod",
+    "name_ru": "Ходжаабадский район",
+    "name_uz": "Xo'jaobod tumani",
+    "region_ru": "Андижанская область",
+    "region_uz": "Andijon viloyati",
+    "type": "mixed",
+    "population": 180000,
+    "coords": { "lat": 40.7167, "lng": 71.9167 }
+  },
+  {
+    "id": "andijan_boston",
+    "name_ru": "Бустанский район",
+    "name_uz": "Bo'ston tumani",
+    "region_ru": "Андижанская область",
+    "region_uz": "Andijon viloyati",
+    "type": "mixed",
+    "population": 120000,
+    "coords": { "lat": 40.57, "lng": 72.22 }
+  },
+  {
+    "id": "bukhara_qorovulbozor",
+    "name_ru": "Каровулбазарский район",
+    "name_uz": "Qorovulbozor tumani",
+    "region_ru": "Бухарская область",
+    "region_uz": "Buxoro viloyati",
+    "type": "rural",
+    "population": 90000,
+    "coords": { "lat": 39.50, "lng": 64.80 }
+  },
+  {
+    "id": "bukhara_qorakol",
+    "name_ru": "Каракульский район",
+    "name_uz": "Qorakol tumani",
+    "region_ru": "Бухарская область",
+    "region_uz": "Buxoro viloyati",
+    "type": "mixed",
+    "population": 110000,
+    "coords": { "lat": 39.50, "lng": 63.85 }
+  },
+  {
+    "id": "fergana_quva",
+    "name_ru": "Кувинский район",
+    "name_uz": "Quva tumani",
+    "region_ru": "Ферганская область",
+    "region_uz": "Farg'ona viloyati",
+    "type": "mixed",
+    "population": 200000,
+    "coords": { "lat": 40.52, "lng": 71.96 }
+  },
+  {
+    "id": "fergana_ozbekiston",
+    "name_ru": "Узбекистанский район",
+    "name_uz": "O'zbekiston tumani",
+    "region_ru": "Ферганская область",
+    "region_uz": "Farg'ona viloyati",
+    "type": "mixed",
+    "population": 170000,
+    "coords": { "lat": 40.68, "lng": 71.72 }
+  },
+  {
+    "id": "samarkand_nurobod",
+    "name_ru": "Нурабадский район",
+    "name_uz": "Nurobod tumani",
+    "region_ru": "Самаркандская область",
+    "region_uz": "Samarqand viloyati",
+    "type": "rural",
+    "population": 130000,
+    "coords": { "lat": 39.57, "lng": 66.63 }
+  },
+  {
+    "id": "samarkand_oqdaryo",
+    "name_ru": "Акдарьинский район",
+    "name_uz": "Oqdaryo tumani",
+    "region_ru": "Самаркандская область",
+    "region_uz": "Samarqand viloyati",
+    "type": "mixed",
+    "population": 120000,
+    "coords": { "lat": 39.72, "lng": 66.38 }
+  },
+  {
+    "id": "samarkand_paxtachi",
+    "name_ru": "Пахтачийский район",
+    "name_uz": "Paxtachi tumani",
+    "region_ru": "Самаркандская область",
+    "region_uz": "Samarqand viloyati",
+    "type": "rural",
+    "population": 85000,
+    "coords": { "lat": 39.92, "lng": 66.20 }
+  },
+  {
+    "id": "samarkand_qoshrabot",
+    "name_ru": "Кушрабадский район",
+    "name_uz": "Qo'shrabot tumani",
+    "region_ru": "Самаркандская область",
+    "region_uz": "Samarqand viloyati",
+    "type": "rural",
+    "population": 60000,
+    "coords": { "lat": 39.63, "lng": 66.57 }
+  },
+  {
+    "id": "kashkadarya_yakkabog",
+    "name_ru": "Яккабагский район",
+    "name_uz": "Yakkabog' tumani",
+    "region_ru": "Кашкадарьинская область",
+    "region_uz": "Qashqadaryo viloyati",
+    "type": "mixed",
+    "population": 200000,
+    "coords": { "lat": 38.99, "lng": 66.68 }
+  },
+  {
+    "id": "jizzakh_zafarobod",
+    "name_ru": "Зафарабадский район",
+    "name_uz": "Zafarobod tumani",
+    "region_ru": "Джизакская область",
+    "region_uz": "Jizzax viloyati",
+    "type": "rural",
+    "population": 80000,
+    "coords": { "lat": 40.57, "lng": 68.32 }
+  },
+  {
+    "id": "jizzakh_zarbdor",
+    "name_ru": "Зарбдорский район",
+    "name_uz": "Zarbdor tumani",
+    "region_ru": "Джизакская область",
+    "region_uz": "Jizzax viloyati",
+    "type": "rural",
+    "population": 75000,
+    "coords": { "lat": 40.53, "lng": 67.65 }
+  },
+  {
+    "id": "tashkent_region_boka",
+    "name_ru": "Букинский район",
+    "name_uz": "Bo'ka tumani",
+    "region_ru": "Ташкентская область",
+    "region_uz": "Toshkent viloyati",
+    "type": "mixed",
+    "population": 90000,
+    "coords": { "lat": 40.79, "lng": 68.68 }
+  },
+  {
+    "id": "tashkent_region_chinoz",
+    "name_ru": "Чиназский район",
+    "name_uz": "Chinoz tumani",
+    "region_ru": "Ташкентская область",
+    "region_uz": "Toshkent viloyati",
+    "type": "mixed",
+    "population": 130000,
+    "coords": { "lat": 40.94, "lng": 68.75 }
+  },
+  {
+    "id": "tashkent_region_ohangaron",
+    "name_ru": "Ахангаранский район",
+    "name_uz": "Ohangaron tumani",
+    "region_ru": "Ташкентская область",
+    "region_uz": "Toshkent viloyati",
+    "type": "mixed",
+    "population": 160000,
+    "coords": { "lat": 40.90, "lng": 69.63 }
+  },
+  {
+    "id": "tashkent_region_qibray",
+    "name_ru": "Кибрайский район",
+    "name_uz": "Qibray tumani",
+    "region_ru": "Ташкентская область",
+    "region_uz": "Toshkent viloyati",
+    "type": "urban",
+    "population": 180000,
+    "coords": { "lat": 41.38, "lng": 69.45 }
+  },
+  {
+    "id": "tashkent_region_yangiyol",
+    "name_ru": "Янгиюльский район",
+    "name_uz": "Yangiyo'l tumani",
+    "region_ru": "Ташкентская область",
+    "region_uz": "Toshkent viloyati",
+    "type": "mixed",
+    "population": 170000,
+    "coords": { "lat": 41.11, "lng": 69.04 }
+  },
+  {
+    "id": "tashkent_yangihayot",
+    "name_ru": "Янгихаётский район",
+    "name_uz": "Yangihayot tumani",
+    "region_ru": "Ташкент",
+    "region_uz": "Toshkent",
+    "type": "urban",
+    "population": 250000,
+    "coords": { "lat": 41.23, "lng": 69.15 }
+  },
+  {
+    "id": "surxondarya_qiziriq",
+    "name_ru": "Кизирикский район",
+    "name_uz": "Qiziriq tumani",
+    "region_ru": "Сурхандарьинская область",
+    "region_uz": "Surxondaryo viloyati",
+    "type": "rural",
+    "population": 120000,
+    "coords": { "lat": 37.75, "lng": 67.20 }
+  },
+  {
+    "id": "surxondarya_uzun",
+    "name_ru": "Узунский район",
+    "name_uz": "Uzun tumani",
+    "region_ru": "Сурхандарьинская область",
+    "region_uz": "Surxondaryo viloyati",
+    "type": "rural",
+    "population": 150000,
+    "coords": { "lat": 38.28, "lng": 67.83 }
+  },
+  {
+    "id": "syrdarya_sardoba",
+    "name_ru": "Сардобинский район",
+    "name_uz": "Sardoba tumani",
+    "region_ru": "Сырдарьинская область",
+    "region_uz": "Sirdaryo viloyati",
+    "type": "rural",
+    "population": 80000,
+    "coords": { "lat": 40.07, "lng": 68.03 }
   }
 ]

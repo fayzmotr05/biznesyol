@@ -84,7 +84,7 @@ function ResultsContent() {
 
   // Generate AI plan with safe JSON extraction
   const generatePlan = useCallback(async () => {
-    if (selectedIdx === null || banks.length === 0 || planLoading) return;
+    if (selectedIdx === null || planLoading) return;
     setPlanLoading(true);
     setPlan(null);
     setPlanError(null);
@@ -96,7 +96,7 @@ function ResultsContent() {
         body: JSON.stringify({
           sessionId,
           businessId: scored[selectedIdx].business_type_id,
-          bankId: banks[0].bank_product.id,
+          bankId: banks.length > 0 ? banks[0].bank_product.id : undefined,
         }),
       });
 
@@ -263,7 +263,7 @@ function ResultsContent() {
             {!plan && !planLoading && (
               <button
                 onClick={generatePlan}
-                disabled={planLoading || banks.length === 0}
+                disabled={planLoading}
                 className="w-full py-3 rounded-xl font-medium text-white transition-colors hover:opacity-90 disabled:opacity-40"
                 style={{ backgroundColor: "#3BB741" }}
               >
