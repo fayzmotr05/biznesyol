@@ -40,3 +40,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 supabase/.temp/
+
+# Documents (sensitive district data)
+*.pdf
+*.doc
+*.docx
