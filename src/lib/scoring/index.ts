@@ -64,7 +64,6 @@ export function scoreBusinessTypes(
   const userSkills = arr(answers, "skills");
   const capitalRange = str(answers, "capital");
   const competition = str(answers, "competition");
-  const priority = str(answers, "priority");
   const hasPremises = str(answers, "premises");
   const season = getCurrentSeason();
   const userCapital = capitalRangeToMln(capitalRange);
@@ -108,23 +107,13 @@ export function scoreBusinessTypes(
       default: competitionLow = 0.5;
     }
 
-    // --- risk_ok: based on priority ---
+    // --- risk_ok: based on risk level (balanced approach since we removed priority question) ---
     let riskOk: number;
-    if (priority === "fast") {
-      switch (biz.risk_level) {
-        case "low": riskOk = 1.0; break;
-        case "medium": riskOk = 0.4; break;
-        case "high": riskOk = 0.1; break;
-        default: riskOk = 0.5;
-      }
-    } else {
-      // "stable" — prefer low risk
-      switch (biz.risk_level) {
-        case "low": riskOk = 1.0; break;
-        case "medium": riskOk = 0.7; break;
-        case "high": riskOk = 0.3; break;
-        default: riskOk = 0.5;
-      }
+    switch (biz.risk_level) {
+      case "low": riskOk = 1.0; break;
+      case "medium": riskOk = 0.6; break;
+      case "high": riskOk = 0.2; break;
+      default: riskOk = 0.5;
     }
 
     // --- season_ok: current season coefficient ---
@@ -186,8 +175,10 @@ export function selectBankProducts(
   districtType?: DistrictType
 ): BankMatch[] {
   const hasCollateral = str(answers, "collateral") === "есть";
-  const isFemale = str(answers, "gender") === "да";
-  const ageGroup = str(answers, "age_group");
+  // Gender and age come from registration, not survey questions
+  const isFemale = str(answers, "user_gender_actual") === "female";
+  const birthYear = parseInt(str(answers, "user_birth_year") || "0");
+  const age = birthYear > 0 ? new Date().getFullYear() - birthYear : 30;
   const isPoorRegistry = str(answers, "poor_registry") === "да";
   const isRural = districtType === "rural";
 
@@ -213,7 +204,7 @@ export function selectBankProducts(
       disqualifiers.push("Только для женщин");
     }
 
-    if (ageGroup === "18-25" && bank.age_max <= 30) {
+    if (age <= 30 && bank.age_max <= 30) {
       matchReasons.push("Программа для молодёжи до 30 лет");
       priority += 15;
     }

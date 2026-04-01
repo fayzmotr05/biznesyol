@@ -110,6 +110,7 @@ export default function SurveyPage() {
         register: "done",
         user_name: profile.full_name,
         user_phone: profile.phone,
+        user_birth_year: String(profile.birth_year || ""),
         user_gender_actual: profile.gender || "",
         user_education: profile.education || "",
         user_income: String(profile.monthly_income_mln || ""),

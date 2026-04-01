@@ -35,16 +35,16 @@ function getTotalQuestions(answers: SurveyAnswers): number {
   // Business path: common + register + sphere selection + sphere questions + financial
   const sphere = answers.sphere as string;
   const sphereCount = sphere ? (SPHERE_QUESTION_COUNTS[sphere] ?? 4) : 4;
-  const financialCount = 7; // capital, collateral, competition, priority, gender, poor_registry, age_group
+  const financialCount = 4; // capital, collateral, competition, poor_registry
 
   return COMMON_QUESTION_IDS.length + 1 + sphereCount + financialCount; // +1 for sphere selection
 }
 
 export function isComplete(answers: SurveyAnswers): boolean {
-  // Survey is done when age_group is answered (business) or job_relocate (job)
+  // Survey is done when poor_registry is answered (business) or job_relocate (job)
   const path = answers.path as string;
   if (path === "job") return "job_relocate" in answers;
-  if (path === "business") return "age_group" in answers;
+  if (path === "business") return "poor_registry" in answers;
   return false;
 }
 

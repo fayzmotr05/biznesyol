@@ -827,32 +827,6 @@ export const questions: Question[] = [
       { value: "много", label_uz: "Ko'p, lekin men farqli qilaman", label_ru: "Много, но я сделаю иначе", label_en: "Many, but I'll stand out" },
     ],
     required: true,
-    next: () => "priority",
-  },
-  {
-    id: "priority",
-    type: "single_choice",
-    text_uz: "Sizga nima muhimroq?",
-    text_ru: "Что для вас важнее?",
-    text_en: "What matters more?",
-    options: [
-      { value: "fast", label_uz: "Tezroq pul ishlash", label_ru: "Побыстрее начать зарабатывать", label_en: "Start earning quickly" },
-      { value: "stable", label_uz: "Barqaror biznes qurish", label_ru: "Строить стабильный бизнес", label_en: "Build a stable business" },
-    ],
-    required: true,
-    next: () => "gender",
-  },
-  {
-    id: "gender",
-    type: "single_choice",
-    text_uz: "Siz ayol tadbirkormisiz?",
-    text_ru: "Вы женщина-предприниматель?",
-    text_en: "Are you a woman entrepreneur?",
-    options: [
-      { value: "да", label_uz: "Ha", label_ru: "Да", label_en: "Yes" },
-      { value: "нет", label_uz: "Yo'q", label_ru: "Нет", label_en: "No" },
-    ],
-    required: true,
     next: () => "poor_registry",
   },
   {
@@ -860,26 +834,11 @@ export const questions: Question[] = [
     type: "single_choice",
     text_uz: "Kam ta'minlangan oila maqomingiz bormi?",
     text_ru: "Есть статус малообеспеченной семьи?",
-    text_en: "Low-income family status?",
+    text_en: "Do you have low-income family status?",
     options: [
       { value: "да", label_uz: "Ha", label_ru: "Да", label_en: "Yes" },
       { value: "нет", label_uz: "Yo'q", label_ru: "Нет", label_en: "No" },
       { value: "не знаю", label_uz: "Bilmayman", label_ru: "Не знаю", label_en: "Not sure" },
-    ],
-    required: true,
-    next: () => "age_group",
-  },
-  {
-    id: "age_group",
-    type: "single_choice",
-    text_uz: "Yoshingiz?",
-    text_ru: "Ваш возраст?",
-    text_en: "Your age?",
-    options: [
-      { value: "18-25", label_uz: "18–25", label_ru: "18–25", label_en: "18–25" },
-      { value: "26-35", label_uz: "26–35", label_ru: "26–35", label_en: "26–35" },
-      { value: "36-45", label_uz: "36–45", label_ru: "36–45", label_en: "36–45" },
-      { value: "46-60", label_uz: "46–60", label_ru: "46–60", label_en: "46–60" },
     ],
     required: true,
     next: () => null,
@@ -966,11 +925,11 @@ export const FIRST_QUESTION_ID = "lang";
 export const JOB_QUESTION_IDS = ["job_skills", "job_experience", "job_salary", "job_relocate"];
 
 // Dynamic — sphere-specific + common financial
+// gender + age come from registration, priority removed (not useful)
 export const BUSINESS_QUESTION_IDS = [
   "sphere",
   // sphere-specific questions are dynamic (food_q1..food_q5, etc.)
-  "capital", "collateral", "competition", "priority",
-  "gender", "poor_registry", "age_group",
+  "capital", "collateral", "competition", "poor_registry",
 ];
 
 export const COMMON_QUESTION_IDS = ["lang", "district", "path", "register"];
