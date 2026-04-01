@@ -1,0 +1,101 @@
+@import "tailwindcss";
+
+:root {
+  --background: #FAFBFC;
+  --foreground: #1A1D23;
+  --primary: #0066FF;
+  --primary-light: #E8F0FE;
+  --accent: #00C853;
+  --accent-light: #E8F8EF;
+  --surface: #FFFFFF;
+  --border: #E5E7EB;
+  --muted: #6B7280;
+  --danger: #EF4444;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-light: var(--primary-light);
+  --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --font-sans: var(--font-inter);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter, 'Inter', system-ui, sans-serif);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Animations */
+.fade-in {
+  opacity: 0;
+  transform: translateY(12px);
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.fade-in-delay {
+  opacity: 0;
+  transform: translateY(12px);
+  animation: fadeIn 0.4s ease-out 0.15s forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.question-enter {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Confetti */
+.confetti-burst {
+  position: relative;
+  width: 30px;
+  height: 30px;
+}
+.confetti-burst::before,
+.confetti-burst::after {
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  animation: confettiPop 1.2s ease-out forwards;
+}
+.confetti-burst::before {
+  background: var(--accent);
+  box-shadow: 12px -8px 0 var(--primary), -10px -12px 0 #F59E0B, 14px 6px 0 #EF4444, -8px 10px 0 #8B5CF6;
+}
+.confetti-burst::after {
+  background: var(--primary);
+  box-shadow: -14px -4px 0 var(--accent), 8px -14px 0 #EF4444, -12px 8px 0 #F59E0B, 10px 12px 0 #8B5CF6;
+  animation-delay: 0.1s;
+}
+@keyframes confettiPop {
+  0% { transform: scale(0); opacity: 1; }
+  50% { transform: scale(1.5); opacity: 1; }
+  100% { transform: scale(2) translateY(-20px); opacity: 0; }
+}
+
+/* Print */
+@media print {
+  header, button, .no-print, footer { display: none !important; }
+  main { max-width: 100% !important; padding: 0 !important; }
+  body { background: white; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #9CA3AF; }
