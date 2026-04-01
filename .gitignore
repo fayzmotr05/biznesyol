@@ -45,3 +45,7 @@ supabase/.temp/
 *.pdf
 *.doc
 *.docx
+
+# Testing artifacts
+.playwright-mcp/
+screenshots/
