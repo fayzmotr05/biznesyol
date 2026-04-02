@@ -11,7 +11,9 @@ interface UserRegistrationProps {
 }
 
 export default function UserRegistration({ lang, onComplete, districtId }: UserRegistrationProps) {
-  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [patronymic, setPatronymic] = useState("");
   const [phone, setPhone] = useState("+998 ");
   const [birthYear, setBirthYear] = useState("");
   const [gender, setGender] = useState<"male" | "female" | "">("");
@@ -23,13 +25,12 @@ export default function UserRegistration({ lang, onComplete, districtId }: UserR
   const [unemployedFamily, setUnemployedFamily] = useState("");
   const [step, setStep] = useState(1);
 
-  const nameParts = name.trim().split(/\s+/).filter(Boolean);
-  const canProceedStep1 = nameParts.length >= 3 && phone.replace(/\D/g, "").length >= 12;
+  const canProceedStep1 = surname.trim().length >= 2 && firstName.trim().length >= 2 && patronymic.trim().length >= 2 && phone.replace(/\D/g, "").length >= 12;
   const canProceedStep2 = gender !== "";
 
   function handleSubmit() {
     onComplete({
-      full_name: name.trim(),
+      full_name: `${surname.trim()} ${firstName.trim()} ${patronymic.trim()}`,
       phone: phone.replace(/\D/g, ""),
       birth_year: birthYear ? parseInt(birthYear) : undefined,
       gender: gender as "male" | "female",
@@ -85,24 +86,41 @@ export default function UserRegistration({ lang, onComplete, districtId }: UserR
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-1.5">
-                {t(lang, "F.I.O. (Familiya Ism Otasining ismi)", "Ф.И.О. (Фамилия Имя Отчество)", "Full name (Last First Middle)")} *
+                {t(lang, "Familiya", "Фамилия", "Surname")} *
               </label>
               <input
                 type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder={t(lang, "Lutpillayev Fayzullo Xayrullaevich", "Лутпиллаев Файзулло Хайруллаевич", "Lutpillayev Fayzullo Khayrullaevich")}
+                value={surname}
+                onChange={(e) => setSurname(e.target.value)}
+                placeholder={t(lang, "Lutpillayev", "Лутпиллаев", "Lutpillayev")}
                 className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all"
               />
-              {name.trim().length > 0 && nameParts.length < 3 && (
-                <p className="text-xs text-red-500 mt-1">
-                  {t(lang,
-                    "Familiya, ism va otangizning ismini kiriting",
-                    "Введите фамилию, имя и отчество",
-                    "Please enter last name, first name and middle name"
-                  )}
-                </p>
-              )}
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-sm font-medium mb-1.5">
+                  {t(lang, "Ism", "Имя", "First name")} *
+                </label>
+                <input
+                  type="text"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  placeholder={t(lang, "Fayzullo", "Файзулло", "Fayzullo")}
+                  className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1.5">
+                  {t(lang, "Otasining ismi", "Отчество", "Patronymic")} *
+                </label>
+                <input
+                  type="text"
+                  value={patronymic}
+                  onChange={(e) => setPatronymic(e.target.value)}
+                  placeholder={t(lang, "Xayrullaevich", "Хайруллаевич", "Khayrullaevich")}
+                  className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all"
+                />
+              </div>
             </div>
             <div>
               <label className="block text-sm font-medium mb-1.5">
