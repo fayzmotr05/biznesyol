@@ -206,9 +206,9 @@ function ResultsContent() {
       <section className="mb-8">
         <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
           {t(lang,
-            `Siz uchun top-${scored.length} biznes turlari`,
-            `Топ-${scored.length} видов бизнеса для вас`,
-            `Top ${scored.length} business types for you`
+            "Sizga mos biznes turlari",
+            "Подходящие виды бизнеса",
+            "Business types that match you"
           )}
         </h2>
         {selectedIdx === null && (

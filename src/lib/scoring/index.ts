@@ -82,31 +82,12 @@ export function scoreBusinessTypes(
     digital: ["it_services", "photo_video", "online_shop"],
     services: ["laundry", "car_wash"],
   };
-  const sphereToRelated: Record<string, string[]> = {
-    food: ["production"],
-    beauty: ["services"],
-    sewing: ["services", "trade"],
-    trade: ["food", "services"],
-    agro: ["food", "production"],
-    repair: ["services", "construction"],
-    transport: ["trade", "services"],
-    education: ["services", "it"],
-    digital: ["creative", "trade", "education"],
-    services: ["trade"],
-  };
   const primaryIds = sphereToPrimary[sphere] || [];
-  const relatedCategories = sphereToRelated[sphere] || [];
 
   const scored = businessTypes.map((biz) => {
-    // --- sphere matching: primary (user's exact sphere) vs related vs unrelated ---
-    let sphereMultiplier: number;
-    if (primaryIds.includes(biz.id)) {
-      sphereMultiplier = 1.0; // exact match — full score
-    } else if (relatedCategories.includes(biz.category)) {
-      sphereMultiplier = 0.5; // related — half score, shown as alternatives
-    } else {
-      sphereMultiplier = 0.1; // unrelated — nearly invisible
-    }
+    // Only show businesses from the user's chosen sphere
+    // No "related" fillers — if you chose trade, you see trade businesses only
+    const sphereMultiplier = primaryIds.includes(biz.id) ? 1.0 : 0;
 
     // --- skills_match: required (full weight) + optional (0.5x bonus) ---
     let requiredMatch = 0;
@@ -199,10 +180,12 @@ export function scoreBusinessTypes(
     };
   });
 
-  scored.sort((a, b) => b.total_score - a.total_score);
-  const top5 = scored.slice(0, 5);
-  top5.forEach((item, i) => { item.rank = i + 1; });
-  return top5;
+  // Only return businesses that match the user's sphere (score > 0)
+  const matching = scored
+    .filter((s) => s.total_score > 0)
+    .sort((a, b) => b.total_score - a.total_score);
+  matching.forEach((item, i) => { item.rank = i + 1; });
+  return matching;
 }
 
 // ============================================================
