@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
     });
 
     const stream = anthropic.messages.stream({
-      model: process.env.ANTHROPIC_MODEL || "claude-3-5-haiku-20241022",
+      model: process.env.ANTHROPIC_MODEL || "claude-sonnet-4-20250514",
       max_tokens: 2000,
       system,
       messages: [{ role: "user", content: user }],
