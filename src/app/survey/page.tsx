@@ -5,39 +5,6 @@ import { useRouter } from "next/navigation";
 import type { Locale, SurveyAnswers, UserProfile, Question } from "@/types";
 import { DEFAULT_LOCALE, getSavedLang, t } from "@/lib/i18n";
 
-// Free text input component
-function FreeTextInput({ question, lang, onSubmit }: { question: Question; lang: Locale; onSubmit: (text: string) => void }) {
-  const [text, setText] = useState("");
-  const qText = lang === "uz" ? question.text_uz : lang === "en" ? question.text_en : question.text_ru;
-  return (
-    <div className="question-enter w-full max-w-lg mx-auto">
-      <h2 className="text-xl font-semibold mb-2 text-center">{qText}</h2>
-      <p className="text-sm text-muted text-center mb-6">
-        {t(lang,
-          "Masalan: \"Shaharlar aro odamlarni tashimoqchiman\" yoki \"Maktab yonida somsa pishirmoqchiman\"",
-          "Например: \"Хочу перевозить людей между городами\" или \"Хочу печь самсу у школы\"",
-          "For example: \"I want to transport people between cities\" or \"I want to bake samsa near the school\""
-        )}
-      </p>
-      <textarea
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        rows={4}
-        placeholder={t(lang, "O'z so'zlaringiz bilan yozing...", "Напишите своими словами...", "Write in your own words...")}
-        className="w-full p-4 rounded-xl border-2 border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none text-base resize-none transition-all"
-        autoFocus
-      />
-      <button
-        onClick={() => text.trim() && onSubmit(text.trim())}
-        disabled={text.trim().length < 3}
-        className="mt-4 w-full py-3 rounded-xl bg-primary text-white font-medium hover:bg-primary/90 disabled:opacity-40 transition-all"
-      >
-        {t(lang, "Davom etish", "Продолжить", "Continue")}
-      </button>
-    </div>
-  );
-}
-
 // Number input component for exact capital
 function NumberInput({ question, lang, onSubmit }: { question: Question; lang: Locale; onSubmit: (val: string) => void }) {
   const [value, setValue] = useState("");
@@ -73,6 +40,12 @@ function NumberInput({ question, lang, onSubmit }: { question: Question; lang: L
         className="mt-4 w-full py-3 rounded-xl bg-primary text-white font-medium hover:bg-primary/90 disabled:opacity-40 transition-all"
       >
         {t(lang, "Davom etish", "Продолжить", "Continue")}
+      </button>
+      <button
+        onClick={() => onSubmit("skip")}
+        className="mt-2 w-full py-2 text-sm text-muted hover:text-foreground transition-colors"
+      >
+        {t(lang, "O'tkazib yuborish", "Пропустить", "Skip")}
       </button>
     </div>
   );
@@ -186,6 +159,8 @@ export default function SurveyPage() {
         user_income: String(profile.monthly_income_mln || ""),
         user_employment: profile.employment_status || "",
         user_experience: profile.has_business_experience ? "yes" : "no",
+        user_family_size: String(profile.family_size || ""),
+        user_unemployed_family: String(profile.unemployed_family_members || "0"),
       };
       const nextHistory = [...history, currentId];
 
@@ -310,12 +285,6 @@ export default function SurveyPage() {
           <PathSplit lang={lang} onSelect={(path) => handleAnswer(path)} />
         ) : question.type === "district_select" ? (
           <DistrictSelect lang={lang} onSelect={(id) => handleAnswer(id)} />
-        ) : question.type === "free_text" ? (
-          <FreeTextInput
-            question={question}
-            lang={lang}
-            onSubmit={(text) => handleAnswer(text)}
-          />
         ) : question.type === "number_input" ? (
           <NumberInput
             question={question}

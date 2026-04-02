@@ -20,6 +20,7 @@ export default function UserRegistration({ lang, onComplete, districtId }: UserR
   const [income, setIncome] = useState("");
   const [employment, setEmployment] = useState("");
   const [experience, setExperience] = useState(false);
+  const [unemployedFamily, setUnemployedFamily] = useState("");
   const [step, setStep] = useState(1);
 
   const canProceedStep1 = name.trim().length >= 2 && phone.replace(/\D/g, "").length >= 12;
@@ -34,6 +35,7 @@ export default function UserRegistration({ lang, onComplete, districtId }: UserR
       district_id: districtId,
       education: education as UserProfile["education"],
       family_size: familySize ? parseInt(familySize) : undefined,
+      unemployed_family_members: unemployedFamily ? parseInt(unemployedFamily) : undefined,
       monthly_income_mln: income ? parseFloat(income) : undefined,
       employment_status: employment as UserProfile["employment_status"],
       has_business_experience: experience,
@@ -221,6 +223,26 @@ export default function UserRegistration({ lang, onComplete, districtId }: UserR
                 {t(lang, "Biznes yuritish tajribam bor", "У меня есть опыт ведения бизнеса", "I have business experience")}
               </span>
             </label>
+            <div>
+              <label className="block text-sm font-medium mb-1.5">
+                {t(lang, "Oilangizda nechta ishsiz a'zo bor?", "Сколько безработных членов в семье?", "How many unemployed family members?")}
+              </label>
+              <input
+                type="number"
+                value={unemployedFamily}
+                onChange={(e) => setUnemployedFamily(e.target.value)}
+                placeholder="0"
+                min="0" max="20"
+                className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:border-primary outline-none"
+              />
+              <p className="text-xs text-muted mt-1">
+                {t(lang,
+                  "Ularni ham biznesga jalb qilish imkoniyatini ko'rib chiqamiz",
+                  "Рассмотрим возможность привлечь их к бизнесу",
+                  "We'll consider involving them in the business"
+                )}
+              </p>
+            </div>
             <div className="flex gap-3">
               <button
                 onClick={() => setStep(1)}

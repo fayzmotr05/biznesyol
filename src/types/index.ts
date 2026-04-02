@@ -280,6 +280,7 @@ export interface UserProfile {
   district_id: string;
   education?: EducationLevel;
   family_size?: number;
+  unemployed_family_members?: number;
   monthly_income_mln?: number;
   employment_status?: EmploymentStatus;
   has_business_experience?: boolean;
