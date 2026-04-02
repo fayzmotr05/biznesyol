@@ -22,18 +22,23 @@ function getAsakaLoans(answers: SurveyAnswers, sphere: string): string {
     if (age < loan.age_min || age > loan.age_max) return false;
     if (loan.requires_collateral && !hasCollateral) return false;
     if (loan.target === "youth" && age > 30) return false;
-    if (!loan.suitable_for.includes("any") && !loan.suitable_for.includes(sphere)) return false;
+    if (loan.target === "large_business") return false; // skip large business loans for individuals
+    if (loan.target === "salary_clients") return false; // skip salary-only products
+    if (!loan.suitable_for_spheres.includes("any") && !loan.suitable_for_spheres.includes(sphere)) return false;
     return true;
   });
 
   if (matching.length === 0) return "Mos Asakabank kredit mahsuloti topilmadi.";
 
   return matching.map((l) =>
-    `- ${l.name_uz}: ${l.min_amount_mln}-${l.max_amount_mln} mln, ${l.interest_rate}% yillik, ${l.term_months_max} oygacha` +
-    (l.grace_period_months ? `, ${l.grace_period_months} oy imtiyozli` : "") +
-    (l.requires_collateral ? " (garov kerak)" : " (garovsiz)") +
-    ` — ${l.description_uz}`
-  ).join("\n");
+    `- ${l.name_uz} [${l.id}]: ${l.min_amount_mln}-${l.max_amount_mln} mln so'm\n` +
+    `  Stavka: ${l.interest_rate_percent}\n` +
+    `  Muddat: ${l.term_months_max} oygacha` +
+    (l.grace_period_months ? `, ${l.grace_period_months} oy imtiyozli davr` : "") + `\n` +
+    `  Garov: ${l.collateral_type}\n` +
+    `  Kim oladi: ${l.who_can_get_uz}\n` +
+    `  ${l.special_conditions_uz}`
+  ).join("\n\n");
 }
 
 export function buildBusinessPlanPrompt(params: BuildPromptParams): {
