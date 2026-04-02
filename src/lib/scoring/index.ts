@@ -121,9 +121,9 @@ export function scoreBusinessTypes(
     // --- competition_low: softer scale ---
     let competitionLow: number;
     switch (competition) {
-      case "нет": competitionLow = 1.0; break;
-      case "1-3": competitionLow = 0.6; break;
-      case "много": competitionLow = 0.25; break;
+      case "none": competitionLow = 1.0; break;
+      case "few": competitionLow = 0.6; break;
+      case "many": competitionLow = 0.25; break;
       default: competitionLow = 0.5;
     }
 
@@ -149,9 +149,9 @@ export function scoreBusinessTypes(
     ) * sphereMultiplier;
 
     // Bonus: premises match
-    if (biz.requires_premises && hasPremises === "нет") {
+    if (biz.requires_premises && hasPremises === "no") {
       totalScore *= 0.85; // Slight penalty, not dealbreaker
-    } else if (!biz.requires_premises && (hasPremises === "нет" || hasPremises === "дом")) {
+    } else if (!biz.requires_premises && (hasPremises === "no" || hasPremises === "home")) {
       totalScore *= 1.05; // Bonus — can work from home
     }
 
@@ -197,12 +197,12 @@ export function selectBankProducts(
   businessId: string,
   districtType?: DistrictType
 ): BankMatch[] {
-  const hasCollateral = str(answers, "collateral") === "есть";
+  const hasCollateral = str(answers, "collateral") === "yes";
   // Gender and age come from registration, not survey questions
   const isFemale = str(answers, "user_gender_actual") === "female";
   const birthYear = parseInt(str(answers, "user_birth_year") || "0");
   const age = birthYear > 0 ? new Date().getFullYear() - birthYear : 30;
-  const isPoorRegistry = str(answers, "poor_registry") === "да";
+  const isPoorRegistry = str(answers, "poor_registry") === "yes";
   const isRural = districtType === "rural";
 
   const results: BankMatch[] = banks.map((bank) => {

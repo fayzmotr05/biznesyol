@@ -167,24 +167,12 @@ data/
 
 ## Credentials
 
-### Supabase
-- URL: `https://xgchbtrzeveefogklxlv.supabase.co`
-- Keys in `.env.local` (gitignored)
+All credentials are stored in `.env.local` (gitignored). See `.env.local.example` for required keys.
 
-### Vercel
-- Account: agrionuz-6703s-projects
-- Project: biznesyol
-- Deploy: `vercel --prod` from repo root
-
-### Super Admin
-- URL: https://biznesyol.vercel.app/admin/login
-- Email: fayzmotr@icloud.com
-- Password: Gamechangers2026!
-
-### Claude API
-- Model: claude-sonnet-4-6
-- Web search enabled (costs $0.01 per search)
-- ~$0.05-0.08 per business plan generation
+- **Supabase:** URL and keys in `.env.local`
+- **Vercel:** Deploy with `vercel --prod` from repo root
+- **Super Admin:** Login at `/admin/login` — credentials in `.env.local`
+- **Claude API:** Model `claude-sonnet-4-6`, web search enabled (~$0.05-0.08 per plan)
 
 ---
 
