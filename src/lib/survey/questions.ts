@@ -829,13 +829,13 @@ export const questions: Question[] = [
   {
     id: "poor_registry",
     type: "single_choice",
-    text_uz: "Kam ta'minlangan oila maqomingiz bormi?",
-    text_ru: "Есть статус малообеспеченной семьи?",
-    text_en: "Do you have low-income family status?",
+    text_uz: "Davlat tomonidan ijtimoiy yordam yoki imtiyozli dasturlarga kiritilganmisiz?",
+    text_ru: "Участвуете ли вы в государственных программах социальной поддержки?",
+    text_en: "Are you enrolled in any government social support programs?",
     options: [
-      { value: "yes", label_uz: "Ha", label_ru: "Да", label_en: "Yes" },
+      { value: "yes", label_uz: "Ha, ro'yxatga kiritilganman", label_ru: "Да, я в реестре", label_en: "Yes, I'm registered" },
       { value: "no", label_uz: "Yo'q", label_ru: "Нет", label_en: "No" },
-      { value: "unknown", label_uz: "Bilmayman", label_ru: "Не знаю", label_en: "Not sure" },
+      { value: "unknown", label_uz: "Aniq bilmayman", label_ru: "Точно не знаю", label_en: "Not sure" },
     ],
     required: true,
     next: () => null,

@@ -23,7 +23,8 @@ export default function UserRegistration({ lang, onComplete, districtId }: UserR
   const [unemployedFamily, setUnemployedFamily] = useState("");
   const [step, setStep] = useState(1);
 
-  const canProceedStep1 = name.trim().length >= 2 && phone.replace(/\D/g, "").length >= 12;
+  const nameParts = name.trim().split(/\s+/).filter(Boolean);
+  const canProceedStep1 = nameParts.length >= 3 && phone.replace(/\D/g, "").length >= 12;
   const canProceedStep2 = gender !== "";
 
   function handleSubmit() {
@@ -84,15 +85,24 @@ export default function UserRegistration({ lang, onComplete, districtId }: UserR
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-1.5">
-                {t(lang, "To'liq ism-familiyangiz", "Полное имя", "Full name")} *
+                {t(lang, "F.I.O. (Familiya Ism Otasining ismi)", "Ф.И.О. (Фамилия Имя Отчество)", "Full name (Last First Middle)")} *
               </label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder={t(lang, "Aliyev Ali", "Алиев Али", "Ali Aliyev")}
+                placeholder={t(lang, "Lutpillayev Fayzullo Xayrullaevich", "Лутпиллаев Файзулло Хайруллаевич", "Lutpillayev Fayzullo Khayrullaevich")}
                 className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all"
               />
+              {name.trim().length > 0 && nameParts.length < 3 && (
+                <p className="text-xs text-red-500 mt-1">
+                  {t(lang,
+                    "Familiya, ism va otangizning ismini kiriting",
+                    "Введите фамилию, имя и отчество",
+                    "Please enter last name, first name and middle name"
+                  )}
+                </p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium mb-1.5">
@@ -171,7 +181,7 @@ export default function UserRegistration({ lang, onComplete, districtId }: UserR
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-sm font-medium mb-1.5">
-                  {t(lang, "Oila a'zolari", "Членов семьи", "Family size")}
+                  {t(lang, "Oilangiz soni", "Членов семьи", "Family size")}
                 </label>
                 <input
                   type="number"
@@ -184,17 +194,37 @@ export default function UserRegistration({ lang, onComplete, districtId }: UserR
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1.5">
-                  {t(lang, "Oylik daromad (mln)", "Доход (млн сум)", "Income (mln)")}
+                  {t(lang, "Ishsizlar soni oilada", "Безработных в семье", "Unemployed in family")}
                 </label>
                 <input
                   type="number"
-                  value={income}
-                  onChange={(e) => setIncome(e.target.value)}
-                  placeholder="3"
-                  step="0.5"
+                  value={unemployedFamily}
+                  onChange={(e) => setUnemployedFamily(e.target.value)}
+                  placeholder="0"
+                  min="0" max="20"
                   className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:border-primary outline-none"
                 />
               </div>
+            </div>
+            <p className="text-xs text-muted -mt-2">
+              {t(lang,
+                "Ularni ham biznesga jalb qilish imkoniyatini ko'rib chiqamiz",
+                "Рассмотрим возможность привлечь их к бизнесу",
+                "We'll consider involving them in the business"
+              )}
+            </p>
+            <div>
+              <label className="block text-sm font-medium mb-1.5">
+                {t(lang, "Oylik daromad (mln so'm)", "Доход (млн сум)", "Income (mln UZS)")}
+              </label>
+              <input
+                type="number"
+                value={income}
+                onChange={(e) => setIncome(e.target.value)}
+                placeholder="3"
+                step="0.5"
+                className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:border-primary outline-none"
+              />
             </div>
             <div>
               <label className="block text-sm font-medium mb-1.5">
@@ -223,26 +253,6 @@ export default function UserRegistration({ lang, onComplete, districtId }: UserR
                 {t(lang, "Biznes yuritish tajribam bor", "У меня есть опыт ведения бизнеса", "I have business experience")}
               </span>
             </label>
-            <div>
-              <label className="block text-sm font-medium mb-1.5">
-                {t(lang, "Oilangizda nechta ishsiz a'zo bor?", "Сколько безработных членов в семье?", "How many unemployed family members?")}
-              </label>
-              <input
-                type="number"
-                value={unemployedFamily}
-                onChange={(e) => setUnemployedFamily(e.target.value)}
-                placeholder="0"
-                min="0" max="20"
-                className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:border-primary outline-none"
-              />
-              <p className="text-xs text-muted mt-1">
-                {t(lang,
-                  "Ularni ham biznesga jalb qilish imkoniyatini ko'rib chiqamiz",
-                  "Рассмотрим возможность привлечь их к бизнесу",
-                  "We'll consider involving them in the business"
-                )}
-              </p>
-            </div>
             <div className="flex gap-3">
               <button
                 onClick={() => setStep(1)}
