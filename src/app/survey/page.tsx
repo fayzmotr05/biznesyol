@@ -50,6 +50,44 @@ function NumberInput({ question, lang, onSubmit }: { question: Question; lang: L
     </div>
   );
 }
+
+// Free text input for "other" sphere description
+function FreeTextInput({ question, lang, onSubmit }: { question: Question; lang: Locale; onSubmit: (val: string) => void }) {
+  const [value, setValue] = useState("");
+  const qText = lang === "uz" ? question.text_uz : lang === "en" ? question.text_en : question.text_ru;
+  return (
+    <div className="question-enter w-full max-w-lg mx-auto">
+      <h2 className="text-xl font-semibold mb-6 text-center">{qText}</h2>
+      <textarea
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder={t(lang,
+          "Masalan: Uyda taom tayyorlab, Telegram orqali buyurtma olib yetkazib bermoqchiman...",
+          "Например: Хочу готовить еду дома и доставлять через Telegram...",
+          "E.g.: I want to cook food at home and deliver via Telegram..."
+        )}
+        rows={4}
+        className="w-full p-4 rounded-xl border-2 border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none text-base transition-all resize-none"
+        autoFocus
+      />
+      <p className="text-xs text-muted text-center mt-2">
+        {t(lang,
+          "Qanchalik batafsil yozsangiz, shunchalik yaxshi tavsiyalar olasiz",
+          "Чем подробнее опишете, тем лучше будут рекомендации",
+          "The more detail you provide, the better your recommendations"
+        )}
+      </p>
+      <button
+        onClick={() => value.trim().length >= 10 && onSubmit(value.trim())}
+        disabled={value.trim().length < 10}
+        className="mt-4 w-full py-3 rounded-xl bg-primary text-white font-medium hover:bg-primary/90 disabled:opacity-40 transition-all"
+      >
+        {t(lang, "Davom etish", "Продолжить", "Continue")}
+      </button>
+    </div>
+  );
+}
+
 import {
   getQuestion,
   getNextQuestionId,
@@ -65,6 +103,13 @@ import DistrictSelect from "@/components/survey/DistrictSelect";
 import UserRegistration from "@/components/survey/UserRegistration";
 
 const STORAGE_KEY = "asaka_survey";
+const OTHER_QUESTIONS_KEY = "asaka_other_questions";
+
+interface AIGeneratedQuestion {
+  id: string;
+  text_uz: string;
+  options: { value: string; label_uz: string }[];
+}
 
 function loadState(): { answers: SurveyAnswers; history: string[] } {
   if (typeof window === "undefined") return { answers: {}, history: [] };
@@ -79,6 +124,19 @@ function saveState(answers: SurveyAnswers, history: string[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify({ answers, history }));
 }
 
+function loadOtherQuestions(): AIGeneratedQuestion[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(OTHER_QUESTIONS_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return [];
+}
+
+function saveOtherQuestions(questions: AIGeneratedQuestion[]) {
+  localStorage.setItem(OTHER_QUESTIONS_KEY, JSON.stringify(questions));
+}
+
 export default function SurveyPage() {
   const router = useRouter();
   const [answers, setAnswers] = useState<SurveyAnswers>({});
@@ -86,9 +144,14 @@ export default function SurveyPage() {
   const [currentId, setCurrentId] = useState<string>(FIRST_QUESTION_ID);
   const [hydrated, setHydrated] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [otherQuestions, setOtherQuestions] = useState<AIGeneratedQuestion[]>([]);
+  const [generatingQuestions, setGeneratingQuestions] = useState(false);
 
   useEffect(() => {
     const saved = loadState();
+    const savedOther = loadOtherQuestions();
+    if (savedOther.length > 0) setOtherQuestions(savedOther);
+
     if (Object.keys(saved.answers).length > 0) {
       setAnswers(saved.answers);
       setHistory(saved.history);
@@ -104,6 +167,27 @@ export default function SurveyPage() {
   }, [router]);
 
   const lang: Locale = (answers.lang as Locale) || getSavedLang() || DEFAULT_LOCALE;
+
+  // Fetch AI-generated questions for "other" sphere
+  async function fetchOtherQuestions(description: string) {
+    setGeneratingQuestions(true);
+    try {
+      const res = await fetch("/api/generate-questions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ description, lang }),
+      });
+      const data = await res.json();
+      if (data.questions && data.questions.length > 0) {
+        setOtherQuestions(data.questions);
+        saveOtherQuestions(data.questions);
+      }
+    } catch (err) {
+      console.error("Failed to generate questions:", err);
+    } finally {
+      setGeneratingQuestions(false);
+    }
+  }
 
   const handleAnswer = useCallback(
     (value: string | string[]) => {
@@ -122,8 +206,14 @@ export default function SurveyPage() {
           education: ["teaching", "subject_knowledge"],
           digital: ["programming", "web_design", "photography"],
           services: ["physical_work", "customer_service"],
+          other: [],
         };
         nextAnswers.skills = sphereSkills[value] || [];
+      }
+
+      // When "other_describe" is answered, trigger AI question generation
+      if (currentId === "other_describe" && typeof value === "string") {
+        fetchOtherQuestions(value);
       }
 
       const nextHistory = [...history, currentId];
@@ -146,8 +236,6 @@ export default function SurveyPage() {
   // Handle registration form completion
   const handleRegistration = useCallback(
     async (profile: UserProfile) => {
-      // Don't save to API yet — wait until survey submit when we have sessionId
-      // Just store profile data in answers for scoring and later API call
       const nextAnswers: SurveyAnswers = {
         ...answers,
         register: "done",
@@ -199,7 +287,6 @@ export default function SurveyPage() {
       if (data.id) {
         localStorage.setItem("asaka_session_id", data.id);
 
-        // NOW save user profile with sessionId
         if (finalAnswers.user_name) {
           try {
             await fetch("/api/users", {
@@ -255,8 +342,62 @@ export default function SurveyPage() {
     );
   }
 
+  // Check if current question is an AI-generated "other" question
+  const isOtherDynamic = currentId.startsWith("other_q") && currentId !== "other_describe";
+  const otherQIndex = isOtherDynamic ? parseInt(currentId.replace("other_q", "")) - 1 : -1;
+  const aiQuestion = isOtherDynamic && otherQuestions[otherQIndex] ? otherQuestions[otherQIndex] : null;
+
+  // Show loading while AI generates questions
+  if (isOtherDynamic && generatingQuestions) {
+    return (
+      <div className="flex-1 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <h3 className="font-semibold text-primary mb-2">
+            {t(lang, "AI savollar tayyorlamoqda...", "AI готовит вопросы...", "AI is preparing questions...")}
+          </h3>
+          <p className="text-sm text-muted">
+            {t(lang, "Sizning biznesingizga mos savollar yaratilmoqda", "Создаём вопросы для вашего бизнеса", "Creating questions for your business")}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // If we're on an other_q* but AI questions haven't loaded yet and not generating, skip to exact_capital
+  if (isOtherDynamic && !aiQuestion && !generatingQuestions) {
+    // AI questions not available — skip to financial questions
+    const nextAnswers = { ...answers, [currentId]: "skipped" };
+    const skipToCapital = () => {
+      setAnswers(nextAnswers);
+      saveState(nextAnswers, history);
+      setCurrentId("exact_capital");
+    };
+    skipToCapital();
+    return null;
+  }
+
   const question = getQuestion(currentId);
   const progress = getSurveyProgress(answers);
+
+  // Build a Question object from AI-generated data for QuestionCard
+  const displayQuestion: Question = aiQuestion
+    ? {
+        id: aiQuestion.id,
+        type: "single_choice",
+        text_uz: aiQuestion.text_uz,
+        text_ru: aiQuestion.text_uz,
+        text_en: aiQuestion.text_uz,
+        options: aiQuestion.options.map((o) => ({
+          value: o.value,
+          label_uz: o.label_uz,
+          label_ru: o.label_uz,
+          label_en: o.label_uz,
+        })),
+        required: true,
+        next: question.next,
+      }
+    : question;
 
   return (
     <main className="flex-1 flex flex-col px-4 py-6 max-w-2xl mx-auto w-full">
@@ -291,10 +432,16 @@ export default function SurveyPage() {
             lang={lang}
             onSubmit={(num) => handleAnswer(num)}
           />
+        ) : currentId === "other_describe" ? (
+          <FreeTextInput
+            question={question}
+            lang={lang}
+            onSubmit={(text) => handleAnswer(text)}
+          />
         ) : (
           <QuestionCard
             key={currentId}
-            question={question}
+            question={displayQuestion}
             lang={lang}
             onAnswer={handleAnswer}
             selected={answers[currentId]}

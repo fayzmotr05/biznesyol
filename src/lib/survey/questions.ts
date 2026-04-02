@@ -1,4 +1,4 @@
-import type { Question, SurveyAnswers } from "@/types";
+import type { Question, QuestionType, SurveyAnswers } from "@/types";
 
 export const questions: Question[] = [
   // ============================================================
@@ -70,10 +70,36 @@ export const questions: Question[] = [
       { value: "education", label_uz: "Ta'lim / repetitorlik / bolalar", label_ru: "Образование / репетиторство / дети", label_en: "Education / tutoring / childcare" },
       { value: "digital", label_uz: "IT / dizayn / foto-video / onlayn savdo", label_ru: "IT / дизайн / фото-видео / онлайн", label_en: "IT / design / photo-video / online" },
       { value: "services", label_uz: "Xizmatlar (kir yuvish, tozalash va h.k.)", label_ru: "Услуги (прачечная, уборка и др.)", label_en: "Services (laundry, cleaning, etc.)" },
+      { value: "other", label_uz: "Boshqa — o'zim yozaman", label_ru: "Другое — напишу сам", label_en: "Other — I'll describe it" },
     ],
     required: true,
-    next: (a: SurveyAnswers) => `${a.sphere}_q1`,
+    next: (a: SurveyAnswers) => a.sphere === "other" ? "other_describe" : `${a.sphere}_q1`,
   },
+
+  // ============================================================
+  // OTHER sphere — user describes their own idea, AI generates questions
+  // ============================================================
+  {
+    id: "other_describe",
+    type: "free_text" as QuestionType,
+    text_uz: "Qanday biznes qilmoqchisiz? Batafsil yozing",
+    text_ru: "Какой бизнес хотите открыть? Опишите подробно",
+    text_en: "What business do you want to start? Describe in detail",
+    required: true,
+    next: () => "other_q1",
+  },
+  // other_q1..other_q4 are generated dynamically by AI
+  // Placeholder entries so the engine can reference them
+  ...([1, 2, 3, 4] as const).map((n) => ({
+    id: `other_q${n}`,
+    type: "single_choice" as QuestionType,
+    text_uz: "",
+    text_ru: "",
+    text_en: "",
+    options: [] as { value: string; label_uz: string; label_ru: string; label_en: string }[],
+    required: true,
+    next: (a: SurveyAnswers) => n < 4 ? `other_q${n + 1}` : "exact_capital",
+  } satisfies Question)),
 
   // ============================================================
   // FOOD sphere — 5 deep questions
@@ -943,4 +969,5 @@ export const SPHERE_QUESTION_COUNTS: Record<string, number> = {
   education: 5,
   digital: 5,
   services: 4,
+  other: 5, // 1 (describe) + 4 (AI-generated)
 };
