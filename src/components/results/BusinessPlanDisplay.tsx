@@ -22,12 +22,26 @@ function num(v: number | string | undefined): number {
 export default function BusinessPlanDisplay({ planJson, isLoading, lang }: Props) {
   if (isLoading) {
     return (
-      <div className="space-y-4 question-enter">
-        <Skeleton className="h-6 w-48" />
-        <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-5/6" />
-        <Skeleton className="h-32 w-full" />
-        <Skeleton className="h-24 w-full" />
+      <div className="question-enter mt-4">
+        <div className="bg-primary/5 border border-primary/20 rounded-2xl p-6 text-center">
+          <div className="w-10 h-10 border-3 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <h3 className="font-semibold text-primary mb-2">
+            {t(lang, "AI biznes-reja tayyorlamoqda...", "AI создаёт бизнес-план...", "AI is generating your business plan...")}
+          </h3>
+          <p className="text-sm text-muted">
+            {t(lang,
+              "Bu 15-30 soniya vaqt oladi. Sizning ma'lumotlaringiz, tuman statistikasi va Asakabank kredit mahsulotlari tahlil qilinmoqda.",
+              "Это займёт 15-30 секунд. Анализируем ваши данные, статистику района и кредитные продукты Асакабанка.",
+              "This takes 15-30 seconds. Analyzing your data, district statistics and Asakabank loan products."
+            )}
+          </p>
+        </div>
+        <div className="space-y-3 mt-4">
+          <Skeleton className="h-6 w-48" />
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-32 w-full" />
+          <Skeleton className="h-24 w-full" />
+        </div>
       </div>
     );
   }
