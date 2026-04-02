@@ -93,6 +93,10 @@ function ResultsContent() {
   // Generate AI plan with safe JSON extraction
   const generatePlan = useCallback(async () => {
     if (selectedIdx === null || planLoading) return;
+    if (!sessionId) {
+      setPlanError(t(lang, "Sessiya topilmadi. So'rovnomani qayta to'ldiring.", "Сессия не найдена. Пройдите опрос заново.", "Session not found. Please retake the survey."));
+      return;
+    }
     setPlanLoading(true);
     setPlan(null);
     setPlanError(null);
@@ -104,13 +108,14 @@ function ResultsContent() {
         body: JSON.stringify({
           sessionId,
           businessId: scored[selectedIdx].business_type_id,
-          bankId: banks.length > 0 ? banks[0].bank_product.id : undefined,
         }),
       });
 
       if (!res.ok) {
-        const err = await res.json().catch(() => ({ error: "Unknown error" }));
-        setPlanError(err.error || "Server error");
+        const text = await res.text();
+        let errMsg = "Server error";
+        try { errMsg = JSON.parse(text).error || errMsg; } catch { errMsg = text.substring(0, 200); }
+        setPlanError(errMsg);
         setPlanLoading(false);
         return;
       }

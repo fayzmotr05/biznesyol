@@ -134,6 +134,8 @@ export type QuestionType =
   | "single_choice"
   | "multi_choice"
   | "district_select"
+  | "free_text"
+  | "number_input"
   | "path_split";
 
 export interface QuestionOption {

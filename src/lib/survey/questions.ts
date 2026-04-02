@@ -149,7 +149,7 @@ export const questions: Question[] = [
       { value: "unknown", label_uz: "Nima ekanini bilmayman", label_ru: "Не знаю что это", label_en: "I don't know what that is" },
     ],
     required: true,
-    next: () => "capital",
+    next: () => "free_text",
   },
 
   // ============================================================
@@ -225,7 +225,7 @@ export const questions: Question[] = [
       { value: "no", label_uz: "Yo'q, yaratish kerak", label_ru: "Нет, нужно создать", label_en: "No, need to create one" },
     ],
     required: true,
-    next: () => "capital",
+    next: () => "free_text",
   },
 
   // ============================================================
@@ -302,7 +302,7 @@ export const questions: Question[] = [
       { value: "5+", label_uz: "5+ (sanoat hajmda)", label_ru: "5+ (промышленный объём)", label_en: "5+ (industrial volume)" },
     ],
     required: true,
-    next: () => "capital",
+    next: () => "free_text",
   },
 
   // ============================================================
@@ -378,7 +378,7 @@ export const questions: Question[] = [
       { value: "unsure", label_uz: "Bilmayman, o'rganishim kerak", label_ru: "Не знаю, нужно изучить", label_en: "Not sure, need to research" },
     ],
     required: true,
-    next: () => "capital",
+    next: () => "free_text",
   },
 
   // ============================================================
@@ -456,7 +456,7 @@ export const questions: Question[] = [
       { value: "neighbors", label_uz: "Qo'shnilarga va mahallaga", label_ru: "Соседям и по махалле", label_en: "To neighbors and community" },
     ],
     required: true,
-    next: () => "capital",
+    next: () => "free_text",
   },
 
   // ============================================================
@@ -532,7 +532,7 @@ export const questions: Question[] = [
       { value: "olx", label_uz: "OLX va e'lonlar orqali", label_ru: "Через OLX и объявления", label_en: "Via OLX and classifieds" },
     ],
     required: true,
-    next: () => "capital",
+    next: () => "free_text",
   },
 
   // ============================================================
@@ -594,7 +594,7 @@ export const questions: Question[] = [
       { value: "max", label_uz: "12+ soat (maksimal daromad)", label_ru: "12+ часов (максимум дохода)", label_en: "12+ hours (maximum income)" },
     ],
     required: true,
-    next: () => "capital",
+    next: () => "free_text",
   },
 
   // ============================================================
@@ -655,7 +655,7 @@ export const questions: Question[] = [
       { value: "large", label_uz: "10+ (katta guruhlar / markaz)", label_ru: "10+ (большие группы / центр)", label_en: "10+ (large groups / center)" },
     ],
     required: true,
-    next: () => "capital",
+    next: () => "free_text",
   },
 
   // ============================================================
@@ -719,7 +719,7 @@ export const questions: Question[] = [
       { value: "all", label_uz: "Hammasi — turli kanallardan", label_ru: "Все каналы — максимальный охват", label_en: "All channels — maximum reach" },
     ],
     required: true,
-    next: () => "capital",
+    next: () => "free_text",
   },
 
   // ============================================================
@@ -780,25 +780,27 @@ export const questions: Question[] = [
       { value: "hire", label_uz: "1–2 ishchi yollayman", label_ru: "Найму 1–2 работников", label_en: "Will hire 1–2 workers" },
     ],
     required: true,
-    next: () => "capital",
+    next: () => "free_text",
   },
 
   // ============================================================
-  // Phase 3: Common financial questions (all spheres converge here)
+  // Phase 3: Free text + Financial (all spheres converge here)
   // ============================================================
   {
-    id: "capital",
-    type: "single_choice",
-    text_uz: "Biznesga qancha pul sarflashingiz mumkin?",
-    text_ru: "Сколько готовы вложить в бизнес?",
-    text_en: "How much can you invest?",
-    options: [
-      { value: "0-5", label_uz: "5 mln gacha", label_ru: "До 5 млн", label_en: "Up to 5M" },
-      { value: "5-20", label_uz: "5–20 mln", label_ru: "5–20 млн", label_en: "5–20M" },
-      { value: "20-50", label_uz: "20–50 mln", label_ru: "20–50 млн", label_en: "20–50M" },
-      { value: "50-100", label_uz: "50–100 mln", label_ru: "50–100 млн", label_en: "50–100M" },
-      { value: "100+", label_uz: "100 mln+", label_ru: "100+ млн", label_en: "100M+" },
-    ],
+    id: "free_text",
+    type: "free_text",
+    text_uz: "Aniqroq ayting — nima qilmoqchisiz? O'z so'zlaringiz bilan yozing",
+    text_ru: "Расскажите подробнее — что именно хотите делать? Своими словами",
+    text_en: "Tell us more — what exactly do you want to do? In your own words",
+    required: true,
+    next: () => "exact_capital",
+  },
+  {
+    id: "exact_capital",
+    type: "number_input",
+    text_uz: "Hozir biznesga sarflashingiz mumkin bo'lgan aniq summani kiriting (mln so'mda)",
+    text_ru: "Введите точную сумму которую можете вложить в бизнес (в млн сум)",
+    text_en: "Enter the exact amount you can invest in the business (in mln UZS)",
     required: true,
     next: () => "collateral",
   },
@@ -929,7 +931,7 @@ export const JOB_QUESTION_IDS = ["job_skills", "job_experience", "job_salary", "
 export const BUSINESS_QUESTION_IDS = [
   "sphere",
   // sphere-specific questions are dynamic (food_q1..food_q5, etc.)
-  "capital", "collateral", "competition", "poor_registry",
+  "free_text", "exact_capital", "collateral", "competition", "poor_registry",
 ];
 
 export const COMMON_QUESTION_IDS = ["lang", "district", "path", "register"];
