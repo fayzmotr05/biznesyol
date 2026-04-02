@@ -40,7 +40,7 @@ export default function Header({ onLangChange }: HeaderProps) {
           </div>
           <div className="leading-tight">
             <span className="font-bold text-base tracking-tight text-foreground">BiznesYo&#39;l</span>
-            <span className="hidden sm:block text-[11px] text-muted -mt-0.5">Biznes rejalashtirish platformasi</span>
+            <span className="hidden sm:block text-[11px] text-muted -mt-0.5">AI biznes-tahlil platformasi</span>
           </div>
         </Link>
 
