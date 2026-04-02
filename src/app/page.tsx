@@ -61,13 +61,13 @@ export default function LandingPage() {
         <div className="text-center">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-light text-primary text-sm font-medium mb-6 fade-in">
             <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-            {t(lang, "Bepul platforma", "Бесплатная платформа", "Free platform")}
+            {t(lang, "AI asosida ishlaydigan platforma", "Платформа на основе AI", "AI-powered platform")}
           </div>
 
           <h1 className="text-4xl sm:text-5xl font-extrabold leading-[1.1] tracking-tight mb-5 fade-in">
-            {lang === "uz" && <>O&#39;z biznesingizni boshlash<br />uchun <span className="text-primary">aniq reja</span> oling</>}
-            {lang === "ru" && <>Получите <span className="text-primary">чёткий план</span><br />для старта бизнеса</>}
-            {lang === "en" && <>Get a <span className="text-primary">clear plan</span><br />to start your business</>}
+            {lang === "uz" && <>AI yordamida <span className="text-primary">biznes-reja</span><br />va kredit tavsiyasi oling</>}
+            {lang === "ru" && <>AI составит <span className="text-primary">бизнес-план</span><br />и подберёт кредит</>}
+            {lang === "en" && <>AI creates your <span className="text-primary">business plan</span><br />and finds the right loan</>}
           </h1>
 
           <p className="text-lg text-muted max-w-md mx-auto mb-8 fade-in-delay">
