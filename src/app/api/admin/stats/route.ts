@@ -31,19 +31,24 @@ export async function GET(req: NextRequest) {
     if (sphere) sphereCounts[sphere] = (sphereCounts[sphere] || 0) + 1;
   }
 
-  // Age distribution
+  // Age distribution — compute from birth year
   const ageCounts: Record<string, number> = {};
+  const currentYear = new Date().getFullYear();
   for (const s of sessions) {
     const answers = s.answers as Record<string, unknown>;
-    const age = answers?.age_group as string;
-    if (age) ageCounts[age] = (ageCounts[age] || 0) + 1;
+    const birthYear = parseInt((answers?.user_birth_year as string) || "0");
+    if (birthYear > 0) {
+      const age = currentYear - birthYear;
+      const bracket = age <= 25 ? "18-25" : age <= 35 ? "26-35" : age <= 45 ? "36-45" : "46-60";
+      ageCounts[bracket] = (ageCounts[bracket] || 0) + 1;
+    }
   }
 
-  // Gender
+  // Gender — use user_gender_actual from registration
   const genderCounts: Record<string, number> = {};
   for (const s of sessions) {
     const answers = s.answers as Record<string, unknown>;
-    const g = answers?.gender as string;
+    const g = answers?.user_gender_actual as string;
     if (g) genderCounts[g] = (genderCounts[g] || 0) + 1;
   }
 

@@ -62,6 +62,24 @@ export default function SurveyPage() {
   const handleAnswer = useCallback(
     (value: string | string[]) => {
       const nextAnswers = { ...answers, [currentId]: value };
+
+      // Auto-infer skills when user picks a sphere
+      if (currentId === "sphere" && typeof value === "string") {
+        const sphereSkills: Record<string, string[]> = {
+          food: ["cooking", "baking"],
+          beauty: ["hairdressing", "beauty"],
+          sewing: ["sewing", "design"],
+          trade: ["sales", "accounting_basic"],
+          agro: ["farming", "agriculture"],
+          repair: ["electronics", "car_repair", "construction"],
+          transport: ["driving"],
+          education: ["teaching", "subject_knowledge"],
+          digital: ["programming", "web_design", "photography"],
+          services: ["physical_work", "customer_service"],
+        };
+        nextAnswers.skills = sphereSkills[value] || [];
+      }
+
       const nextHistory = [...history, currentId];
 
       setAnswers(nextAnswers);
@@ -82,29 +100,8 @@ export default function SurveyPage() {
   // Handle registration form completion
   const handleRegistration = useCallback(
     async (profile: UserProfile) => {
-      // Save profile to API
-      try {
-        await fetch("/api/users", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            fullName: profile.full_name,
-            phone: profile.phone,
-            birthYear: profile.birth_year,
-            gender: profile.gender,
-            districtId: profile.district_id,
-            education: profile.education,
-            familySize: profile.family_size,
-            monthlyIncomeMln: profile.monthly_income_mln,
-            employmentStatus: profile.employment_status,
-            hasBusinessExperience: profile.has_business_experience,
-          }),
-        });
-      } catch (err) {
-        console.error("Failed to save profile:", err);
-      }
-
-      // Store profile data in answers for scoring
+      // Don't save to API yet — wait until survey submit when we have sessionId
+      // Just store profile data in answers for scoring and later API call
       const nextAnswers: SurveyAnswers = {
         ...answers,
         register: "done",
@@ -153,6 +150,32 @@ export default function SurveyPage() {
       const data = await res.json();
       if (data.id) {
         localStorage.setItem("asaka_session_id", data.id);
+
+        // NOW save user profile with sessionId
+        if (finalAnswers.user_name) {
+          try {
+            await fetch("/api/users", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                sessionId: data.id,
+                fullName: finalAnswers.user_name,
+                phone: finalAnswers.user_phone,
+                birthYear: finalAnswers.user_birth_year ? parseInt(finalAnswers.user_birth_year as string) : null,
+                gender: finalAnswers.user_gender_actual,
+                districtId: finalAnswers.district,
+                education: finalAnswers.user_education,
+                familySize: finalAnswers.user_family_size ? parseInt(finalAnswers.user_family_size as string) : null,
+                monthlyIncomeMln: finalAnswers.user_income ? parseFloat(finalAnswers.user_income as string) : null,
+                employmentStatus: finalAnswers.user_employment,
+                hasBusinessExperience: finalAnswers.user_experience === "yes",
+              }),
+            });
+          } catch (err) {
+            console.error("Profile save failed:", err);
+          }
+        }
+
         router.push(`/results?sessionId=${data.id}`);
         return;
       }

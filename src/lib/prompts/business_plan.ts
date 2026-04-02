@@ -135,12 +135,11 @@ ${userBlock}
 === SOHA VA JAVOBLAR ===
 Tanlangan soha: ${sphere}
 Biznes turi: ${biz.name_uz}
-Ko'nikmalari: ${skillsList}
-Boshlang'ich kapital: ${answers.capital} mln so'm
-Garov: ${answers.collateral}
-Joy: ${answers.premises || "noma'lum"}
-Raqobat yaqin atrofda: ${answers.competition}
-Kam ta'minlangan oila: ${answers.poor_registry}
+Ko'nikmalari: ${skillsList || "soha bo'yicha (yuqoridagi javoblarga qarang)"}
+Boshlang'ich kapital: ${answers.capital || "noma'lum"} mln so'm
+Garov: ${answers.collateral || "noma'lum"}
+Raqobat yaqin atrofda: ${answers.competition || "noma'lum"}
+Kam ta'minlangan oila: ${answers.poor_registry || "noma'lum"}
 ${sphereAnswers.length > 0 ? "\nSoha bo'yicha batafsil javoblar:\n" + sphereAnswers.join("\n") : ""}
 
 === BANK ===
