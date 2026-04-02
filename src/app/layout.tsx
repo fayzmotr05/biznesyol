@@ -35,9 +35,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" className={`${inter.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col font-[var(--font-inter)]">
-        <Header />
-        {children}
+      <body className="min-h-full flex flex-col font-[var(--font-inter)] relative">
+        {/* Asakabank watermark background */}
+        <div
+          className="fixed inset-0 pointer-events-none z-0 flex items-center justify-center"
+          aria-hidden="true"
+        >
+          <img
+            src="/asakabank-logo.png"
+            alt=""
+            className="w-[400px] h-[400px] object-contain opacity-[0.03]"
+          />
+        </div>
+        <div className="relative z-10 min-h-full flex flex-col">
+          <Header />
+          {children}
+        </div>
       </body>
     </html>
   );

@@ -34,8 +34,8 @@ export const questions: Question[] = [
     text_ru: "Какая у вас цель?",
     text_en: "What is your goal?",
     options: [
-      { value: "job", label_uz: "Ish topish", label_ru: "Найти работу", label_en: "Find a job" },
       { value: "business", label_uz: "Biznes ochish", label_ru: "Открыть бизнес", label_en: "Start a business" },
+      { value: "job", label_uz: "Ish topish", label_ru: "Найти работу", label_en: "Find a job" },
     ],
     required: true,
     next: (a: SurveyAnswers) => a.path === "job" ? "job_skills" : "register",

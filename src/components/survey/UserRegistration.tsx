@@ -92,7 +92,7 @@ export default function UserRegistration({ lang, onComplete, districtId }: UserR
                 type="text"
                 value={surname}
                 onChange={(e) => setSurname(e.target.value)}
-                placeholder={t(lang, "Lutpillayev", "Лутпиллаев", "Lutpillayev")}
+                placeholder={t(lang, "Asrorov", "Асроров", "Asrorov")}
                 className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all"
               />
             </div>
@@ -105,7 +105,7 @@ export default function UserRegistration({ lang, onComplete, districtId }: UserR
                   type="text"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  placeholder={t(lang, "Fayzullo", "Файзулло", "Fayzullo")}
+                  placeholder={t(lang, "Abror", "Аброр", "Abror")}
                   className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all"
                 />
               </div>
@@ -117,7 +117,7 @@ export default function UserRegistration({ lang, onComplete, districtId }: UserR
                   type="text"
                   value={patronymic}
                   onChange={(e) => setPatronymic(e.target.value)}
-                  placeholder={t(lang, "Xayrullaevich", "Хайруллаевич", "Khayrullaevich")}
+                  placeholder={t(lang, "Axadovich", "Ахадович", "Akhadovich")}
                   className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all"
                 />
               </div>

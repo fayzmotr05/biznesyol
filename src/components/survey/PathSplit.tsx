@@ -10,16 +10,6 @@ interface PathSplitProps {
 
 const paths = [
   {
-    value: "job" as const,
-    emoji: "\uD83D\uDCBC",
-    title: { uz: "Ish topish", ru: "Найти работу", en: "Find a job" },
-    desc: {
-      uz: "Ko'nikmalaringiz va tumaningiz bo'yicha ish o'rinlarini tanlaymiz. Ish beruvchilar ro'yxati va kontaktlarini olasiz.",
-      ru: "Подберём вакансии по вашим навыкам и району. Получите список работодателей и контакты.",
-      en: "We'll match vacancies to your skills and district. You'll get a list of employers and contacts.",
-    },
-  },
-  {
     value: "business" as const,
     emoji: "\uD83D\uDE80",
     title: { uz: "Biznes ochish", ru: "Открыть бизнес", en: "Start a business" },
@@ -27,6 +17,16 @@ const paths = [
       uz: "Eng yaxshi biznes turini, kredit uchun bankni tanlaymiz va bosqichma-bosqich reja tuzamiz.",
       ru: "Подберём лучший вид бизнеса, банк для кредита и составим пошаговый план действий.",
       en: "We'll find the best business type, match a bank loan, and build your step-by-step action plan.",
+    },
+  },
+  {
+    value: "job" as const,
+    emoji: "\uD83D\uDCBC",
+    title: { uz: "Ish topish", ru: "Найти работу", en: "Find a job" },
+    desc: {
+      uz: "Ko'nikmalaringiz va tumaningiz bo'yicha ish o'rinlarini tanlaymiz. Ish beruvchilar ro'yxati va kontaktlarini olasiz.",
+      ru: "Подберём вакансии по вашим навыкам и району. Получите список работодателей и контакты.",
+      en: "We'll match vacancies to your skills and district. You'll get a list of employers and contacts.",
     },
   },
 ];
