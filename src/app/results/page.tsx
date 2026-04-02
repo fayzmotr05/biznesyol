@@ -204,74 +204,59 @@ function ResultsContent() {
         )}
       </div>
 
-      {/* Top businesses */}
-      <section className="mb-8">
-        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+      {/* Business type selection — simple cards, no fake scores */}
+      <section className="mb-6">
+        <h2 className="text-sm font-semibold text-muted uppercase tracking-wide mb-3">
           {t(lang,
-            "Sizga mos biznes turlari",
-            "Подходящие виды бизнеса",
-            "Business types that match you"
+            "Biznes turini tanlang — AI sizga reja tuzib beradi",
+            "Выберите тип бизнеса — AI составит план",
+            "Choose a business type — AI will create your plan"
           )}
         </h2>
-        {selectedIdx === null && (
-          <p className="text-sm text-gray-400 mb-3">
-            {t(lang,
-              "Batafsil ko'rish uchun bitta biznesni tanlang",
-              "Нажмите на бизнес для подробностей",
-              "Tap a business to see details"
-            )}
-          </p>
-        )}
-        <div className="space-y-3">
-          {scored.map((biz, i) => (
-            <BusinessCard
-              key={biz.business_type_id}
-              business={biz}
-              rank={biz.rank}
-              lang={lang}
-              onSelect={() => handleSelect(i)}
-              isSelected={selectedIdx === i}
-            />
-          ))}
+        <div className="space-y-2">
+          {scored.map((biz, i) => {
+            const isSelected = selectedIdx === i;
+            const name = lang === "uz" ? biz.business_type.name_uz : biz.business_type.name_ru;
+            return (
+              <button
+                key={biz.business_type_id}
+                onClick={() => { handleSelect(i); }}
+                className={`w-full p-4 rounded-xl border-2 text-left transition-all ${
+                  isSelected ? "border-primary bg-primary/5" : "border-border hover:border-primary/40"
+                }`}
+              >
+                <div className="font-semibold">{name}</div>
+              </button>
+            );
+          })}
         </div>
       </section>
 
-      {/* Selected business details */}
+      {/* AI Business Plan — auto-generates when business selected */}
       {selectedBiz && (
-        <>
-          {/* AI Business Plan — includes real Asaka Bank recommendations */}
-          <section className="mb-8">
-            {!plan && !planLoading && (
-              <button
-                onClick={generatePlan}
-                disabled={planLoading}
-                className="w-full py-4 rounded-xl font-semibold text-white text-base transition-all hover:opacity-90 disabled:opacity-40"
-                style={{ backgroundColor: "#0066FF" }}
-              >
-                {t(lang, "Biznes-reja yaratish", "Создать бизнес-план", "Generate business plan")}
-              </button>
-            )}
-            {planError && (
-              <div className="mt-3 p-4 bg-red-50 rounded-xl text-sm text-red-700">
-                {planError}
-                <button
-                  onClick={() => { setPlanError(null); generatePlan(); }}
-                  className="ml-2 underline"
-                >
-                  {t(lang, "Qayta urinish", "Повторить", "Retry")}
-                </button>
-              </div>
-            )}
-            <BusinessPlanDisplay planJson={plan} isLoading={planLoading} lang={lang} />
-          </section>
-
-          {/* Checklist */}
-          {plan && (
-            <section className="mb-8">
-              <Checklist steps={selectedBiz.business_type.checklist_steps} lang={lang} sessionId={sessionId} />
-            </section>
+        <section className="mb-8">
+          {!plan && !planLoading && !planError && (
+            <button
+              onClick={generatePlan}
+              className="w-full py-4 rounded-xl font-semibold text-white text-base transition-all hover:opacity-90"
+              style={{ backgroundColor: "#0066FF" }}
+            >
+              {t(lang, "Biznes-reja yaratish", "Создать бизнес-план", "Generate business plan")}
+            </button>
           )}
-        </>
+          {planError && (
+            <div className="p-4 bg-red-50 rounded-xl text-sm text-red-700">
+              {planError}
+              <button
+                onClick={() => { setPlanError(null); generatePlan(); }}
+                className="ml-2 underline"
+              >
+                {t(lang, "Qayta urinish", "Повторить", "Retry")}
+              </button>
+            </div>
+          )}
+          <BusinessPlanDisplay planJson={plan} isLoading={planLoading} lang={lang} />
+        </section>
       )}
 
       {/* Actions */}
