@@ -127,18 +127,25 @@ function ResultsContent() {
         text += decoder.decode(value, { stream: true });
       }
 
-      // Extract JSON safely — find first { to last }
-      const start = text.indexOf("{");
-      const end = text.lastIndexOf("}");
+      // Extract JSON safely — strip markdown wrappers, find first { to last }
+      let clean = text.replace(/```json\s*/g, "").replace(/```\s*/g, "").trim();
+      const start = clean.indexOf("{");
+      const end = clean.lastIndexOf("}");
       if (start === -1 || end === -1) {
-        setPlanError(t(lang, "AI javobini o'qib bo'lmadi", "Не удалось прочитать ответ AI", "Could not parse AI response"));
+        console.error("No JSON found in response:", text.substring(0, 200));
+        setPlanError(t(lang, "AI javobini o'qib bo'lmadi. Qayta urinib ko'ring.", "Не удалось прочитать ответ AI", "Could not parse AI response"));
         setPlanLoading(false);
         return;
       }
 
-      const jsonStr = text.slice(start, end + 1);
-      const parsed = JSON.parse(jsonStr) as BusinessPlanResult;
-      setPlan(parsed);
+      const jsonStr = clean.slice(start, end + 1);
+      try {
+        const parsed = JSON.parse(jsonStr) as BusinessPlanResult;
+        setPlan(parsed);
+      } catch (parseErr) {
+        console.error("JSON parse error:", parseErr, "Raw:", jsonStr.substring(0, 200));
+        setPlanError(t(lang, "AI javobini tahlil qilib bo'lmadi. Qayta urinib ko'ring.", "Ошибка разбора ответа AI", "Could not parse AI response"));
+      }
     } catch (err) {
       console.error("Plan generation failed:", err);
       setPlanError(t(lang, "Xatolik yuz berdi. Qayta urinib ko'ring.", "Произошла ошибка. Попробуйте ещё раз.", "An error occurred. Please try again."));

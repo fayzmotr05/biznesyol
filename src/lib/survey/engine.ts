@@ -35,7 +35,7 @@ function getTotalQuestions(answers: SurveyAnswers): number {
   // Business path: common + register + sphere selection + sphere questions + financial
   const sphere = answers.sphere as string;
   const sphereCount = sphere ? (SPHERE_QUESTION_COUNTS[sphere] ?? 4) : 4;
-  const financialCount = 4; // exact_capital, collateral, competition, poor_registry
+  const financialCount = 3; // exact_capital, competition, poor_registry
 
   return COMMON_QUESTION_IDS.length + 1 + sphereCount + financialCount; // +1 for sphere selection
 }

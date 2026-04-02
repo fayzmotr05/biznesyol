@@ -793,19 +793,6 @@ export const questions: Question[] = [
     text_ru: "Сколько можете вложить в бизнес? (в млн сум)",
     text_en: "How much can you invest? (in mln UZS)",
     required: false,
-    next: () => "collateral",
-  },
-  {
-    id: "collateral",
-    type: "single_choice",
-    text_uz: "Kredit uchun garov qo'ya olasizmi?",
-    text_ru: "Можете предоставить залог для кредита?",
-    text_en: "Can you provide collateral for a loan?",
-    options: [
-      { value: "есть", label_uz: "Ha — uy, avto yoki yer", label_ru: "Да — дом, авто или земля", label_en: "Yes — house, car, or land" },
-      { value: "нет", label_uz: "Yo'q", label_ru: "Нет", label_en: "No" },
-    ],
-    required: true,
     next: () => "competition",
   },
   {
@@ -922,7 +909,7 @@ export const JOB_QUESTION_IDS = ["job_skills", "job_experience", "job_salary", "
 export const BUSINESS_QUESTION_IDS = [
   "sphere",
   // sphere-specific questions are dynamic (food_q1..food_q5, etc.)
-  "exact_capital", "collateral", "competition", "poor_registry",
+  "exact_capital", "competition", "poor_registry",
 ];
 
 export const COMMON_QUESTION_IDS = ["lang", "district", "path", "register"];
