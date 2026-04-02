@@ -107,45 +107,15 @@ function ResultsContent() {
         }),
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
-        const text = await res.text();
-        let errMsg = "Server error";
-        try { errMsg = JSON.parse(text).error || errMsg; } catch { errMsg = text.substring(0, 200); }
-        setPlanError(errMsg);
+        setPlanError(data.error || "Server error");
         setPlanLoading(false);
         return;
       }
 
-      const reader = res.body?.getReader();
-      if (!reader) { setPlanError("No response"); setPlanLoading(false); return; }
-
-      const decoder = new TextDecoder();
-      let text = "";
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        text += decoder.decode(value, { stream: true });
-      }
-
-      // Extract JSON safely — strip markdown wrappers, find first { to last }
-      let clean = text.replace(/```json\s*/g, "").replace(/```\s*/g, "").trim();
-      const start = clean.indexOf("{");
-      const end = clean.lastIndexOf("}");
-      if (start === -1 || end === -1) {
-        console.error("No JSON found in response:", text.substring(0, 200));
-        setPlanError(t(lang, "AI javobini o'qib bo'lmadi. Qayta urinib ko'ring.", "Не удалось прочитать ответ AI", "Could not parse AI response"));
-        setPlanLoading(false);
-        return;
-      }
-
-      const jsonStr = clean.slice(start, end + 1);
-      try {
-        const parsed = JSON.parse(jsonStr) as BusinessPlanResult;
-        setPlan(parsed);
-      } catch (parseErr) {
-        console.error("JSON parse error:", parseErr, "Raw:", jsonStr.substring(0, 200));
-        setPlanError(t(lang, "AI javobini tahlil qilib bo'lmadi. Qayta urinib ko'ring.", "Ошибка разбора ответа AI", "Could not parse AI response"));
-      }
+      setPlan(data as BusinessPlanResult);
     } catch (err) {
       console.error("Plan generation failed:", err);
       setPlanError(t(lang, "Xatolik yuz berdi. Qayta urinib ko'ring.", "Произошла ошибка. Попробуйте ещё раз.", "An error occurred. Please try again."));

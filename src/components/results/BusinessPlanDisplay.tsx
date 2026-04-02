@@ -13,12 +13,6 @@ function Skeleton({ className = "" }: { className?: string }) {
   return <div className={`animate-pulse bg-gray-200 rounded-lg ${className}`} />;
 }
 
-function num(v: number | string | undefined): number {
-  if (typeof v === "number") return v;
-  if (typeof v === "string") return parseFloat(v) || 0;
-  return 0;
-}
-
 export default function BusinessPlanDisplay({ planJson, isLoading, lang }: Props) {
   if (isLoading) {
     return (
@@ -30,17 +24,11 @@ export default function BusinessPlanDisplay({ planJson, isLoading, lang }: Props
           </h3>
           <p className="text-sm text-muted">
             {t(lang,
-              "Bu 15-30 soniya vaqt oladi. Sizning ma'lumotlaringiz, tuman statistikasi va Asakabank kredit mahsulotlari tahlil qilinmoqda.",
-              "Это займёт 15-30 секунд. Анализируем ваши данные, статистику района и кредитные продукты Асакабанка.",
-              "This takes 15-30 seconds. Analyzing your data, district statistics and Asakabank loan products."
+              "Bu 20-40 soniya vaqt oladi. Internet orqali haqiqiy narxlar qidirilmoqda.",
+              "Это займёт 20-40 секунд. Ищем реальные цены в интернете.",
+              "This takes 20-40 seconds. Searching real prices online."
             )}
           </p>
-        </div>
-        <div className="space-y-3 mt-4">
-          <Skeleton className="h-6 w-48" />
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-32 w-full" />
-          <Skeleton className="h-24 w-full" />
         </div>
       </div>
     );
@@ -49,21 +37,27 @@ export default function BusinessPlanDisplay({ planJson, isLoading, lang }: Props
   if (!planJson) return null;
   const plan = planJson;
 
-  const items = plan.startup_items || plan.startup_costs?.map((c) => ({ item: c.item, price_mln: c.amount_mln, where_to_buy: "" })) || [];
-  const forecast = plan.monthly_plan || plan.monthly_forecast || { revenue_mln: 0, expenses_mln: 0, profit_mln: 0 };
-  const totalStartup = items.reduce((sum, i) => sum + num(i.price_mln), 0);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const raw = plan as any;
+  const items: Array<{ item: string; price: string; where_to_buy: string }> =
+    (raw.startup_items || raw.startup_costs || []).map((i: Record<string, string>) => ({
+      item: i.item || "", price: String(i.price || i.price_mln || i.amount_mln || ""), where_to_buy: i.where_to_buy || "",
+    }));
+  const forecast = raw.monthly_plan || raw.monthly_forecast || {};
+  const fRevenue = String(forecast.revenue || forecast.revenue_mln || "");
+  const fExpenses = String(forecast.expenses || forecast.expenses_mln || "");
+  const fProfit = String(forecast.profit || forecast.profit_mln || "");
 
   return (
     <div className="question-enter space-y-5 mt-4">
-      {/* Business name + summary */}
       {plan.business_name && (
         <h3 className="text-xl font-bold text-primary">{plan.business_name}</h3>
       )}
+
       <div className="bg-primary/5 p-4 rounded-xl">
         <p className="text-sm leading-relaxed">{plan.summary}</p>
       </div>
 
-      {/* Why this business */}
       {plan.why_this_business && (
         <div className="bg-accent/5 border border-accent/20 p-4 rounded-xl">
           <h4 className="text-sm font-semibold text-accent mb-1">
@@ -73,76 +67,76 @@ export default function BusinessPlanDisplay({ planJson, isLoading, lang }: Props
         </div>
       )}
 
-      {/* Startup items with prices */}
+      {/* Startup items */}
       {items.length > 0 && (
         <div>
           <h4 className="text-sm font-semibold text-muted mb-2">
             {t(lang, "Kerakli narsalar va narxlar", "Что нужно купить", "What you need to buy")}
           </h4>
-          <div className="border border-border rounded-xl overflow-hidden">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="bg-background">
-                  <th className="text-left p-3 font-medium">{t(lang, "Nomi", "Название", "Item")}</th>
-                  <th className="text-right p-3 font-medium w-24">{t(lang, "Narx", "Цена", "Price")}</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {items.map((item, i) => (
-                  <tr key={i}>
-                    <td className="p-3">
-                      <div>{item.item}</div>
-                      {item.where_to_buy && (
-                        <div className="text-xs text-muted mt-0.5">{item.where_to_buy}</div>
-                      )}
-                    </td>
-                    <td className="p-3 text-right font-medium whitespace-nowrap">{num(item.price_mln).toFixed(1)} mln</td>
-                  </tr>
-                ))}
-                <tr className="bg-background font-semibold">
-                  <td className="p-3">{t(lang, "Jami", "Итого", "Total")}</td>
-                  <td className="p-3 text-right text-primary">{totalStartup.toFixed(1)} mln</td>
-                </tr>
-              </tbody>
-            </table>
+          <div className="space-y-2">
+            {items.map((item, i) => (
+              <div key={i} className="bg-background rounded-xl border border-border p-3 flex justify-between items-start gap-3">
+                <div className="flex-1">
+                  <div className="text-sm font-medium">{item.item}</div>
+                  {item.where_to_buy && <div className="text-xs text-muted mt-0.5">{item.where_to_buy}</div>}
+                </div>
+                <div className="text-sm font-bold text-primary whitespace-nowrap">{String(item.price || "")}</div>
+              </div>
+            ))}
           </div>
+          {plan.total_startup_cost && (
+            <div className="mt-2 p-3 bg-primary/5 rounded-xl flex justify-between">
+              <span className="font-semibold">{t(lang, "Jami", "Итого", "Total")}</span>
+              <span className="font-bold text-primary">{String(plan.total_startup_cost)}</span>
+            </div>
+          )}
+          {plan.loan_needed && (
+            <div className="mt-1 p-3 bg-yellow-50 rounded-xl flex justify-between">
+              <span className="text-sm">{t(lang, "Kredit kerak", "Нужен кредит", "Loan needed")}</span>
+              <span className="font-bold text-yellow-700">{String(plan.loan_needed)}</span>
+            </div>
+          )}
         </div>
       )}
 
       {/* Monthly forecast */}
-      <div>
-        <h4 className="text-sm font-semibold text-muted mb-2">
-          {t(lang, "Oylik prognoz (taxminan)", "Прогноз на месяц", "Monthly forecast")}
-        </h4>
-        <div className="grid grid-cols-3 gap-3 text-center">
-          <div className="bg-background rounded-xl p-3 border border-border">
-            <div className="text-lg font-bold text-primary">{num(forecast.revenue_mln).toFixed(1)}</div>
-            <div className="text-xs text-muted">{t(lang, "Daromad", "Выручка", "Revenue")}</div>
+      {fRevenue && (
+        <div>
+          <h4 className="text-sm font-semibold text-muted mb-2">
+            {t(lang, "Oylik prognoz (taxminan)", "Месячный прогноз", "Monthly forecast")}
+          </h4>
+          <div className="grid grid-cols-3 gap-3 text-center">
+            <div className="bg-background rounded-xl p-3 border border-border">
+              <div className="text-base font-bold text-primary">{fRevenue}</div>
+              <div className="text-xs text-muted">{t(lang, "Daromad", "Выручка", "Revenue")}</div>
+            </div>
+            <div className="bg-background rounded-xl p-3 border border-border">
+              <div className="text-base font-bold text-red-400">{fExpenses}</div>
+              <div className="text-xs text-muted">{t(lang, "Xarajat", "Расходы", "Expenses")}</div>
+            </div>
+            <div className="bg-accent/5 rounded-xl p-3 border border-accent/20">
+              <div className="text-base font-bold text-accent">{fProfit}</div>
+              <div className="text-xs text-muted">{t(lang, "Foyda", "Прибыль", "Profit")}</div>
+            </div>
           </div>
-          <div className="bg-background rounded-xl p-3 border border-border">
-            <div className="text-lg font-bold text-red-400">{num(forecast.expenses_mln).toFixed(1)}</div>
-            <div className="text-xs text-muted">{t(lang, "Xarajat", "Расходы", "Expenses")}</div>
-          </div>
-          <div className="bg-accent/5 rounded-xl p-3 border border-accent/20">
-            <div className="text-lg font-bold text-accent">{num(forecast.profit_mln).toFixed(1)}</div>
-            <div className="text-xs text-muted">{t(lang, "Foyda", "Прибыль", "Profit")}</div>
-          </div>
+          <p className="text-center text-sm text-muted mt-2">
+            {t(lang, `O'zini qoplash: ~${plan.breakeven_months} oy`, `Окупаемость: ~${plan.breakeven_months} мес`, `Breakeven: ~${plan.breakeven_months} months`)}
+          </p>
         </div>
-        <p className="text-center text-sm text-muted mt-2">
-          {t(lang, `O'zini qoplash: ~${plan.breakeven_months} oy`, `Окупаемость: ~${plan.breakeven_months} мес`, `Breakeven: ~${plan.breakeven_months} months`)}
-        </p>
-      </div>
+      )}
 
-      {/* Recommended Asaka loan */}
+      {/* Recommended loan */}
       {plan.recommended_loan && (
         <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
           <h4 className="font-semibold text-blue-800 mb-1">
             Asakabank: {plan.recommended_loan.name}
           </h4>
-          <p className="text-sm text-blue-700">
-            {num(plan.recommended_loan.amount_mln).toFixed(1)} mln so'm &middot; {plan.recommended_loan.rate}
-          </p>
-          <p className="text-sm text-blue-600 mt-1">{plan.recommended_loan.why}</p>
+          <div className="text-sm text-blue-700 space-y-1">
+            {plan.recommended_loan.amount && <p>Summa: {plan.recommended_loan.amount}</p>}
+            <p>Stavka: {plan.recommended_loan.rate}</p>
+            {plan.recommended_loan.term && <p>Muddat: {plan.recommended_loan.term}</p>}
+          </div>
+          <p className="text-sm text-blue-600 mt-2">{plan.recommended_loan.why}</p>
         </div>
       )}
 
