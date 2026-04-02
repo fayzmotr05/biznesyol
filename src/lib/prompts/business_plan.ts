@@ -1,19 +1,7 @@
 import type { SurveyAnswers, ScoredBusiness, BankMatch, District } from "@/types";
+import asakaBankData from "../../../data/asaka_bank.json";
 
 interface DistrictDataRow {
-  population?: number;
-  unemployment_rate?: number;
-  poverty_rate?: number;
-  poverty_families?: number;
-  small_businesses_count?: number;
-  individual_entrepreneurs?: number;
-  sme_loans_bln?: number;
-  key_sectors?: string[];
-  recommended_sectors?: string[];
-  kindergarten_coverage_pct?: number;
-  markets_count?: number;
-  vacant_jobs?: number;
-  notes?: string;
   [key: string]: unknown;
 }
 
@@ -25,89 +13,58 @@ interface BuildPromptParams {
   districtData?: DistrictDataRow | null;
 }
 
+function getAsakaLoans(answers: SurveyAnswers, sphere: string): string {
+  const birthYear = parseInt((answers.user_birth_year as string) || "0");
+  const age = birthYear > 0 ? new Date().getFullYear() - birthYear : 30;
+  const hasCollateral = (answers.collateral as string) === "есть";
+
+  const matching = asakaBankData.filter((loan) => {
+    if (age < loan.age_min || age > loan.age_max) return false;
+    if (loan.requires_collateral && !hasCollateral) return false;
+    if (loan.target === "youth" && age > 30) return false;
+    if (!loan.suitable_for.includes("any") && !loan.suitable_for.includes(sphere)) return false;
+    return true;
+  });
+
+  if (matching.length === 0) return "Mos Asakabank kredit mahsuloti topilmadi.";
+
+  return matching.map((l) =>
+    `- ${l.name_uz}: ${l.min_amount_mln}-${l.max_amount_mln} mln, ${l.interest_rate}% yillik, ${l.term_months_max} oygacha` +
+    (l.grace_period_months ? `, ${l.grace_period_months} oy imtiyozli` : "") +
+    (l.requires_collateral ? " (garov kerak)" : " (garovsiz)") +
+    ` — ${l.description_uz}`
+  ).join("\n");
+}
+
 export function buildBusinessPlanPrompt(params: BuildPromptParams): {
   system: string;
   user: string;
 } {
   const { business, bank, answers, district, districtData } = params;
-  const lang = answers.lang === "uz" ? "uz" : answers.lang === "en" ? "en" : "ru";
+  const lang = (answers.lang as string) || "uz";
   const biz = business.business_type;
   const bp = bank.bank_product;
+  const sphere = (answers.sphere as string) || "";
 
-  // Build district context block from admin data
+  // District context
   let districtContext = "";
   if (districtData) {
     const d = districtData;
     const lines: string[] = [];
-    if (d.population) lines.push(`Aholi: ${d.population.toLocaleString()}`);
+    if (d.population) lines.push(`Aholi: ${(d.population as number).toLocaleString()}`);
     if (d.unemployment_rate) lines.push(`Ishsizlik: ${d.unemployment_rate}%`);
     if (d.poverty_rate) lines.push(`Kambagrlik: ${d.poverty_rate}%`);
     if (d.small_businesses_count) lines.push(`Kichik bizneslar: ${d.small_businesses_count}`);
-    if (d.individual_entrepreneurs) lines.push(`YaTT lar: ${d.individual_entrepreneurs}`);
-    if (d.sme_loans_bln) lines.push(`KBga kreditlar: ${d.sme_loans_bln} mlrd so'm`);
+    if (d.individual_entrepreneurs) lines.push(`YaTT: ${d.individual_entrepreneurs}`);
+    if (d.sme_loans_bln) lines.push(`KBga kreditlar: ${d.sme_loans_bln} mlrd`);
     if (d.markets_count) lines.push(`Bozorlar: ${d.markets_count}`);
-    if (d.vacant_jobs) lines.push(`Bo'sh ish o'rinlari: ${d.vacant_jobs}`);
-    if (d.key_sectors?.length) lines.push(`Asosiy sohalar: ${d.key_sectors.join(", ")}`);
-    if (d.recommended_sectors?.length) lines.push(`Tavsiya etilgan sohalar: ${d.recommended_sectors.join(", ")}`);
-    if (d.kindergarten_coverage_pct) lines.push(`MTM qamrovi: ${d.kindergarten_coverage_pct}%`);
-    if (d.notes) lines.push(`Qo'shimcha: ${d.notes}`);
-    if (lines.length > 0) {
-      districtContext = "\n\nTUMAN STATISTIKASI (admin tomonidan kiritilgan haqiqiy ma'lumotlar):\n" + lines.join("\n");
-    }
+    if (d.key_sectors) lines.push(`Asosiy sohalar: ${(d.key_sectors as string[]).join(", ")}`);
+    if (d.recommended_sectors) lines.push(`Tavsiya sohalar: ${(d.recommended_sectors as string[]).join(", ")}`);
+    if (d.notes) lines.push(`Izoh: ${d.notes}`);
+    districtContext = lines.join("\n");
   }
 
-  const systemPrompts: Record<string, string> = {
-    ru: `Ты — опытный бизнес-консультант в Узбекистане с 15+ лет опыта. Даёшь ТОЛЬКО практичные, конкретные советы.
-
-ПРАВИЛА:
-1. Бизнес-план СТРОГО по выбранной сфере. Шитьё = только шитьё.
-2. В startup_costs ОБЯЗАТЕЛЬНО укажи ВСЁ что нужно купить:
-   - Оборудование: конкретная модель, где купить (OLX.uz, Малика, Сергели базар), цена в млн сум
-   - Расходные материалы: ткань/продукты/запчасти на первый месяц
-   - Аренда: примерная цена в этом районе
-   - Регистрация: ИП через my.gov.uz, стоимость
-   Пример: "Швейная машина JUKI DDL-8700 (б/у, OLX.uz)" — 3.5 млн
-3. Если пользователь ответил что у него НЕТ оборудования — подробно распиши что именно нужно купить и где.
-4. Используй "ориентировочно", "по оценке". Без гарантий.
-5. Ответ — строго JSON без markdown, без \`\`\`.`,
-
-    uz: `Sen — O'zbekistonda 15+ yillik tajribaga ega biznes-maslahatchi. FAQAT amaliy, aniq maslahatlar berasan.
-
-QOIDALAR:
-1. Biznes-reja FAQAT tanlangan soha bo'yicha. Tikuvchilik = faqat tikuvchilik.
-2. startup_costs da sotib olish kerak bo'lgan HAMMA narsani yoz:
-   - Jihozlar: aniq model, qayerdan olish (OLX.uz, Malika, Sergeli bozori), narxi mln so'mda
-   - Xom ashyo: mato/oziq-ovqat/ehtiyot qismlar birinchi oyga
-   - Ijara: shu tumandagi taxminiy narx
-   - Ro'yxatdan o'tish: my.gov.uz orqali YaTT, narxi
-   Masalan: "Tikuv mashinasi JUKI DDL-8700 (b/u, OLX.uz)" — 3.5 mln
-3. Agar foydalanuvchi jihozi YO'Q degan bo'lsa — nimani, qayerdan, qancha so'mga olish kerakligini BATAFSIL yoz.
-4. "Taxminan", "baholash bo'yicha" so'zlarini ishlat. Kafolat berma.
-5. Javob — faqat JSON, markdown bo'lmasin, \`\`\` bo'lmasin.`,
-
-    en: `You are an experienced business consultant in Uzbekistan with 15+ years of experience. Give ONLY practical, specific advice.
-
-RULES:
-1. Business plan MUST match the chosen field. Sewing = only sewing.
-2. In startup_costs list EVERYTHING the user needs to buy:
-   - Equipment: specific model, where to buy (OLX.uz, Malika bazaar, Sergeli), price in mln UZS
-   - Supplies: fabric/ingredients/parts for first month
-   - Rent: approximate price in this district
-   - Registration: IP via my.gov.uz, cost
-   Example: "JUKI DDL-8700 sewing machine (used, OLX.uz)" — 3.5 mln
-3. If user answered they DON'T have equipment — detail exactly what to buy, where, and for how much.
-4. Use "approximately", "estimated". No guarantees.
-5. Response — strict JSON only, no markdown, no \`\`\`.`,
-  };
-
-  const system = systemPrompts[lang] || systemPrompts.ru;
-
-  const skillsList = Array.isArray(answers.skills)
-    ? answers.skills.join(", ")
-    : (answers.skills as string) ?? "";
-
-  // Sphere-specific answers for deeper analysis
-  const sphere = (answers.sphere as string) || "";
+  // Sphere-specific answers
   const sphereAnswers: string[] = [];
   for (const [key, val] of Object.entries(answers)) {
     if (key.startsWith(`${sphere}_q`)) {
@@ -115,68 +72,97 @@ RULES:
     }
   }
 
-  // User profile from registration
-  const userName = (answers.user_name as string) || "";
-  const userGender = (answers.user_gender_actual as string) || "";
-  const userEducation = (answers.user_education as string) || "";
-  const userIncome = (answers.user_income as string) || "";
-  const userEmployment = (answers.user_employment as string) || "";
-  const userExperience = (answers.user_experience as string) || "";
+  // User profile
   const birthYear = parseInt((answers.user_birth_year as string) || "0");
   const age = birthYear > 0 ? new Date().getFullYear() - birthYear : 0;
+  const unemployedFamily = parseInt((answers.user_unemployed_family as string) || "0");
 
-  const userBlock = `
-FOYDALANUVCHI PROFILI:
-Ism: ${userName}
-Yosh: ${age > 0 ? age : "noma'lum"}
-Jins: ${userGender === "female" ? "ayol" : userGender === "male" ? "erkak" : "noma'lum"}
-Ta'lim: ${userEducation || "noma'lum"}
-Hozirgi daromad: ${userIncome ? userIncome + " mln so'm/oy" : "noma'lum"}
-Holati: ${userEmployment || "noma'lum"}
-Biznes tajribasi: ${userExperience === "yes" ? "bor" : "yo'q"}`;
+  // Asaka bank matching loans
+  const asakaLoans = getAsakaLoans(answers, sphere);
 
-  const user = `DIQQAT: Biznes-reja FAQAT "${biz.name_uz}" haqida bo'lishi SHART. Boshqa soha tavsiya QILMA.
+  const system = lang === "ru"
+    ? `Ты — бизнес-консультант Асакабанка в Узбекистане. Пишешь бизнес-планы для реальных клиентов.
 
-=== TUMAN MA'LUMOTLARI ===
-Tuman: ${district.name_uz} (${district.region_uz}), turi: ${district.type}, aholi: ${district.population.toLocaleString()}
-${districtContext}
-
-=== FOYDALANUVCHI ===
-${userBlock}
-
-=== SOHA VA JAVOBLAR ===
-Tanlangan soha: ${sphere}
-Biznes turi: ${biz.name_uz}
-Ko'nikmalari: ${skillsList || "soha bo'yicha (yuqoridagi javoblarga qarang)"}
-Boshlang'ich kapital: ${answers.capital || "noma'lum"} mln so'm
-Garov: ${answers.collateral || "noma'lum"}
-Raqobat yaqin atrofda: ${answers.competition || "noma'lum"}
-Kam ta'minlangan oila: ${answers.poor_registry || "noma'lum"}
-${sphereAnswers.length > 0 ? "\nSoha bo'yicha batafsil javoblar:\n" + sphereAnswers.join("\n") : ""}
-
-=== BANK ===
-Tavsiya: ${bp.bank_name_uz} — ${bp.product_name_uz}
-Kredit: ${bp.min_amount_mln}–${bp.max_amount_mln} mln so'm, ${bp.interest_rate_annual}% yillik, ${bp.term_months_max} oygacha
-
-=== MUHIM KO'RSATMALAR ===
-1. startup_costs da ANIQ jihoz/uskuna nomlari va O'zbekistondagi narxlarini yoz.
-   Masalan: "Tikuv mashinasi JUKI DDL-8700 (b/u OLX.uz)" — 3.5 mln, "Overlok JACK E4" — 4 mln.
-   Agar foydalanuvchi javoblarida jihozi yo'q desa — kerakli jihozlarni aniq ko'rsat.
-2. risks da bu tumanga xos xavflarni yoz (raqobat, suv/elektr muammolari va h.k.)
-3. mentor_note da ANIQ, amaliy maslahat ber — "qayerdan boshlash", "qayerda mijoz topish"
-
-Faqat JSON qaytar:
+ФОРМАТ ОТВЕТА — строго JSON, без markdown:
 {
-  "summary": "3-4 jumlada: nima qiladi, kimga xizmat qiladi, qancha daromad kutilmoqda — FAQAT ${biz.name_uz} haqida",
-  "target_audience": "bu tumandagi aniq maqsadli mijozlar kimlar va ular qayerda",
-  "startup_costs": [
-    { "item": "ANIQ jihoz nomi va modeli (qayerdan olish mumkin)", "amount_mln": "narxi" }
+  "business_name": "название бизнеса",
+  "summary": "3-4 предложения: что делает, для кого, сколько зарабатывает",
+  "why_this_business": "почему именно этот бизнес подходит этому человеку в этом районе",
+  "startup_items": [
+    {"item": "КОНКРЕТНОЕ оборудование/товар с моделью", "price_mln": число, "where_to_buy": "где купить"}
   ],
-  "monthly_forecast": { "revenue_mln": "raqam", "expenses_mln": "raqam", "profit_mln": "raqam" },
-  "breakeven_months": "raqam",
-  "risks": [{ "risk": "tumanga xos aniq xavf", "mitigation": "aniq yechim" }],
-  "mentor_note": "1-2 jumlada eng muhim amaliy maslahat — qayerdan boshlash kerak"
+  "monthly_plan": {"revenue_mln": число, "expenses_mln": число, "profit_mln": число},
+  "breakeven_months": число,
+  "recommended_loan": {"name": "название кредита Асакабанка", "amount_mln": число, "rate": "ставка", "why": "почему этот"},
+  "first_steps": ["шаг 1", "шаг 2", "шаг 3", "шаг 4", "шаг 5"],
+  "risks": [{"risk": "риск", "solution": "решение"}],
+  "tip": "один практичный совет"
+}`
+    : lang === "en"
+    ? `You are a business consultant at Asakabank in Uzbekistan. You write business plans for real clients.
+
+RESPONSE FORMAT — strict JSON, no markdown:
+{
+  "business_name": "business name",
+  "summary": "3-4 sentences: what it does, for whom, how much it earns",
+  "why_this_business": "why this business fits this person in this district",
+  "startup_items": [
+    {"item": "SPECIFIC equipment/goods with model", "price_mln": number, "where_to_buy": "where to buy"}
+  ],
+  "monthly_plan": {"revenue_mln": number, "expenses_mln": number, "profit_mln": number},
+  "breakeven_months": number,
+  "recommended_loan": {"name": "Asakabank loan name", "amount_mln": number, "rate": "rate", "why": "why this one"},
+  "first_steps": ["step 1", "step 2", "step 3", "step 4", "step 5"],
+  "risks": [{"risk": "risk", "solution": "solution"}],
+  "tip": "one practical tip"
+}`
+    : `Sen — Asakabankning biznes-maslahatchisisan. Haqiqiy mijozlar uchun biznes-reja yozasan.
+
+JAVOB FORMATI — faqat JSON, markdown bo'lmasin:
+{
+  "business_name": "biznes nomi",
+  "summary": "3-4 jumla: nima qiladi, kimga, qancha daromad",
+  "why_this_business": "nega aynan shu biznes shu odamga shu tumanda mos",
+  "startup_items": [
+    {"item": "ANIQ jihoz/tovar nomi va modeli", "price_mln": raqam, "where_to_buy": "qayerdan olish"}
+  ],
+  "monthly_plan": {"revenue_mln": raqam, "expenses_mln": raqam, "profit_mln": raqam},
+  "breakeven_months": raqam,
+  "recommended_loan": {"name": "Asakabank kredit nomi", "amount_mln": raqam, "rate": "stavka", "why": "nega aynan bu"},
+  "first_steps": ["1-qadam", "2-qadam", "3-qadam", "4-qadam", "5-qadam"],
+  "risks": [{"risk": "xavf", "solution": "yechim"}],
+  "tip": "bitta amaliy maslahat"
 }`;
+
+  const user = `FOYDALANUVCHI:
+Ism: ${answers.user_name || "?"}, Yosh: ${age || "?"}, Jins: ${(answers.user_gender_actual as string) || "?"}
+Ta'lim: ${(answers.user_education as string) || "?"}, Holati: ${(answers.user_employment as string) || "?"}
+Biznes tajribasi: ${(answers.user_experience as string) === "yes" ? "bor" : "yo'q"}
+Oiladagi ishsizlar: ${unemployedFamily > 0 ? unemployedFamily + " kishi (ularni ham jalb qilish mumkin)" : "0"}
+
+TUMAN: ${district.name_uz} (${district.region_uz}), ${district.type}, aholi: ${district.population.toLocaleString()}
+${districtContext ? "TUMAN STATISTIKASI:\n" + districtContext : "Ma'lumot kiritilmagan"}
+
+TANLANGAN BIZNES: ${biz.name_uz}
+SOHA: ${sphere}
+${sphereAnswers.length > 0 ? "SOHA JAVOBLARI:\n" + sphereAnswers.join("\n") : ""}
+
+MOLIYA:
+Mavjud pul: ${(answers.exact_capital as string) || "noma'lum"} mln so'm
+Garov: ${(answers.collateral as string) || "noma'lum"}
+Raqobat: ${(answers.competition as string) || "noma'lum"}
+Kam ta'minlangan: ${(answers.poor_registry as string) || "noma'lum"}
+
+ASAKABANK KREDIT MAHSULOTLARI (shu foydalanuvchiga mos):
+${asakaLoans}
+
+BANK TAVSIYASI (umumiy):
+${bp.bank_name_uz} — ${bp.product_name_uz}
+${bp.min_amount_mln}-${bp.max_amount_mln} mln, ${bp.interest_rate_annual}% yillik
+
+MUHIM: startup_items da HAMMA kerakli narsani yoz — jihozlar, xom ashyo, ijara, ro'yxatdan o'tish. Har bir narsa uchun aniq narx va qayerdan olishni ko'rsat.
+recommended_loan da AYNAN Asakabank mahsulotlaridan birini tanlash va nega shu mos ekanini tushuntir.
+${unemployedFamily > 0 ? `tip da oiladagi ${unemployedFamily} ishsiz a'zoni ham biznesga jalb qilish haqida maslahat ber.` : ""}`;
 
   return { system, user };
 }

@@ -220,17 +220,20 @@ export interface BusinessPlan {
 
 /** JSON structure returned by Claude API */
 export interface BusinessPlanResult {
+  business_name?: string;
   summary: string;
-  target_audience: string;
-  startup_costs: Array<{ item: string; amount_mln: number }>;
-  monthly_forecast: {
-    revenue_mln: number;
-    expenses_mln: number;
-    profit_mln: number;
-  };
-  breakeven_months: number;
-  risks: Array<{ risk: string; mitigation: string }>;
-  mentor_note: string;
+  why_this_business?: string;
+  target_audience?: string;
+  startup_items?: Array<{ item: string; price_mln: number | string; where_to_buy?: string }>;
+  startup_costs?: Array<{ item: string; amount_mln: number | string }>;
+  monthly_plan?: { revenue_mln: number | string; expenses_mln: number | string; profit_mln: number | string };
+  monthly_forecast?: { revenue_mln: number | string; expenses_mln: number | string; profit_mln: number | string };
+  breakeven_months: number | string;
+  recommended_loan?: { name: string; amount_mln: number | string; rate: string; why: string };
+  first_steps?: string[];
+  risks: Array<{ risk: string; solution?: string; mitigation?: string }>;
+  tip?: string;
+  mentor_note?: string;
 }
 
 export interface Recommendation {
