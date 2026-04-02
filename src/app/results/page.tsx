@@ -16,6 +16,7 @@ interface BusinessIdea {
   estimated_monthly_income_mln: number;
   why_suitable: string;
   key_requirement: string;
+  suggested_loan?: string;
 }
 
 export default function ResultsPage() {
@@ -296,10 +297,19 @@ function ResultsContent() {
                       ~{idea.estimated_monthly_income_mln} mln/oy
                     </span>
                   </div>
-                  {isSelected && idea.why_suitable && (
-                    <p className="text-xs text-primary/80 mt-2 pt-2 border-t border-primary/10">
-                      {idea.why_suitable}
-                    </p>
+                  {isSelected && (
+                    <div className="mt-2 pt-2 border-t border-primary/10 space-y-1">
+                      {idea.why_suitable && (
+                        <p className="text-xs text-primary/80">
+                          {idea.why_suitable}
+                        </p>
+                      )}
+                      {idea.suggested_loan && (
+                        <p className="text-xs text-blue-600 font-medium">
+                          Kredit: {idea.suggested_loan}
+                        </p>
+                      )}
+                    </div>
                   )}
                 </button>
               );
