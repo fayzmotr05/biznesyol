@@ -3,12 +3,11 @@
 import { Suspense, useEffect, useState, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import type { Locale, SurveyAnswers, ScoredBusiness, BankMatch, BusinessPlanResult, District } from "@/types";
+import type { Locale, SurveyAnswers, ScoredBusiness, BusinessPlanResult, District } from "@/types";
 import { DEFAULT_LOCALE, t } from "@/lib/i18n";
-import { scoreBusinessTypes, selectBankProducts } from "@/lib/scoring";
+import { scoreBusinessTypes } from "@/lib/scoring";
 import districtsData from "../../../data/districts.json";
 import BusinessCard from "@/components/results/BusinessCard";
-import BankCard from "@/components/results/BankCard";
 import Checklist from "@/components/results/Checklist";
 import BusinessPlanDisplay from "@/components/results/BusinessPlanDisplay";
 
@@ -36,7 +35,6 @@ function ResultsContent() {
   const [answers, setAnswers] = useState<SurveyAnswers | null>(null);
   const [district, setDistrict] = useState<District | null>(null);
   const [scored, setScored] = useState<ScoredBusiness[]>([]);
-  const [banks, setBanks] = useState<BankMatch[]>([]);
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const [plan, setPlan] = useState<BusinessPlanResult | null>(null);
   const [planLoading, setPlanLoading] = useState(false);
@@ -81,10 +79,8 @@ function ResultsContent() {
     setPlan(null);
     setPlanLoading(false);
     setPlanError(null);
-    if (!answers || !district) return;
 
     const bizId = scored[idx].business_type_id;
-    setBanks(selectBankProducts(answers, bizId, district.type));
 
     // Save selected business for tracker
     localStorage.setItem("asaka_selected_business", bizId);
@@ -141,14 +137,15 @@ function ResultsContent() {
       }
 
       const jsonStr = text.slice(start, end + 1);
-      setPlan(JSON.parse(jsonStr) as BusinessPlanResult);
+      const parsed = JSON.parse(jsonStr) as BusinessPlanResult;
+      setPlan(parsed);
     } catch (err) {
       console.error("Plan generation failed:", err);
-      setPlanError(t(lang, "Xatolik yuz berdi", "Произошла ошибка", "An error occurred"));
+      setPlanError(t(lang, "Xatolik yuz berdi. Qayta urinib ko'ring.", "Произошла ошибка. Попробуйте ещё раз.", "An error occurred. Please try again."));
     } finally {
       setPlanLoading(false);
     }
-  }, [selectedIdx, banks, scored, sessionId, planLoading, lang]);
+  }, [selectedIdx, scored, sessionId, planLoading, lang]);
 
   // No data state
   if (noData) {
@@ -242,45 +239,16 @@ function ResultsContent() {
       {/* Selected business details */}
       {selectedBiz && (
         <>
-          {banks.length > 0 && (
-            <section className="mb-8">
-              <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-                {t(lang, "Mos bank mahsulotlari", "Подходящие банковские продукты", "Matching bank products")}
-              </h2>
-              <div className="space-y-3">
-                {banks.map((bank) => (
-                  <BankCard key={bank.bank_product.id} bank={bank} lang={lang} />
-                ))}
-              </div>
-            </section>
-          )}
-
-          {banks.length === 0 && (
-            <section className="mb-8 text-center p-6 bg-gray-50 rounded-2xl">
-              <p className="text-sm text-gray-500">
-                {t(lang,
-                  "Mos bank mahsulotlari topilmadi. Garov sharoitlari yoki boshqa parametrlarni o'zgartirib ko'ring.",
-                  "Подходящих банковских продуктов не найдено. Попробуйте изменить параметры залога.",
-                  "No matching bank products found. Try adjusting your collateral parameters."
-                )}
-              </p>
-            </section>
-          )}
-
-          <section className="mb-8">
-            <Checklist steps={selectedBiz.business_type.checklist_steps} lang={lang} sessionId={sessionId} />
-          </section>
-
-          {/* AI Business Plan */}
+          {/* AI Business Plan — includes real Asaka Bank recommendations */}
           <section className="mb-8">
             {!plan && !planLoading && (
               <button
                 onClick={generatePlan}
                 disabled={planLoading}
-                className="w-full py-3 rounded-xl font-medium text-white transition-colors hover:opacity-90 disabled:opacity-40"
-                style={{ backgroundColor: "#3BB741" }}
+                className="w-full py-4 rounded-xl font-semibold text-white text-base transition-all hover:opacity-90 disabled:opacity-40"
+                style={{ backgroundColor: "#0066FF" }}
               >
-                {t(lang, "Biznes-reja yaratish (AI)", "Сгенерировать бизнес-план (AI)", "Generate business plan (AI)")}
+                {t(lang, "Biznes-reja yaratish", "Создать бизнес-план", "Generate business plan")}
               </button>
             )}
             {planError && (
@@ -296,6 +264,13 @@ function ResultsContent() {
             )}
             <BusinessPlanDisplay planJson={plan} isLoading={planLoading} lang={lang} />
           </section>
+
+          {/* Checklist */}
+          {plan && (
+            <section className="mb-8">
+              <Checklist steps={selectedBiz.business_type.checklist_steps} lang={lang} sessionId={sessionId} />
+            </section>
+          )}
         </>
       )}
 
