@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
     };
 
     // Build prompt
-    const { system, user } = buildBusinessPlanPrompt({
+    const { system, user } = await buildBusinessPlanPrompt({
       business, bank, answers, district, districtData,
     });
 

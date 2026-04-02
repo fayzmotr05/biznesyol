@@ -1,5 +1,5 @@
 import type { SurveyAnswers, ScoredBusiness, BankMatch, District } from "@/types";
-import asakaBankData from "../../../data/asaka_bank.json";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 interface DistrictDataRow {
   [key: string]: unknown;
@@ -13,17 +13,33 @@ interface BuildPromptParams {
   districtData?: DistrictDataRow | null;
 }
 
-function getAsakaLoans(answers: SurveyAnswers, sphere: string): string {
+interface BankProduct {
+  id: string; name_uz: string; min_amount_mln: number; max_amount_mln: number;
+  interest_rate_percent: string; interest_rate_number: number; term_months_max: number;
+  grace_period_months: number; collateral_type: string; requires_collateral: boolean;
+  who_can_get_uz: string; special_conditions_uz: string; target: string;
+  age_min: number; age_max: number; suitable_for_spheres: string[];
+}
+
+async function getAsakaLoans(answers: SurveyAnswers, sphere: string): Promise<string> {
   const birthYear = parseInt((answers.user_birth_year as string) || "0");
   const age = birthYear > 0 ? new Date().getFullYear() - birthYear : 30;
   const hasCollateral = (answers.collateral as string) === "есть";
 
-  const matching = asakaBankData.filter((loan) => {
+  const supabase = createAdminClient();
+  const { data: allProducts } = await supabase
+    .from("bank_products")
+    .select("*")
+    .eq("is_active", true);
+
+  if (!allProducts || allProducts.length === 0) return "Bank mahsulotlari topilmadi.";
+
+  const matching = (allProducts as BankProduct[]).filter((loan) => {
     if (age < loan.age_min || age > loan.age_max) return false;
     if (loan.requires_collateral && !hasCollateral) return false;
     if (loan.target === "youth" && age > 30) return false;
-    if (loan.target === "large_business") return false; // skip large business loans for individuals
-    if (loan.target === "salary_clients") return false; // skip salary-only products
+    if (loan.target === "large_business") return false;
+    if (loan.target === "salary_clients") return false;
     if (!loan.suitable_for_spheres.includes("any") && !loan.suitable_for_spheres.includes(sphere)) return false;
     return true;
   });
@@ -41,10 +57,10 @@ function getAsakaLoans(answers: SurveyAnswers, sphere: string): string {
   ).join("\n\n");
 }
 
-export function buildBusinessPlanPrompt(params: BuildPromptParams): {
+export async function buildBusinessPlanPrompt(params: BuildPromptParams): Promise<{
   system: string;
   user: string;
-} {
+}> {
   const { business, bank, answers, district, districtData } = params;
   const lang = (answers.lang as string) || "uz";
   const biz = business.business_type;
@@ -83,7 +99,7 @@ export function buildBusinessPlanPrompt(params: BuildPromptParams): {
   const unemployedFamily = parseInt((answers.user_unemployed_family as string) || "0");
 
   // Asaka bank matching loans
-  const asakaLoans = getAsakaLoans(answers, sphere);
+  const asakaLoans = await getAsakaLoans(answers, sphere);
 
   const system = lang === "ru"
     ? `Ты — бизнес-консультант Асакабанка в Узбекистане. Пишешь бизнес-планы для реальных клиентов.
