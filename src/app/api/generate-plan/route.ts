@@ -1,6 +1,9 @@
 import { NextRequest } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { parseAIJson } from "@/lib/json-repair";
+
+// Allow up to 60s on Vercel (free tier max)
+export const maxDuration = 60;
 import { buildBusinessPlanPrompt } from "@/lib/prompts/business_plan";
 import type { District, SurveyAnswers, BusinessType } from "@/types";
 import districtsData from "../../../../data/districts.json";
@@ -12,8 +15,8 @@ const businessTypes = businessTypesData as BusinessType[];
 interface IdeaInput {
   title: string;
   description: string;
-  estimated_startup_mln?: number;
-  estimated_monthly_income_mln?: number;
+  estimated_startup_mln?: number | string;
+  estimated_monthly_income_mln?: number | string;
 }
 
 export async function POST(req: NextRequest) {
@@ -71,6 +74,17 @@ export async function POST(req: NextRequest) {
       if (idea.estimated_startup_mln) {
         ideaContext += `\nTaxminiy boshlang'ich xarajat: ${idea.estimated_startup_mln} mln so'm`;
       }
+      if (idea.estimated_monthly_income_mln) {
+        ideaContext += `\nTaxminiy oylik foyda: ${idea.estimated_monthly_income_mln} mln so'm`;
+      }
+      // Parse numeric values safely (could be "5-12" range string)
+      const startupNum = typeof idea.estimated_startup_mln === "number"
+        ? idea.estimated_startup_mln
+        : parseFloat(String(idea.estimated_startup_mln)) || 5;
+      const incomeNum = typeof idea.estimated_monthly_income_mln === "number"
+        ? idea.estimated_monthly_income_mln
+        : parseFloat(String(idea.estimated_monthly_income_mln)) || 5;
+
       // Use a default business type shell for the prompt builder
       bizType = {
         id: "ai_idea",
@@ -79,14 +93,14 @@ export async function POST(req: NextRequest) {
         category: "services",
         required_skills: [],
         optional_skills: [],
-        min_capital_mln: idea.estimated_startup_mln || 5,
-        max_capital_mln: (idea.estimated_startup_mln || 5) * 2,
+        min_capital_mln: startupNum,
+        max_capital_mln: startupNum * 2,
         requires_collateral: false,
         location_types: ["urban", "mixed", "rural"],
         seasons: { spring: 1, summer: 1, autumn: 1, winter: 1 },
         risk_level: "medium",
-        avg_monthly_revenue_mln: idea.estimated_monthly_income_mln || 3,
-        avg_monthly_expense_mln: (idea.estimated_monthly_income_mln || 3) * 0.6,
+        avg_monthly_revenue_mln: incomeNum,
+        avg_monthly_expense_mln: incomeNum * 0.6,
         breakeven_months: 6,
         requires_premises: false,
         target_clients: "",
@@ -172,7 +186,7 @@ export async function POST(req: NextRequest) {
         {
           type: "web_search_20250305" as const,
           name: "web_search",
-          max_uses: 5,
+          max_uses: 3,
         },
       ],
       messages: [{ role: "user", content: finalUser }],
