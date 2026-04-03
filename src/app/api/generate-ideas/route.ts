@@ -4,6 +4,8 @@ import { parseAIJson } from "@/lib/json-repair";
 import type { District, SurveyAnswers } from "@/types";
 import districtsData from "../../../../data/districts.json";
 
+export const maxDuration = 60;
+
 const districts = districtsData as District[];
 
 interface BankProduct {
@@ -212,7 +214,7 @@ VAZIFA: 3-4 ta ANIQ biznes g'oyasini tavsiya qil. Har bir g'oyada kredit imkoniy
 
     const response = await anthropic.messages.create({
       model: process.env.ANTHROPIC_MODEL || "claude-sonnet-4-6",
-      max_tokens: 2000,
+      max_tokens: 3000,
       system: systemPrompt,
       messages: [{ role: "user", content: userPrompt }],
     });

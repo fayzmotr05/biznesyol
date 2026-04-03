@@ -6,6 +6,8 @@ import type { District, SurveyAnswers, BusinessType } from "@/types";
 import districtsData from "../../../../data/districts.json";
 import businessTypesData from "../../../../data/business_types.json";
 
+export const maxDuration = 60;
+
 const districts = districtsData as District[];
 const businessTypes = businessTypesData as BusinessType[];
 
@@ -202,7 +204,7 @@ export async function POST(req: NextRequest) {
         {
           type: "web_search_20250305" as const,
           name: "web_search",
-          max_uses: 5,
+          max_uses: 3,
         },
       ],
       messages: [{ role: "user", content: finalUser }],
@@ -214,6 +216,14 @@ export async function POST(req: NextRequest) {
       if (block.type === "text") {
         text += block.text;
       }
+    }
+
+    if (!text.trim()) {
+      console.error("AI returned empty response. Stop reason:", response.stop_reason);
+      return Response.json(
+        { error: "AI bo'sh javob qaytardi. Qayta urinib ko'ring." },
+        { status: 500 }
+      );
     }
 
     // Parse JSON from AI response
@@ -228,8 +238,16 @@ export async function POST(req: NextRequest) {
     return Response.json(parsed);
   } catch (err) {
     console.error("generate-plan error:", err);
+    const msg = err instanceof Error ? err.message : "Internal error";
+    // Detect timeout specifically
+    if (msg.includes("timeout") || msg.includes("FUNCTION_INVOCATION_TIMEOUT")) {
+      return Response.json(
+        { error: "So'rov uzoq davom etdi. Qayta urinib ko'ring." },
+        { status: 504 }
+      );
+    }
     return Response.json(
-      { error: err instanceof Error ? err.message : "Internal error" },
+      { error: msg },
       { status: 500 }
     );
   }

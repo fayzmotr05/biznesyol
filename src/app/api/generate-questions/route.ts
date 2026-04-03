@@ -1,6 +1,8 @@
 import { NextRequest } from "next/server";
 import { parseAIJson } from "@/lib/json-repair";
 
+export const maxDuration = 30;
+
 export async function POST(req: NextRequest) {
   try {
     const { description, lang } = await req.json();
@@ -64,7 +66,7 @@ Har bir savolda 3-4 ta javob varianti bo'lsin.`;
 
     const response = await anthropic.messages.create({
       model: process.env.ANTHROPIC_MODEL || "claude-sonnet-4-6",
-      max_tokens: 1000,
+      max_tokens: 1500,
       system: systemPrompt,
       messages: [{ role: "user", content: userPrompt }],
     });
