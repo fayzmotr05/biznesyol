@@ -96,7 +96,9 @@ MUHIM QOIDALAR:
 5. Xom ashyo va materiallarni QAYERDAN olish mumkinligini tuman kontekstida yoz (masalan: "Kattaqo'rg'on bozoridan" yoki "Samarqand Siyob bozoridan").
 6. Asakabank kredit mahsulotlaridan ENG MOS birini tanla va NEGA mos ekanini tushuntir.
 7. "Taxminan", "baholash bo'yicha" so'zlarini ishlat — kafolat berma.
-${unemployedFamily > 0 ? `8. Oilada ${unemployedFamily} ta ishsiz a'zo bor — ularni biznesga jalb qilish haqida maslahat ber.` : ""}
+8. DAROMAD HISOBLASH: kunlik mijozlar soni × xizmat narxi × 25 ish kuni. Web search bilan O'zbekistondagi HAQIQIY xizmat narxlarini tekshir. Oylik sof foyda MINIMUM 4 000 000 so'mdan kam bo'lmasin — agar kamroq chiqsa hisoblashni qayta ko'rib chiq.
+9. Daromad va foydani ORALIQ (MIN - MAX) ko'rsat, masalan: "4 000 000 - 8 000 000 so'm".
+${unemployedFamily > 0 ? `10. Oilada ${unemployedFamily} ta ishsiz a'zo bor — ularni biznesga jalb qilish haqida maslahat ber.` : ""}
 
 JAVOB FORMATI — faqat JSON, markdown bo'lmasin:
 {
@@ -106,7 +108,7 @@ JAVOB FORMATI — faqat JSON, markdown bo'lmasin:
   "startup_items": [
     {"item": "jihoz/tovar nomi va modeli", "price": "aniq narx so'mda", "where_to_buy": "qayerdan olish mumkin"}
   ],
-  "monthly_plan": {"revenue": "oylik daromad so'mda", "expenses": "oylik xarajat so'mda", "profit": "sof foyda so'mda"},
+  "monthly_plan": {"revenue": "oylik daromad so'mda (MIN - MAX oraliq)", "expenses": "oylik xarajat so'mda", "profit": "sof foyda so'mda (MIN - MAX oraliq)"},
   "total_startup_cost": "jami boshlang'ich xarajat so'mda",
   "loan_needed": "kredit kerak bo'lgan summa so'mda (jami xarajat - foydalanuvchi puli)",
   "breakeven_months": raqam,
