@@ -1,9 +1,6 @@
 import { NextRequest } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { parseAIJson } from "@/lib/json-repair";
-
-// Allow up to 60s on Vercel (free tier max)
-export const maxDuration = 60;
 import { buildBusinessPlanPrompt } from "@/lib/prompts/business_plan";
 import type { District, SurveyAnswers, BusinessType } from "@/types";
 import districtsData from "../../../../data/districts.json";
@@ -77,14 +74,8 @@ export async function POST(req: NextRequest) {
       if (idea.estimated_monthly_income_mln) {
         ideaContext += `\nTaxminiy oylik foyda: ${idea.estimated_monthly_income_mln} mln so'm`;
       }
-      // Parse numeric values safely (could be "5-12" range string)
-      const startupNum = typeof idea.estimated_startup_mln === "number"
-        ? idea.estimated_startup_mln
-        : parseFloat(String(idea.estimated_startup_mln)) || 5;
-      const incomeNum = typeof idea.estimated_monthly_income_mln === "number"
-        ? idea.estimated_monthly_income_mln
-        : parseFloat(String(idea.estimated_monthly_income_mln)) || 5;
-
+      const startupNum = parseFloat(String(idea.estimated_startup_mln)) || 5;
+      const incomeNum = parseFloat(String(idea.estimated_monthly_income_mln)) || 5;
       // Use a default business type shell for the prompt builder
       bizType = {
         id: "ai_idea",
@@ -186,7 +177,7 @@ export async function POST(req: NextRequest) {
         {
           type: "web_search_20250305" as const,
           name: "web_search",
-          max_uses: 3,
+          max_uses: 5,
         },
       ],
       messages: [{ role: "user", content: finalUser }],

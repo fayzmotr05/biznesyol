@@ -13,71 +13,31 @@ interface BankProduct {
   grace_period_months: number; collateral_type: string; requires_collateral: boolean;
   who_can_get_uz: string; special_conditions_uz: string; target: string;
   age_min: number; age_max: number; suitable_for_spheres: string[];
-  requires_guarantor: boolean;
 }
 
 async function getAsakaLoans(answers: SurveyAnswers, sphere: string): Promise<string> {
   const birthYear = parseInt((answers.user_birth_year as string) || "0");
   const age = birthYear > 0 ? new Date().getFullYear() - birthYear : 30;
-  const gender = (answers.user_gender_actual as string) || "";
-  const isPoorRegistry = (answers.poor_registry as string) === "yes";
 
   const supabase = createAdminClient();
   const { data } = await supabase.from("bank_products").select("*").eq("is_active", true);
   if (!data || data.length === 0) return "Bank mahsulotlari topilmadi.";
 
-  const results: string[] = [];
+  const matching = (data as BankProduct[]).filter((l) => {
+    if (age < l.age_min || age > l.age_max) return false;
+    if (l.target === "youth" && age > 30) return false;
+    if (l.target === "large_business" || l.target === "salary_clients") return false;
+    if (!l.suitable_for_spheres.includes("any") && !l.suitable_for_spheres.includes(sphere)) return false;
+    return true;
+  });
 
-  for (const l of data as BankProduct[]) {
-    const issues: string[] = [];
-    let eligible = true;
+  if (matching.length === 0) return "Mos kredit topilmadi.";
 
-    // Age check
-    if (age < l.age_min || age > l.age_max) {
-      eligible = false;
-      issues.push(`Yosh mos emas (${l.age_min}-${l.age_max} yosh talab qilinadi)`);
-    }
-
-    // Target audience check
-    if (l.target === "youth" && age > 30) {
-      eligible = false;
-      issues.push("Faqat 30 yoshgacha yoshlar uchun");
-    }
-    if (l.target === "large_business" || l.target === "salary_clients") continue;
-    if (l.target === "women" && gender !== "female") {
-      eligible = false;
-      issues.push("Faqat ayollar uchun");
-    }
-
-    // Sphere check
-    if (!l.suitable_for_spheres.includes("any") && !l.suitable_for_spheres.includes(sphere)) {
-      eligible = false;
-      issues.push(`Bu soha uchun mos emas (mos sohalar: ${l.suitable_for_spheres.join(", ")})`);
-    }
-
-    // Collateral check
-    if (l.requires_collateral) {
-      issues.push("GAROV TALAB QILINADI: " + l.collateral_type);
-    }
-
-    if (l.requires_guarantor) {
-      issues.push("Kafil talab qilinadi");
-    }
-
-    const status = eligible ? "MOS" : "MOS EMAS";
-    let line = `• [${status}] ${l.name_uz}: ${l.min_amount_mln}-${l.max_amount_mln} mln so'm, ${l.interest_rate_percent}, ${l.term_months_max} oygacha`;
-    if (l.grace_period_months) line += `, ${l.grace_period_months} oy imtiyozli davr`;
-    if (l.requires_collateral) line += `. Garov: ${l.collateral_type}`;
-    else line += `. Garovsiz`;
-    if (l.who_can_get_uz) line += `\n  Kim olishi mumkin: ${l.who_can_get_uz}`;
-    if (l.special_conditions_uz) line += `\n  Maxsus shart: ${l.special_conditions_uz}`;
-    if (issues.length > 0 && !eligible) line += `\n  SABAB: ${issues.join("; ")}`;
-
-    results.push(line);
-  }
-
-  if (results.length === 0) return "Mos kredit topilmadi.";
-  return results.join("\n\n");
+  return matching.map((l) =>
+    `• ${l.name_uz}: ${l.min_amount_mln * 1000000}-${l.max_amount_mln * 1000000} so'm, ${l.interest_rate_percent}, ${l.term_months_max} oygacha` +
+    (l.grace_period_months ? `, ${l.grace_period_months} oy imtiyozli davr` : "") +
+    `. Garov: ${l.collateral_type}. ${l.special_conditions_uz}`
+  ).join("\n");
 }
 
 export async function buildBusinessPlanPrompt(params: BuildPromptParams): Promise<{ system: string; user: string }> {
@@ -106,7 +66,7 @@ export async function buildBusinessPlanPrompt(params: BuildPromptParams): Promis
   // Sphere answers
   const sphereAnswers: string[] = [];
   for (const [key, val] of Object.entries(answers)) {
-    if (key.startsWith(`${sphere}_q`) || key.startsWith("other_q")) sphereAnswers.push(`${key}: ${val}`);
+    if (key.startsWith(`${sphere}_q`)) sphereAnswers.push(`${key}: ${val}`);
   }
 
   // User
@@ -132,34 +92,11 @@ MUHIM QOIDALAR:
 1. Javob FAQAT ${systemLang} bo'lsin.
 2. Barcha summalar ODDIY RAQAMDA yoz: "3 500 000 ${currency}" — MILLION deb yozma.
 3. Tovarlar va jihozlar narxlarini REAL bozor narxlarida ko'rsat. Web search ishlatib, OLX.uz, olcha.uz dan haqiqiy narxlarni top.
-4. Foydalanuvchi javoblariga qarab TAYYOR YECHIM ber — savol berma.
-5. Xom ashyo va materiallarni QAYERDAN olish mumkinligini tuman kontekstida yoz.
-
-DAROMAD HISOBLASH QOIDALARI — JUDA MUHIM:
-6. Oylik daromadni REAL BOZOR NARXLARIDA hisobla. Web search ishlatib O'zbekistondagi HAQIQIY narxlarni top.
-7. Daromadni ORALIQ (MIN - MAX) ko'rsatish SHART. Masalan:
-   - Tikuvchi: kuniga 2-3 ta buyurtma × 150 000-300 000 so'm = oyiga 8 000 000 - 15 000 000 so'm
-   - Oshpaz: kuniga 20-30 porsiya × 25 000-40 000 so'm = oyiga 15 000 000 - 25 000 000 so'm
-   - Go'zallik saloni: kuniga 3-5 mijoz × 100 000-200 000 so'm = oyiga 10 000 000 - 20 000 000 so'm
-   - Avto ta'mir: kuniga 2-3 mijoz × 200 000-500 000 so'm = oyiga 12 000 000 - 25 000 000 so'm
-8. Daromadni KUNLIK MIJOZLAR × NARX × 25 ISH KUNI formulasi bilan hisobla. MIN va MAX alohida.
-9. Xarajatlarni ham REAL ko'rsat (ijara, xom ashyo, elektr, soliq, transport).
-10. SOF FOYDA ham ORALIQ bo'lsin: MIN foyda va MAX foyda. MINIMUM foyda 4 000 000 so'mdan kam bo'lmasligi kerak — agar kamroq chiqsa hisoblashni qayta ko'rib chiq.
-
-KREDIT TANLASH QOIDALARI — JUDA MUHIM:
-11. Quyidagi kredit ro'yxatida [MOS] va [MOS EMAS] belgilangan. FAQAT [MOS] deb belgilangan kreditlardan tanla!
-12. Agar kredit GAROV talab qilsa — foydalanuvchiga ogohlantir va garovsiz alternativa ko'rsat.
-13. Foydalanuvchining yoshi, jinsi va sohasiga mos kelmaydigan kreditni TAVSIYA QILMA.
-14. "Kim olishi mumkin" qismini diqqat bilan o'qi — agar foydalanuvchi shartlarga mos kelmasa, boshqa kredit tanla.
-
-15. "Taxminan", "baholash bo'yicha" so'zlarini ishlat — kafolat berma.
-${unemployedFamily > 0 ? `16. Oilada ${unemployedFamily} ta ishsiz a'zo bor — ularni biznesga jalb qilish haqida maslahat ber.` : ""}
-
-MOLIYAVIY HISOBLASH QOIDASI — JUDA MUHIM:
-- JAMI KERAKLI PUL = boshlang'ich xaridlar + (oylik xarajatlar × o'zini qoplash oylari)
-- Masalan: jihozlar 5 mln + oylik xarajat 3 mln × 3 oy qoplash = 5 + 9 = 14 mln JAMI kerak
-- Kredit summasi = JAMI KERAKLI PUL - foydalanuvchining o'z puli
-- Bu formulani ALBATTA qo'lla, chunki foydalanuvchi faqat jihozni emas, birinchi oylarning xarajatlarini ham qoplashi kerak
+4. Foydalanuvchi javoblariga qarab TAYYOR YECHIM ber — savol berma. Masalan: agar tikuv mashinasi yo'q degan bo'lsa, "siz Sergeli bozoridan JACK A2S mashinasini 3 500 000 so'mga olishingiz mumkin" deb yoz.
+5. Xom ashyo va materiallarni QAYERDAN olish mumkinligini tuman kontekstida yoz (masalan: "Kattaqo'rg'on bozoridan" yoki "Samarqand Siyob bozoridan").
+6. Asakabank kredit mahsulotlaridan ENG MOS birini tanla va NEGA mos ekanini tushuntir.
+7. "Taxminan", "baholash bo'yicha" so'zlarini ishlat — kafolat berma.
+${unemployedFamily > 0 ? `8. Oilada ${unemployedFamily} ta ishsiz a'zo bor — ularni biznesga jalb qilish haqida maslahat ber.` : ""}
 
 JAVOB FORMATI — faqat JSON, markdown bo'lmasin:
 {
@@ -169,15 +106,11 @@ JAVOB FORMATI — faqat JSON, markdown bo'lmasin:
   "startup_items": [
     {"item": "jihoz/tovar nomi va modeli", "price": "aniq narx so'mda", "where_to_buy": "qayerdan olish mumkin"}
   ],
-  "first_month_expenses": [
-    {"item": "xarajat nomi (ijara, xom ashyo, reklama, transport va h.k.)", "price": "summa so'mda"}
-  ],
-  "monthly_plan": {"revenue": "oylik daromad ORALIQ: masalan 8 000 000 - 15 000 000 so'm", "expenses": "oylik xarajat so'mda", "profit": "sof foyda ORALIQ: masalan 4 000 000 - 10 000 000 so'm"},
-  "total_startup_cost": "faqat jihozlar va boshlang'ich xaridlar summasi so'mda",
-  "total_investment": "JAMI kerakli pul = boshlang'ich xaridlar + (oylik xarajat × breakeven_months) so'mda",
-  "loan_needed": "kredit kerak summa = total_investment - foydalanuvchi puli so'mda",
+  "monthly_plan": {"revenue": "oylik daromad so'mda", "expenses": "oylik xarajat so'mda", "profit": "sof foyda so'mda"},
+  "total_startup_cost": "jami boshlang'ich xarajat so'mda",
+  "loan_needed": "kredit kerak bo'lgan summa so'mda (jami xarajat - foydalanuvchi puli)",
   "breakeven_months": raqam,
-  "recommended_loan": {"name": "Asakabank kredit nomi", "amount": "kredit summasi so'mda", "rate": "foiz stavka", "term": "muddat", "why": "nega aynan bu kredit mos — foydalanuvchi shartlarga qanday mos kelishini tushuntir"},
+  "recommended_loan": {"name": "Asakabank kredit nomi", "amount": "kredit summasi so'mda", "rate": "foiz stavka", "term": "muddat", "why": "nega aynan bu kredit mos"},
   "first_steps": ["1-qadam", "2-qadam", "3-qadam", "4-qadam", "5-qadam"],
   "risks": [{"risk": "xavf", "solution": "yechim"}],
   "tip": "eng muhim amaliy maslahat"
@@ -198,15 +131,12 @@ ${sphereAnswers.length > 0 ? "SOHA JAVOBLARI:\n" + sphereAnswers.join("\n") : ""
 MOLIYA:
 Mavjud pul: ${exactCapital !== "skip" && exactCapital !== "noma'lum" ? exactCapital + " mln so'm" : "aniq ko'rsatilmagan"}
 Raqobat: ${(answers.competition as string) || "?"}
-Ijtimoiy yordam dasturida: ${(answers.poor_registry as string) || "?"}
+Kam ta'minlangan: ${(answers.poor_registry as string) || "?"}
 
-ASAKABANK KREDIT MAHSULOTLARI:
+ASAKABANK KREDIT MAHSULOTLARI (foydalanuvchiga mos):
 ${asakaLoans}
 
-MUHIM:
-1. Web search ishlatib, jihozlar va materiallarning HAQIQIY narxlarini O'zbekiston bozoridan top.
-2. Daromadni REAL hisobla: kunlik mijozlar soni × xizmat narxi × 25 ish kuni. Web search bilan O'zbekistondagi haqiqiy xizmat narxlarini tekshir.
-3. FAQAT [MOS] deb belgilangan kreditlarni tavsiya qil. [MOS EMAS] kreditlarni TAVSIYA QILMA.`;
+MUHIM: Web search ishlatib, jihozlar va materiallarning HAQIQIY narxlarini O'zbekiston bozoridan top. OLX.uz, olcha.uz, mahalliy bozorlardan real narxlarni ko'rsat.`;
 
   return { system, user };
 }
