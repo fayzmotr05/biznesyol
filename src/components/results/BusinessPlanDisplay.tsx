@@ -43,6 +43,11 @@ export default function BusinessPlanDisplay({ planJson, isLoading, lang }: Props
     (raw.startup_items || raw.startup_costs || []).map((i: Record<string, string>) => ({
       item: i.item || "", price: String(i.price || i.price_mln || i.amount_mln || ""), where_to_buy: i.where_to_buy || "",
     }));
+  const firstMonthExpenses: Array<{ item: string; price: string }> =
+    (raw.first_month_expenses || []).map((i: Record<string, string>) => ({
+      item: i.item || "", price: String(i.price || i.amount || ""),
+    }));
+  const totalInvestment = raw.total_investment || "";
   const forecast = raw.monthly_plan || raw.monthly_forecast || {};
   const fRevenue = String(forecast.revenue || forecast.revenue_mln || "");
   const fExpenses = String(forecast.expenses || forecast.expenses_mln || "");
@@ -86,12 +91,52 @@ export default function BusinessPlanDisplay({ planJson, isLoading, lang }: Props
           </div>
           {plan.total_startup_cost && (
             <div className="mt-2 p-3 bg-primary/5 rounded-xl flex justify-between">
-              <span className="font-semibold">{t(lang, "Jami", "Итого", "Total")}</span>
+              <span className="font-semibold">{t(lang, "Jihozlar jami", "Оборудование итого", "Equipment total")}</span>
               <span className="font-bold text-primary">{String(plan.total_startup_cost)}</span>
             </div>
           )}
+        </div>
+      )}
+
+      {/* First month operating expenses */}
+      {firstMonthExpenses.length > 0 && (
+        <div>
+          <h4 className="text-sm font-semibold text-muted mb-2">
+            {t(lang, "Birinchi oy xarajatlari", "Расходы первого месяца", "First month expenses")}
+          </h4>
+          <div className="space-y-2">
+            {firstMonthExpenses.map((exp, i) => (
+              <div key={i} className="bg-background rounded-xl border border-border p-3 flex justify-between items-center gap-3">
+                <span className="text-sm">{exp.item}</span>
+                <span className="text-sm font-bold text-muted whitespace-nowrap">{exp.price}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Total investment until breakeven */}
+      {totalInvestment && (
+        <div className="p-4 bg-primary/10 border border-primary/20 rounded-xl">
+          <div className="flex justify-between items-center mb-1">
+            <span className="font-semibold">
+              {t(lang,
+                `Jami kerakli pul (${plan.breakeven_months} oygacha)`,
+                `Всего нужно (на ${plan.breakeven_months} мес)`,
+                `Total needed (for ${plan.breakeven_months} months)`
+              )}
+            </span>
+            <span className="font-bold text-primary text-lg">{String(totalInvestment)}</span>
+          </div>
+          <p className="text-xs text-muted">
+            {t(lang,
+              "Jihozlar + birinchi oylar xarajatlari (biznes o'zini qoplaguncha)",
+              "Оборудование + расходы первых месяцев (до окупаемости)",
+              "Equipment + operating costs until breakeven"
+            )}
+          </p>
           {plan.loan_needed && (
-            <div className="mt-1 p-3 bg-yellow-50 rounded-xl flex justify-between">
+            <div className="mt-2 pt-2 border-t border-primary/20 flex justify-between">
               <span className="text-sm">{t(lang, "Kredit kerak", "Нужен кредит", "Loan needed")}</span>
               <span className="font-bold text-yellow-700">{String(plan.loan_needed)}</span>
             </div>

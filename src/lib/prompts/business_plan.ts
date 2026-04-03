@@ -137,14 +137,14 @@ MUHIM QOIDALAR:
 
 DAROMAD HISOBLASH QOIDALARI — JUDA MUHIM:
 6. Oylik daromadni REAL BOZOR NARXLARIDA hisobla. Web search ishlatib O'zbekistondagi HAQIQIY narxlarni top.
-7. MINIMAL emas, REAL ishlaydigan biznesning daromadini ko'rsat. Masalan:
-   - Tikuvchi: kuniga 2-3 ta buyurtma × 150 000-300 000 so'm = oyiga 8-15 mln so'm daromad
-   - Oshpaz: kuniga 20-30 porsiya × 25 000-40 000 so'm = oyiga 15-25 mln so'm daromad
-   - Go'zallik saloni: kuniga 3-5 mijoz × 100 000-200 000 so'm = oyiga 10-20 mln so'm daromad
-   - Avto ta'mir: kuniga 2-3 mijoz × 200 000-500 000 so'm = oyiga 12-25 mln so'm daromad
-8. Daromadni KUNLIK MIJOZLAR × NARX × 25 ISH KUNI formulasi bilan hisobla.
+7. Daromadni ORALIQ (MIN - MAX) ko'rsatish SHART. Masalan:
+   - Tikuvchi: kuniga 2-3 ta buyurtma × 150 000-300 000 so'm = oyiga 8 000 000 - 15 000 000 so'm
+   - Oshpaz: kuniga 20-30 porsiya × 25 000-40 000 so'm = oyiga 15 000 000 - 25 000 000 so'm
+   - Go'zallik saloni: kuniga 3-5 mijoz × 100 000-200 000 so'm = oyiga 10 000 000 - 20 000 000 so'm
+   - Avto ta'mir: kuniga 2-3 mijoz × 200 000-500 000 so'm = oyiga 12 000 000 - 25 000 000 so'm
+8. Daromadni KUNLIK MIJOZLAR × NARX × 25 ISH KUNI formulasi bilan hisobla. MIN va MAX alohida.
 9. Xarajatlarni ham REAL ko'rsat (ijara, xom ashyo, elektr, soliq, transport).
-10. SOF FOYDA = daromad - xarajatlar. Agar foyda 2 mln dan kam chiqsa — hisoblashni qayta ko'rib chiq, chunki bu real emas.
+10. SOF FOYDA ham ORALIQ bo'lsin: MIN foyda va MAX foyda. MINIMUM foyda 4 000 000 so'mdan kam bo'lmasligi kerak — agar kamroq chiqsa hisoblashni qayta ko'rib chiq.
 
 KREDIT TANLASH QOIDALARI — JUDA MUHIM:
 11. Quyidagi kredit ro'yxatida [MOS] va [MOS EMAS] belgilangan. FAQAT [MOS] deb belgilangan kreditlardan tanla!
@@ -155,6 +155,12 @@ KREDIT TANLASH QOIDALARI — JUDA MUHIM:
 15. "Taxminan", "baholash bo'yicha" so'zlarini ishlat — kafolat berma.
 ${unemployedFamily > 0 ? `16. Oilada ${unemployedFamily} ta ishsiz a'zo bor — ularni biznesga jalb qilish haqida maslahat ber.` : ""}
 
+MOLIYAVIY HISOBLASH QOIDASI — JUDA MUHIM:
+- JAMI KERAKLI PUL = boshlang'ich xaridlar + (oylik xarajatlar × o'zini qoplash oylari)
+- Masalan: jihozlar 5 mln + oylik xarajat 3 mln × 3 oy qoplash = 5 + 9 = 14 mln JAMI kerak
+- Kredit summasi = JAMI KERAKLI PUL - foydalanuvchining o'z puli
+- Bu formulani ALBATTA qo'lla, chunki foydalanuvchi faqat jihozni emas, birinchi oylarning xarajatlarini ham qoplashi kerak
+
 JAVOB FORMATI — faqat JSON, markdown bo'lmasin:
 {
   "business_name": "biznes nomi",
@@ -163,9 +169,13 @@ JAVOB FORMATI — faqat JSON, markdown bo'lmasin:
   "startup_items": [
     {"item": "jihoz/tovar nomi va modeli", "price": "aniq narx so'mda", "where_to_buy": "qayerdan olish mumkin"}
   ],
-  "monthly_plan": {"revenue": "oylik daromad so'mda", "expenses": "oylik xarajat so'mda", "profit": "sof foyda so'mda"},
-  "total_startup_cost": "jami boshlang'ich xarajat so'mda",
-  "loan_needed": "kredit kerak bo'lgan summa so'mda (jami xarajat - foydalanuvchi puli)",
+  "first_month_expenses": [
+    {"item": "xarajat nomi (ijara, xom ashyo, reklama, transport va h.k.)", "price": "summa so'mda"}
+  ],
+  "monthly_plan": {"revenue": "oylik daromad ORALIQ: masalan 8 000 000 - 15 000 000 so'm", "expenses": "oylik xarajat so'mda", "profit": "sof foyda ORALIQ: masalan 4 000 000 - 10 000 000 so'm"},
+  "total_startup_cost": "faqat jihozlar va boshlang'ich xaridlar summasi so'mda",
+  "total_investment": "JAMI kerakli pul = boshlang'ich xaridlar + (oylik xarajat × breakeven_months) so'mda",
+  "loan_needed": "kredit kerak summa = total_investment - foydalanuvchi puli so'mda",
   "breakeven_months": raqam,
   "recommended_loan": {"name": "Asakabank kredit nomi", "amount": "kredit summasi so'mda", "rate": "foiz stavka", "term": "muddat", "why": "nega aynan bu kredit mos — foydalanuvchi shartlarga qanday mos kelishini tushuntir"},
   "first_steps": ["1-qadam", "2-qadam", "3-qadam", "4-qadam", "5-qadam"],
