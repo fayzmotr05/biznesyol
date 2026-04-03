@@ -12,8 +12,8 @@ const STORAGE_KEY = "asaka_survey";
 interface BusinessIdea {
   title: string;
   description: string;
-  estimated_startup_mln: number;
-  estimated_monthly_income_mln: number;
+  estimated_startup_mln: number | string;
+  estimated_monthly_income_mln: number | string;
   why_suitable: string;
   key_requirement: string;
   suggested_loan?: string;
@@ -293,7 +293,7 @@ function ResultsContent() {
                       ~{idea.estimated_startup_mln} mln
                     </span>
                     <span className="text-accent font-medium">
-                      {t(lang, "Daromad:", "Доход:", "Income:")}{" "}
+                      {t(lang, "Foyda:", "Прибыль:", "Profit:")}{" "}
                       ~{idea.estimated_monthly_income_mln} mln/oy
                     </span>
                   </div>

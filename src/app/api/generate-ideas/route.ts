@@ -161,6 +161,12 @@ QOIDALAR:
 - Har bir g'oyada qaysi kredit mos kelishini ko'rsat
 - Tuman ma'lumotlarini hisobga ol (aholi, bozorlar, raqobat)
 
+DAROMAD QOIDASI — JUDA MUHIM:
+- Oylik daromadni REAL BOZOR narxlarida hisobla: kunlik mijozlar × narx × 25 ish kuni
+- MINIMUM oylik sof foyda 4 mln so'mdan kam bo'lmasin — aks holda biznes qilishning ma'nosi yo'q
+- Real misollar: tikuvchi 5-12 mln, oshpaz 8-20 mln, go'zallik 6-15 mln, savdo 5-15 mln, ta'mirlash 7-20 mln
+- estimated_monthly_income_mln — bu SOF FOYDA (daromad minus xarajatlar), MINIMUM 4 mln
+
 Javob — FAQAT JSON, markdown bo'lmasin:
 {
   "ideas": [
@@ -168,7 +174,7 @@ Javob — FAQAT JSON, markdown bo'lmasin:
       "title": "g'oya nomi",
       "description": "2-3 jumla — nima qiladi, kimga xizmat, nega aynan bu",
       "estimated_startup_mln": raqam,
-      "estimated_monthly_income_mln": raqam,
+      "estimated_monthly_income_mln": "MIN-MAX oraliq, masalan: 5-12 (mln so'mda, sof foyda)",
       "why_suitable": "nega aynan bu odamga mos",
       "key_requirement": "eng muhim narsa kerak",
       "suggested_loan": "qaysi Asakabank krediti mos (nomi va summasi) yoki 'kredit shart emas' agar o'z puli yetsa"
