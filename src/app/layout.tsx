@@ -44,7 +44,7 @@ export default function RootLayout({
           <img
             src="/asakabank-logo.png"
             alt=""
-            className="w-full max-w-[90vw] h-auto object-contain opacity-[0.10]"
+            className="w-full max-w-[75vw] h-auto object-contain opacity-[0.10]"
           />
         </div>
         <div className="relative z-10 min-h-full flex flex-col">
