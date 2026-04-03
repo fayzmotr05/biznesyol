@@ -4,7 +4,7 @@ import { parseAIJson } from "@/lib/json-repair";
 import type { District, SurveyAnswers } from "@/types";
 import districtsData from "../../../../data/districts.json";
 
-export const maxDuration = 60;
+export const maxDuration = 120;
 
 const districts = districtsData as District[];
 

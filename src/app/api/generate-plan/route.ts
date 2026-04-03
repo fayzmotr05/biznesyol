@@ -6,7 +6,7 @@ import type { District, SurveyAnswers, BusinessType } from "@/types";
 import districtsData from "../../../../data/districts.json";
 import businessTypesData from "../../../../data/business_types.json";
 
-export const maxDuration = 60;
+export const maxDuration = 120;
 
 const districts = districtsData as District[];
 const businessTypes = businessTypesData as BusinessType[];

@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { parseAIJson } from "@/lib/json-repair";
 
-export const maxDuration = 30;
+export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {
   try {
