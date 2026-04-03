@@ -162,8 +162,22 @@ export async function POST(req: NextRequest) {
       districtData,
     });
 
-    // Append idea context to user prompt if from AI idea
-    const finalUser = ideaContext ? user + ideaContext : user;
+    // For AI ideas: replace the generic BIZNES line with the specific idea
+    let finalUser = user;
+    if (idea && ideaContext) {
+      // Remove the generic "BIZNES: ..." line and replace with specific idea context
+      finalUser = user.replace(
+        /BIZNES:.*\n/,
+        `BIZNES: ${idea.title}\nTavsif: ${idea.description}\n`
+      );
+      if (idea.estimated_startup_mln) {
+        finalUser += `\nTaxminiy boshlang'ich xarajat: ${idea.estimated_startup_mln} mln so'm`;
+      }
+      if (idea.estimated_monthly_income_mln) {
+        finalUser += `\nTaxminiy oylik foyda: ${idea.estimated_monthly_income_mln} mln so'm`;
+      }
+      finalUser += `\n\nMUHIM: Biznes-reja FAQAT "${idea.title}" uchun bo'lsin. Boshqa biznes turini taklif qilma.`;
+    }
 
     // Call Claude with WEB SEARCH enabled for real prices
     const Anthropic = (await import("@anthropic-ai/sdk")).default;
