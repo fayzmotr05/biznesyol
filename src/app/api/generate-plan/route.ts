@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { parseAIJson } from "@/lib/json-repair";
 import { buildBusinessPlanPrompt } from "@/lib/prompts/business_plan";
 import type { District, SurveyAnswers, BusinessType } from "@/types";
 import districtsData from "../../../../data/districts.json";
@@ -185,31 +186,16 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Clean and return JSON
-    const clean = text
-      .replace(/```json\s*/g, "")
-      .replace(/```\s*/g, "")
-      .trim();
-    const start = clean.indexOf("{");
-    const end = clean.lastIndexOf("}");
-
-    if (start === -1 || end === -1) {
+    // Parse JSON from AI response
+    const parsed = parseAIJson(text);
+    if (!parsed) {
+      console.error("AI JSON parse failed. Raw:", text.slice(0, 500));
       return Response.json(
-        { error: "AI response has no JSON" },
+        { error: "AI javobini o'qib bo'lmadi. Qayta urinib ko'ring." },
         { status: 500 }
       );
     }
-
-    const jsonStr = clean.slice(start, end + 1);
-    try {
-      const parsed = JSON.parse(jsonStr);
-      return Response.json(parsed);
-    } catch {
-      return Response.json(
-        { error: "Invalid JSON from AI" },
-        { status: 500 }
-      );
-    }
+    return Response.json(parsed);
   } catch (err) {
     console.error("generate-plan error:", err);
     return Response.json(

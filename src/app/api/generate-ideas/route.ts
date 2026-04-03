@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { parseAIJson } from "@/lib/json-repair";
 import type { District, SurveyAnswers } from "@/types";
 import districtsData from "../../../../data/districts.json";
 
@@ -212,17 +213,15 @@ VAZIFA: 3-4 ta ANIQ biznes g'oyasini tavsiya qil. Har bir g'oyada kredit imkoniy
 
     const text =
       response.content[0].type === "text" ? response.content[0].text : "";
-    const start = text.indexOf("{");
-    const end = text.lastIndexOf("}");
-    if (start === -1 || end === -1) {
+    const parsed = parseAIJson(text);
+    if (!parsed) {
+      console.error("AI JSON parse failed. Raw:", text.slice(0, 500));
       return Response.json(
-        { error: "AI response parsing failed" },
+        { error: "AI javobini o'qib bo'lmadi. Qayta urinib ko'ring." },
         { status: 500 }
       );
     }
-
-    const ideas = JSON.parse(text.slice(start, end + 1));
-    return Response.json(ideas);
+    return Response.json(parsed);
   } catch (err) {
     console.error("generate-ideas error:", err);
     const message = err instanceof Error ? err.message : "Internal error";

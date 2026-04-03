@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { parseAIJson } from "@/lib/json-repair";
 
 export async function POST(req: NextRequest) {
   try {
@@ -70,17 +71,15 @@ Har bir savolda 3-4 ta javob varianti bo'lsin.`;
 
     const text =
       response.content[0].type === "text" ? response.content[0].text : "";
-    const start = text.indexOf("{");
-    const end = text.lastIndexOf("}");
-    if (start === -1 || end === -1) {
+    const parsed = parseAIJson(text);
+    if (!parsed) {
+      console.error("AI JSON parse failed. Raw:", text.slice(0, 500));
       return Response.json(
-        { error: "AI response parsing failed" },
+        { error: "AI javobini o'qib bo'lmadi. Qayta urinib ko'ring." },
         { status: 500 }
       );
     }
-
-    const result = JSON.parse(text.slice(start, end + 1));
-    return Response.json(result);
+    return Response.json(parsed);
   } catch (err) {
     console.error("generate-questions error:", err);
     const message = err instanceof Error ? err.message : "Internal error";
