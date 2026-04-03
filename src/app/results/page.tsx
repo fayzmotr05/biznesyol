@@ -138,6 +138,9 @@ function ResultsContent() {
             description: idea.description,
             estimated_startup_mln: idea.estimated_startup_mln,
             estimated_monthly_income_mln: idea.estimated_monthly_income_mln,
+            why_suitable: idea.why_suitable,
+            key_requirement: idea.key_requirement,
+            suggested_loan: idea.suggested_loan,
           },
         }),
       });

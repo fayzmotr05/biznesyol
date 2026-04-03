@@ -14,6 +14,9 @@ interface IdeaInput {
   description: string;
   estimated_startup_mln?: number | string;
   estimated_monthly_income_mln?: number | string;
+  why_suitable?: string;
+  key_requirement?: string;
+  suggested_loan?: string;
 }
 
 export async function POST(req: NextRequest) {
@@ -162,21 +165,29 @@ export async function POST(req: NextRequest) {
       districtData,
     });
 
-    // For AI ideas: replace the generic BIZNES line with the specific idea
+    // For AI ideas: replace the generic BIZNES line with full idea context
     let finalUser = user;
-    if (idea && ideaContext) {
-      // Remove the generic "BIZNES: ..." line and replace with specific idea context
-      finalUser = user.replace(
-        /BIZNES:.*\n/,
-        `BIZNES: ${idea.title}\nTavsif: ${idea.description}\n`
-      );
-      if (idea.estimated_startup_mln) {
-        finalUser += `\nTaxminiy boshlang'ich xarajat: ${idea.estimated_startup_mln} mln so'm`;
-      }
-      if (idea.estimated_monthly_income_mln) {
-        finalUser += `\nTaxminiy oylik foyda: ${idea.estimated_monthly_income_mln} mln so'm`;
-      }
-      finalUser += `\n\nMUHIM: Biznes-reja FAQAT "${idea.title}" uchun bo'lsin. Boshqa biznes turini taklif qilma.`;
+    if (idea) {
+      // Build complete idea context
+      let ideaBlock = `BIZNES: ${idea.title}\nTavsif: ${idea.description}`;
+      if (idea.why_suitable) ideaBlock += `\nNega mos: ${idea.why_suitable}`;
+      if (idea.key_requirement) ideaBlock += `\nAsosiy talab: ${idea.key_requirement}`;
+      ideaBlock += `\n\nOLDINGI TAHLIL NATIJALARI (biznes g'oya bosqichida hisoblangan):`;
+      if (idea.estimated_startup_mln) ideaBlock += `\n- Taxminiy boshlang'ich xarajat: ${idea.estimated_startup_mln} mln so'm`;
+      if (idea.estimated_monthly_income_mln) ideaBlock += `\n- Taxminiy oylik sof foyda: ${idea.estimated_monthly_income_mln} mln so'm`;
+      if (idea.suggested_loan) ideaBlock += `\n- Tavsiya etilgan kredit: ${idea.suggested_loan}`;
+
+      // Replace BIZNES line with full idea block
+      finalUser = user.replace(/BIZNES:.*\n/, ideaBlock + "\n");
+
+      // Add consistency instruction
+      finalUser += `\n\nJUDA MUHIM — MOSLIK QOIDASI:
+1. Biznes-reja FAQAT "${idea.title}" uchun bo'lsin.
+2. Yuqoridagi OLDINGI TAHLIL NATIJALARI bilan MOS bo'lsin:
+   - Boshlang'ich xarajat taxminan ${idea.estimated_startup_mln || "?"} mln atrofida bo'lsin (web search narxlari bilan aniqlashtir, lekin juda katta farq bo'lmasin)
+   - Oylik foyda taxminan ${idea.estimated_monthly_income_mln || "?"} mln atrofida bo'lsin
+   ${idea.suggested_loan ? `- Kredit sifatida "${idea.suggested_loan}" ni tavsiya qil (agar foydalanuvchiga mos bo'lsa)` : ""}
+3. Agar web search boshqa narx ko'rsatsa — OLDINGI TAHLIL ga yaqinroq bo'lgan raqamlarni ishlat.`;
     }
 
     // Call Claude with WEB SEARCH enabled for real prices
